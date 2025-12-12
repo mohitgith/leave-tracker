@@ -11,11 +11,13 @@ import './FilterBar.css';
 interface FilterBarProps {
     viewMode: '1' | '3';
     onViewModeChange: (mode: '1' | '3') => void;
+    onCreateLeave: () => void;
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({
     viewMode,
     onViewModeChange,
+    onCreateLeave,
 }) => {
     const handleViewChange = (e: RadioChangeEvent) => {
         onViewModeChange(e.target.value);
@@ -57,6 +59,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
                     type="primary"
                     icon={<PlusOutlined />}
                     className="create-leave-button"
+                    onClick={onCreateLeave}
                 >
                     Create Leave
                 </Button>

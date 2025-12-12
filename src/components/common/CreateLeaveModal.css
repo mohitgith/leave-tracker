@@ -1,0 +1,61 @@
+.create-leave-modal .ant-modal-header {
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+.create-leave-modal .ant-modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.leave-form {
+    padding-top: 8px;
+}
+
+.date-row {
+    display: flex;
+    gap: 16px;
+}
+
+.date-field {
+    flex: 1;
+}
+
+.working-days-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #f0f7ff;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #d6e8ff;
+}
+
+.working-days-label {
+    font-size: 13px;
+    color: #595959;
+}
+
+.working-days-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0066b3;
+}
+
+.working-days-note {
+    font-size: 12px;
+    color: #8c8c8c;
+}
+
+.create-leave-modal .ant-btn-primary {
+    background: #0066b3;
+    border-color: #0066b3;
+}
+
+.create-leave-modal .ant-btn-primary:hover {
+    background: #0052a3 !important;
+    border-color: #0052a3 !important;
+}

@@ -24,7 +24,6 @@ const Scheduler: React.FC<SchedulerProps> = ({
 }) => {
     const timelineRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
     const [dayWidth, setDayWidth] = useState(32);
 
     // Calculate total days in the view
@@ -39,22 +38,26 @@ const Scheduler: React.FC<SchedulerProps> = ({
         return days;
     }, [startDate, endDate]);
 
-    // Calculate day width to fill container
+    // Calculate day width to fill container - ensure no horizontal scroll
     useEffect(() => {
         const updateDayWidth = () => {
-            if (containerRef.current) {
-                const containerWidth = containerRef.current.offsetWidth;
+            if (timelineRef.current) {
+                const containerWidth = timelineRef.current.clientWidth;
                 const totalDays = getTotalDays();
-                // Calculate width to fill container, with a minimum
-                const calculatedWidth = Math.max(containerWidth / totalDays, viewMode === '1' ? 28 : 14);
-                setDayWidth(calculatedWidth);
+                // Always fit all days within the container width
+                const calculatedWidth = Math.floor(containerWidth / totalDays);
+                setDayWidth(Math.max(calculatedWidth, 8)); // Minimum 8px per day
             }
         };
 
-        updateDayWidth();
+        // Use setTimeout to ensure DOM is ready
+        const timer = setTimeout(updateDayWidth, 0);
         window.addEventListener('resize', updateDayWidth);
-        return () => window.removeEventListener('resize', updateDayWidth);
-    }, [viewMode, getTotalDays]);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('resize', updateDayWidth);
+        };
+    }, [viewMode, getTotalDays, startDate, endDate]);
 
     const config: TimelineConfig = generateTimelineConfig(startDate, endDate, dayWidth);
     const currentMonth = dayjs();
@@ -97,15 +100,13 @@ const Scheduler: React.FC<SchedulerProps> = ({
                     ))}
                 </div>
 
-                {/* Timeline grid (scrollable) */}
+                {/* Timeline grid */}
                 <div className="scheduler-timeline" ref={timelineRef}>
-                    <div ref={containerRef} style={{ width: '100%', minWidth: 'fit-content' }}>
-                        <TimelineGrid
-                            employees={employees}
-                            leaves={leaves}
-                            config={config}
-                        />
-                    </div>
+                    <TimelineGrid
+                        employees={employees}
+                        leaves={leaves}
+                        config={config}
+                    />
                 </div>
             </div>
         </div>

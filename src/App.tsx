@@ -1,11 +1,12 @@
-import React, { useState, useMemo } from 'react';
-import { Layout, Typography } from 'antd';
+import { useState, useMemo } from 'react';
+import { Layout, Typography, message } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { Sidebar, TopBar } from './components/layout';
 import { Scheduler } from './components/scheduler';
-import { FilterBar, SearchInput } from './components/common';
+import { FilterBar, SearchInput, CreateLeaveModal } from './components/common';
 import { employees, leaveRecords } from './data/mockData';
+import { LeaveType } from './types';
 import './App.css';
 
 const { Content } = Layout;
@@ -15,6 +16,7 @@ const App: React.FC = () => {
     const [searchValue, setSearchValue] = useState('');
     const [viewMode, setViewMode] = useState<'1' | '3'>('1');
     const [startDate, setStartDate] = useState(dayjs('2024-01-01'));
+    const [createLeaveModalOpen, setCreateLeaveModalOpen] = useState(false);
 
     // Calculate end date based on view mode
     const endDate = useMemo(() => {
@@ -51,6 +53,21 @@ const App: React.FC = () => {
         setStartDate(prev => prev.add(months, 'month'));
     };
 
+    const handleCreateLeave = () => {
+        setCreateLeaveModalOpen(true);
+    };
+
+    const handleLeaveSubmit = (values: {
+        startDate: string;
+        endDate: string;
+        type: LeaveType;
+        description: string;
+    }) => {
+        console.log('Leave request submitted:', values);
+        message.success('Leave request submitted successfully!');
+        // In a real app, this would make an API call
+    };
+
     return (
         <Layout className="app-layout">
             <Sidebar />
@@ -74,6 +91,7 @@ const App: React.FC = () => {
                     <FilterBar
                         viewMode={viewMode}
                         onViewModeChange={setViewMode}
+                        onCreateLeave={handleCreateLeave}
                     />
 
                     {/* Search and Scheduler Container */}
@@ -101,6 +119,13 @@ const App: React.FC = () => {
                     </div>
                 </Content>
             </Layout>
+
+            {/* Create Leave Modal */}
+            <CreateLeaveModal
+                open={createLeaveModalOpen}
+                onClose={() => setCreateLeaveModalOpen(false)}
+                onSubmit={handleLeaveSubmit}
+            />
         </Layout>
     );
 };

@@ -46,7 +46,7 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }
     }, [config]);
 
     return (
-        <div className="timeline-grid" style={{ minWidth: `${gridWidth}px` }}>
+        <div className="timeline-grid" style={{ width: `${gridWidth}px` }}>
             {/* Day column grid lines */}
             <div className="grid-lines">
                 {generateDayColumns.map((col, index) => (
