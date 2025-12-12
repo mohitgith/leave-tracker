@@ -8,9 +8,18 @@ interface TimelineHeaderProps {
 }
 
 const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth }) => {
+    const today = dayjs();
+
     // Generate all days for the visible range
     const generateDays = () => {
-        const days: { date: dayjs.Dayjs; dayOfWeek: string; dayNum: number; isWeekend: boolean; isMonthStart: boolean }[] = [];
+        const days: {
+            date: dayjs.Dayjs;
+            dayOfWeek: string;
+            dayNum: number;
+            isWeekend: boolean;
+            isMonthStart: boolean;
+            isToday: boolean;
+        }[] = [];
         let currentDate = config.startDate.startOf('month');
         const endDate = config.endDate.endOf('month');
 
@@ -21,6 +30,7 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth })
                 dayNum: currentDate.date(),
                 isWeekend: currentDate.day() === 0 || currentDate.day() === 6,
                 isMonthStart: currentDate.date() === 1,
+                isToday: currentDate.isSame(today, 'day'),
             });
             currentDate = currentDate.add(1, 'day');
         }
@@ -54,7 +64,7 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth })
                 {days.map((day, index) => (
                     <div
                         key={index}
-                        className={`timeline-day ${day.isWeekend ? 'timeline-day-weekend' : ''} ${day.isMonthStart && index > 0 ? 'timeline-day-month-start' : ''}`}
+                        className={`timeline-day ${day.isWeekend ? 'timeline-day-weekend' : ''} ${day.isMonthStart && index > 0 ? 'timeline-day-month-start' : ''} ${day.isToday ? 'timeline-day-today' : ''}`}
                         style={{ width: `${config.dayWidth}px` }}
                     >
                         <span className="day-letter">{day.dayOfWeek}</span>

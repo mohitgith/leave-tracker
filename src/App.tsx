@@ -15,7 +15,7 @@ const { Text } = Typography;
 const App: React.FC = () => {
     const [searchValue, setSearchValue] = useState('');
     const [viewMode, setViewMode] = useState<'1' | '3'>('1');
-    const [startDate, setStartDate] = useState(dayjs('2024-01-01'));
+    const [startDate, setStartDate] = useState(dayjs().startOf('month'));
     const [createLeaveModalOpen, setCreateLeaveModalOpen] = useState(false);
 
     // Calculate end date based on view mode

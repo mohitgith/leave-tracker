@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import 'dayjs';
+import dayjs from 'dayjs';
 import { Employee, LeaveRecord } from '../../types';
 import { TimelineConfig, calculateLeavePosition } from '../../utils/timelineUtils';
 import EventBlock from './EventBlock';
@@ -12,6 +12,8 @@ interface TimelineGridProps {
 }
 
 const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }) => {
+    const today = dayjs();
+
     const leavesByEmployee = useMemo(() => {
         const grouped: Record<string, LeaveRecord[]> = {};
         employees.forEach(emp => {
@@ -24,7 +26,7 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }
 
     // Generate all day columns for grid lines
     const generateDayColumns = useMemo(() => {
-        const columns: { offset: number; isMonthStart: boolean; isWeekend: boolean }[] = [];
+        const columns: { offset: number; isMonthStart: boolean; isWeekend: boolean; isToday: boolean }[] = [];
         let currentDate = config.startDate.startOf('month');
         const endDate = config.endDate.endOf('month');
         let offset = 0;
@@ -32,18 +34,20 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }
         while (currentDate.isBefore(endDate) || currentDate.isSame(endDate, 'day')) {
             const isMonthStart = currentDate.date() === 1;
             const isWeekend = currentDate.day() === 0 || currentDate.day() === 6;
+            const isToday = currentDate.isSame(today, 'day');
 
             columns.push({
                 offset,
                 isMonthStart,
                 isWeekend,
+                isToday,
             });
 
             offset += config.dayWidth;
             currentDate = currentDate.add(1, 'day');
         }
         return columns;
-    }, [config]);
+    }, [config, today]);
 
     return (
         <div className="timeline-grid" style={{ width: `${gridWidth}px` }}>
@@ -52,7 +56,7 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }
                 {generateDayColumns.map((col, index) => (
                     <div
                         key={index}
-                        className={`grid-column ${col.isMonthStart ? 'grid-column-month' : ''} ${col.isWeekend ? 'grid-column-weekend' : ''}`}
+                        className={`grid-column ${col.isMonthStart ? 'grid-column-month' : ''} ${col.isWeekend ? 'grid-column-weekend' : ''} ${col.isToday ? 'grid-column-today' : ''}`}
                         style={{
                             left: `${col.offset}px`,
                             width: `${config.dayWidth}px`

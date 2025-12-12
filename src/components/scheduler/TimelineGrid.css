@@ -30,6 +30,10 @@
     background: rgba(0, 0, 0, 0.02);
 }
 
+.grid-column-today {
+    background: rgba(0, 102, 179, 0.08);
+}
+
 .timeline-row {
     position: relative;
     height: 48px;
