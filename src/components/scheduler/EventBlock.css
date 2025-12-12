@@ -1,0 +1,67 @@
+.event-block {
+    position: absolute;
+    height: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 4px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    z-index: 1;
+}
+
+.event-block:hover {
+    transform: translateY(-50%) scale(1.02);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 2;
+}
+
+.event-pending {
+    background-image: repeating-linear-gradient(45deg,
+            transparent,
+            transparent 3px,
+            rgba(255, 255, 255, 0.3) 3px,
+            rgba(255, 255, 255, 0.3) 6px) !important;
+}
+
+.event-rejected {
+    opacity: 0.5;
+}
+
+.event-tooltip {
+    text-align: center;
+}
+
+.tooltip-type {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.tooltip-dates {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 4px;
+}
+
+.tooltip-status {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.tooltip-status-approved {
+    background: rgba(82, 196, 26, 0.2);
+    color: #52c41a;
+}
+
+.tooltip-status-pending {
+    background: rgba(250, 173, 20, 0.2);
+    color: #faad14;
+}
+
+.tooltip-status-rejected {
+    background: rgba(255, 77, 79, 0.2);
+    color: #ff4d4f;
+}

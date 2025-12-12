@@ -1,0 +1,93 @@
+.topbar {
+    background: linear-gradient(90deg, #0a2540 0%, #0d4a70 100%) !important;
+    padding: 0 24px !important;
+    height: 56px !important;
+    line-height: 56px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    position: fixed;
+    top: 0;
+    left: 60px;
+    right: 0;
+    z-index: 99;
+}
+
+.topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-text {
+    color: #fff !important;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.brand-divider {
+    color: rgba(255, 255, 255, 0.4) !important;
+    font-weight: 300;
+}
+
+.brand-subtitle {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    transition: color 0.2s;
+    font-size: 11px;
+}
+
+.action-item:hover {
+    color: #fff;
+}
+
+.action-item .anticon {
+    font-size: 18px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+
+.user-profile:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.user-name {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.dropdown-icon {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 10px;
+}

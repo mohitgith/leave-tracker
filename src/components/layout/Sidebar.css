@@ -1,0 +1,65 @@
+.sidebar {
+    background: linear-gradient(180deg, #0a2540 0%, #0d3a5c 100%) !important;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar .ant-layout-sider-children {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sidebar-logo {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-icon {
+    font-size: 24px;
+    color: #fff;
+}
+
+.sidebar-menu {
+    background: transparent !important;
+    border-right: none !important;
+}
+
+.sidebar-menu .ant-menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4px 8px !important;
+    padding: 0 !important;
+    height: 44px !important;
+    border-radius: 8px !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.sidebar-menu .ant-menu-item:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+}
+
+.sidebar-menu .ant-menu-item-selected {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+}
+
+.sidebar-menu .ant-menu-item .anticon {
+    font-size: 20px;
+    margin: 0 !important;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding-bottom: 16px;
+}

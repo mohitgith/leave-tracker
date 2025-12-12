@@ -1,0 +1,78 @@
+.timeline-header {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.timeline-months-row {
+    display: flex;
+    height: 32px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.timeline-month {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #e8e8e8;
+    flex-shrink: 0;
+}
+
+.timeline-month:last-child {
+    border-right: none;
+}
+
+.month-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #595959;
+}
+
+.timeline-month-current .month-label {
+    color: #0066b3;
+    font-weight: 600;
+}
+
+.timeline-days-row {
+    display: flex;
+    height: 36px;
+}
+
+.timeline-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-right: 1px solid #f5f5f5;
+    gap: 1px;
+}
+
+.timeline-day:last-child {
+    border-right: none;
+}
+
+.timeline-day-weekend {
+    background: #fafafa;
+}
+
+.day-letter {
+    font-size: 9px;
+    color: #8c8c8c;
+    text-transform: uppercase;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.day-number {
+    font-size: 11px;
+    color: #595959;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.timeline-day-weekend .day-letter,
+.timeline-day-weekend .day-number {
+    color: #bfbfbf;
+}

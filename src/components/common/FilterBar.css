@@ -1,0 +1,101 @@
+.filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.filter-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filter-button {
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.filter-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 16px;
+    background: #f5f5f5;
+    border: 1px solid #e8e8e8;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-tag:hover {
+    background: #ebebeb;
+}
+
+.avatar-tag .avatar-group {
+    display: flex;
+    align-items: center;
+}
+
+.icon-tag .icon-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.leave-icon {
+    font-size: 14px;
+}
+
+.unit-icon {
+    margin-right: 4px;
+}
+
+.view-mode-group {
+    display: flex;
+}
+
+.view-mode-group .ant-radio-button-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    height: auto;
+    line-height: 1.2;
+    border-radius: 0;
+}
+
+.view-mode-group .ant-radio-button-wrapper:first-child {
+    border-radius: 6px 0 0 6px;
+}
+
+.view-mode-group .ant-radio-button-wrapper:last-child {
+    border-radius: 0 6px 6px 0;
+}
+
+.view-label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.view-sublabel {
+    font-size: 10px;
+    opacity: 0.8;
+}
+
+.view-mode-group .ant-radio-button-wrapper-checked .view-label,
+.view-mode-group .ant-radio-button-wrapper-checked .view-sublabel {
+    color: #fff;
+}

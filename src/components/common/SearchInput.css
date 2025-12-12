@@ -1,0 +1,18 @@
+.search-input {
+    width: 200px;
+    border-radius: 6px;
+}
+
+.search-input .search-icon {
+    color: #bfbfbf;
+}
+
+.search-input:hover,
+.search-input:focus {
+    border-color: #0066b3;
+}
+
+.search-input.ant-input-affix-wrapper-focused {
+    border-color: #0066b3;
+    box-shadow: 0 0 0 2px rgba(0, 102, 179, 0.1);
+}

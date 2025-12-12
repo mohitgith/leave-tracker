@@ -1,0 +1,33 @@
+.timeline-grid {
+    position: relative;
+    background: #fafafa;
+    min-height: 100%;
+}
+
+.grid-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.grid-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #e8e8e8;
+}
+
+.timeline-row {
+    position: relative;
+    height: 48px;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fff;
+}
+
+.timeline-row:nth-child(even) {
+    background: #fafbfc;
+}

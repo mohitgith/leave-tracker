@@ -1,0 +1,37 @@
+.employee-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    height: 48px;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fff;
+}
+
+.employee-avatar {
+    flex-shrink: 0;
+}
+
+.employee-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 1px;
+}
+
+.employee-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.employee-role {
+    font-size: 11px;
+    color: #8c8c8c;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

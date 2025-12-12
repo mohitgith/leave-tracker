@@ -1,0 +1,69 @@
+.scheduler {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e8e8e8;
+    overflow: hidden;
+    height: 100%;
+}
+
+.scheduler-header {
+    display: flex;
+    border-bottom: 1px solid #e8e8e8;
+    background: #fff;
+    flex-shrink: 0;
+}
+
+.scheduler-header-left {
+    width: 220px;
+    min-width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid #e8e8e8;
+    display: flex;
+    align-items: flex-end;
+}
+
+.employee-search-header {
+    height: 68px;
+    /* Match header height: 32px month row + 36px days row */
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.scheduler-header-right {
+    flex: 1;
+    overflow: hidden;
+}
+
+.scheduler-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.scheduler-employees {
+    width: 220px;
+    min-width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid #e8e8e8;
+    overflow-y: auto;
+    background: #fff;
+}
+
+.scheduler-timeline {
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+/* Scrollbar sync */
+.scheduler-header-right::-webkit-scrollbar,
+.scheduler-timeline::-webkit-scrollbar {
+    height: 8px;
+}
+
+.scheduler-header-right {
+    overflow-x: hidden;
+}
