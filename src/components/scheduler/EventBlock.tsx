@@ -1,4 +1,3 @@
-import React from 'react';
 import { Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import { LeaveRecord, LEAVE_TYPE_COLORS, LEAVE_TYPE_LABELS } from '../../types';
@@ -16,14 +15,20 @@ const EventBlock: React.FC<EventBlockProps> = ({ leave, left, width }) => {
 
     const startDate = dayjs(leave.startDate).format('MMM D');
     const endDate = dayjs(leave.endDate).format('MMM D, YYYY');
+    const duration = dayjs(leave.endDate).diff(dayjs(leave.startDate), 'day') + 1;
 
     const isPending = leave.status === 'pending';
     const isRejected = leave.status === 'rejected';
+
+    // Show label text if width is sufficient
+    const showLabel = width > 60;
+    const displayText = showLabel ? label : '';
 
     const tooltipContent = (
         <div className="event-tooltip">
             <div className="tooltip-type">{label}</div>
             <div className="tooltip-dates">{startDate} - {endDate}</div>
+            <div className="tooltip-duration">{duration} day{duration > 1 ? 's' : ''}</div>
             <div className={`tooltip-status tooltip-status-${leave.status}`}>
                 {leave.status.charAt(0).toUpperCase() + leave.status.slice(1)}
             </div>
@@ -40,7 +45,9 @@ const EventBlock: React.FC<EventBlockProps> = ({ leave, left, width }) => {
                     backgroundColor: colors.bg,
                     borderColor: colors.border,
                 }}
-            />
+            >
+                {showLabel && <span className="event-label">{displayText}</span>}
+            </div>
         </Tooltip>
     );
 };

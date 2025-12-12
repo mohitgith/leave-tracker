@@ -79,12 +79,16 @@ const App: React.FC = () => {
                     {/* Search and Scheduler Container */}
                     <div className="scheduler-container">
                         <div className="scheduler-search-row">
-                            <div className="search-wrapper">
+                            <div className="search-section">
                                 <SearchInput
                                     value={searchValue}
                                     onChange={setSearchValue}
                                     placeholder="Find employee"
                                 />
+                                <div className="manager-info">
+                                    <span className="manager-label">Manager:</span>
+                                    <span className="manager-name">Lohit Ganta</span>
+                                </div>
                             </div>
                         </div>
                         <Scheduler

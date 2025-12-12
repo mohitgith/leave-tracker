@@ -58,8 +58,19 @@
     font-size: 14px;
 }
 
-.unit-icon {
-    margin-right: 4px;
+.create-leave-button {
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    background: #0066b3;
+    border-color: #0066b3;
+}
+
+.create-leave-button:hover {
+    background: #0052a3 !important;
+    border-color: #0052a3 !important;
 }
 
 .view-mode-group {

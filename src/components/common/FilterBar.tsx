@@ -3,6 +3,7 @@ import {
     FilterOutlined,
     UserOutlined,
     CloseOutlined,
+    PlusOutlined,
 } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';
 import './FilterBar.css';
@@ -51,6 +52,14 @@ const FilterBar: React.FC<FilterBarProps> = ({
                         <span className="leave-icon remote">🏠</span>
                     </div>
                 </Tag>
+
+                <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    className="create-leave-button"
+                >
+                    Create Leave
+                </Button>
             </div>
 
             <div className="filter-right">

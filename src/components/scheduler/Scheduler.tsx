@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import dayjs from 'dayjs';
 import { Employee, LeaveRecord } from '../../types';
 import { TimelineConfig, generateTimelineConfig } from '../../utils/timelineUtils';
@@ -24,18 +24,40 @@ const Scheduler: React.FC<SchedulerProps> = ({
 }) => {
     const timelineRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [dayWidth, setDayWidth] = useState(32);
 
-    // Calculate day width based on view mode - wider for better visibility
-    const getDayWidth = () => {
-        switch (viewMode) {
-            case '1': return 32;  // Wider for 1 month view
-            case '3': return 18;  // Reasonable size for 3 months
-            default: return 18;
+    // Calculate total days in the view
+    const getTotalDays = useCallback(() => {
+        let days = 0;
+        let current = startDate.startOf('month');
+        const end = endDate.endOf('month');
+        while (current.isBefore(end) || current.isSame(end, 'day')) {
+            days++;
+            current = current.add(1, 'day');
         }
-    };
+        return days;
+    }, [startDate, endDate]);
 
-    const config: TimelineConfig = generateTimelineConfig(startDate, endDate, getDayWidth());
-    const currentMonth = dayjs(); // March 2024 for the mockup
+    // Calculate day width to fill container
+    useEffect(() => {
+        const updateDayWidth = () => {
+            if (containerRef.current) {
+                const containerWidth = containerRef.current.offsetWidth;
+                const totalDays = getTotalDays();
+                // Calculate width to fill container, with a minimum
+                const calculatedWidth = Math.max(containerWidth / totalDays, viewMode === '1' ? 28 : 14);
+                setDayWidth(calculatedWidth);
+            }
+        };
+
+        updateDayWidth();
+        window.addEventListener('resize', updateDayWidth);
+        return () => window.removeEventListener('resize', updateDayWidth);
+    }, [viewMode, getTotalDays]);
+
+    const config: TimelineConfig = generateTimelineConfig(startDate, endDate, dayWidth);
+    const currentMonth = dayjs();
 
     // Sync scroll between header and grid
     useEffect(() => {
@@ -77,11 +99,13 @@ const Scheduler: React.FC<SchedulerProps> = ({
 
                 {/* Timeline grid (scrollable) */}
                 <div className="scheduler-timeline" ref={timelineRef}>
-                    <TimelineGrid
-                        employees={employees}
-                        leaves={leaves}
-                        config={config}
-                    />
+                    <div ref={containerRef} style={{ width: '100%', minWidth: 'fit-content' }}>
+                        <TimelineGrid
+                            employees={employees}
+                            leaves={leaves}
+                            config={config}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
