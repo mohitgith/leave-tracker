@@ -1,9 +1,6 @@
-import React from 'react';
 import { Layout, Menu, Tooltip } from 'antd';
 import {
-    PlusCircleOutlined,
     AppstoreOutlined,
-    SwapOutlined,
     TeamOutlined,
     FileTextOutlined,
     SettingOutlined,
@@ -17,11 +14,9 @@ interface SidebarProps {
 }
 
 const menuItems = [
-    { key: 'add', icon: <PlusCircleOutlined />, label: 'Add' },
     { key: 'dashboard', icon: <AppstoreOutlined />, label: 'Dashboard' },
-    { key: 'transfers', icon: <SwapOutlined />, label: 'Transfers' },
     { key: 'employees', icon: <TeamOutlined />, label: 'Employees' },
-    { key: 'documents', icon: <FileTextOutlined />, label: 'Documents' },
+    { key: 'documents', icon: <FileTextOutlined />, label: 'Leave Tracker' },
 ];
 
 const bottomItems = [

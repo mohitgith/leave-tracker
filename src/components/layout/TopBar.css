@@ -25,55 +25,44 @@
     justify-content: center;
 }
 
-.brand-text {
-    color: #fff !important;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.brand-divider {
-    color: rgba(255, 255, 255, 0.4) !important;
-    font-weight: 300;
-}
-
 .brand-subtitle {
     color: rgba(255, 255, 255, 0.9) !important;
-    font-size: 16px;
-    font-weight: 400;
+    font-size: 18px;
+    font-weight: 500;
 }
 
 .topbar-actions {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
 }
 
-.action-item {
+.notification-wrapper {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 2px;
-    color: rgba(255, 255, 255, 0.85);
+    justify-content: center;
     cursor: pointer;
-    transition: color 0.2s;
-    font-size: 11px;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.2s;
 }
 
-.action-item:hover {
-    color: #fff;
+.notification-wrapper:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
-.action-item .anticon {
-    font-size: 18px;
+.notification-icon {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .user-profile {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 20px;
+    padding: 4px 12px 4px 4px;
+    border-radius: 24px;
     transition: background 0.2s;
 }
 
@@ -81,10 +70,22 @@
     background: rgba(255, 255, 255, 0.1);
 }
 
+.user-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
 .user-name {
     color: #fff;
     font-size: 14px;
     font-weight: 500;
+}
+
+.manager-name {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 11px;
+    font-weight: 400;
 }
 
 .dropdown-icon {

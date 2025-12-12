@@ -12,7 +12,7 @@ interface SchedulerProps {
     leaves: LeaveRecord[];
     startDate: dayjs.Dayjs;
     endDate: dayjs.Dayjs;
-    viewMode: '1' | '3' | '6' | '12'; // months
+    viewMode: '1' | '3'; // months
 }
 
 const Scheduler: React.FC<SchedulerProps> = ({
@@ -25,14 +25,12 @@ const Scheduler: React.FC<SchedulerProps> = ({
     const timelineRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
 
-    // Calculate day width based on view mode
+    // Calculate day width based on view mode - wider for better visibility
     const getDayWidth = () => {
         switch (viewMode) {
-            case '1': return 28;
-            case '3': return 12;
-            case '6': return 6;
-            case '12': return 3;
-            default: return 12;
+            case '1': return 32;  // Wider for 1 month view
+            case '3': return 18;  // Reasonable size for 3 months
+            default: return 18;
         }
     };
 

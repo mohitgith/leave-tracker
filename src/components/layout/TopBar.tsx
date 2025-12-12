@@ -1,7 +1,5 @@
 import { Layout, Avatar, Badge, Dropdown, Typography } from 'antd';
 import {
-    HomeOutlined,
-    MessageOutlined,
     BellOutlined,
     DownOutlined,
 } from '@ant-design/icons';
@@ -33,21 +31,10 @@ const TopBar: React.FC = () => {
             </div>
 
             <div className="topbar-actions">
-                <div className="action-item">
-                    <HomeOutlined />
-                    <span>Home</span>
-                </div>
-
-                <div className="action-item">
-                    <MessageOutlined />
-                    <span>Messaging</span>
-                </div>
-
-                <div className="action-item">
+                <div className="notification-wrapper">
                     <Badge count={0} showZero={false}>
-                        <BellOutlined />
+                        <BellOutlined className="notification-icon" />
                     </Badge>
-                    <span>Notifications</span>
                 </div>
 
                 <Dropdown menu={{ items: userMenuItems }} trigger={['click']}>
@@ -56,7 +43,10 @@ const TopBar: React.FC = () => {
                             size={32}
                             src="https://ui-avatars.com/api/?name=Antonina&background=e91e63&color=fff&size=32&bold=true"
                         />
-                        <span className="user-name">Antonina</span>
+                        <div className="user-info">
+                            <span className="user-name">Antonina</span>
+                            <span className="manager-name">Manager: Lohit Ganta</span>
+                        </div>
                         <DownOutlined className="dropdown-icon" />
                     </div>
                 </Dropdown>

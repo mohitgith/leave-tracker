@@ -10,7 +10,7 @@ interface TimelineHeaderProps {
 const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth }) => {
     // Generate all days for the visible range
     const generateDays = () => {
-        const days: { date: dayjs.Dayjs; dayOfWeek: string; dayNum: number; isWeekend: boolean }[] = [];
+        const days: { date: dayjs.Dayjs; dayOfWeek: string; dayNum: number; isWeekend: boolean; isMonthStart: boolean }[] = [];
         let currentDate = config.startDate.startOf('month');
         const endDate = config.endDate.endOf('month');
 
@@ -20,6 +20,7 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth })
                 dayOfWeek: currentDate.format('dd')[0], // First letter of day
                 dayNum: currentDate.date(),
                 isWeekend: currentDate.day() === 0 || currentDate.day() === 6,
+                isMonthStart: currentDate.date() === 1,
             });
             currentDate = currentDate.add(1, 'day');
         }
@@ -53,7 +54,7 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth })
                 {days.map((day, index) => (
                     <div
                         key={index}
-                        className={`timeline-day ${day.isWeekend ? 'timeline-day-weekend' : ''}`}
+                        className={`timeline-day ${day.isWeekend ? 'timeline-day-weekend' : ''} ${day.isMonthStart && index > 0 ? 'timeline-day-month-start' : ''}`}
                         style={{ width: `${config.dayWidth}px` }}
                     >
                         <span className="day-letter">{day.dayOfWeek}</span>
