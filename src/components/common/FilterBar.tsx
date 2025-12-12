@@ -8,8 +8,8 @@ import type { RadioChangeEvent } from 'antd';
 import './FilterBar.css';
 
 interface FilterBarProps {
-    viewMode: '1' | '3' | '6' | '12';
-    onViewModeChange: (mode: '1' | '3' | '6' | '12') => void;
+    viewMode: '1' | '3';
+    onViewModeChange: (mode: '1' | '3') => void;
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({
@@ -70,18 +70,6 @@ const FilterBar: React.FC<FilterBarProps> = ({
                     <Tooltip title="3 Months View">
                         <Radio.Button value="3">
                             <span className="view-label">3</span>
-                            <span className="view-sublabel">months</span>
-                        </Radio.Button>
-                    </Tooltip>
-                    <Tooltip title="6 Months View">
-                        <Radio.Button value="6">
-                            <span className="view-label">6</span>
-                            <span className="view-sublabel">months</span>
-                        </Radio.Button>
-                    </Tooltip>
-                    <Tooltip title="12 Months View">
-                        <Radio.Button value="12">
-                            <span className="view-label">12</span>
                             <span className="view-sublabel">months</span>
                         </Radio.Button>
                     </Tooltip>

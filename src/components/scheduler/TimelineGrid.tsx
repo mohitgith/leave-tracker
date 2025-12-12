@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import 'dayjs';
 import { Employee, LeaveRecord } from '../../types';
 import { TimelineConfig, calculateLeavePosition } from '../../utils/timelineUtils';
 import EventBlock from './EventBlock';
@@ -21,23 +22,43 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }
 
     const gridWidth = config.totalDays * config.dayWidth;
 
+    // Generate all day columns for grid lines
+    const generateDayColumns = useMemo(() => {
+        const columns: { offset: number; isMonthStart: boolean; isWeekend: boolean }[] = [];
+        let currentDate = config.startDate.startOf('month');
+        const endDate = config.endDate.endOf('month');
+        let offset = 0;
+
+        while (currentDate.isBefore(endDate) || currentDate.isSame(endDate, 'day')) {
+            const isMonthStart = currentDate.date() === 1;
+            const isWeekend = currentDate.day() === 0 || currentDate.day() === 6;
+
+            columns.push({
+                offset,
+                isMonthStart,
+                isWeekend,
+            });
+
+            offset += config.dayWidth;
+            currentDate = currentDate.add(1, 'day');
+        }
+        return columns;
+    }, [config]);
+
     return (
         <div className="timeline-grid" style={{ minWidth: `${gridWidth}px` }}>
-            {/* Month divider lines */}
+            {/* Day column grid lines */}
             <div className="grid-lines">
-                {config.months.map((_monthData, index) => {
-                    let offset = 0;
-                    for (let i = 0; i < index; i++) {
-                        offset += config.months[i].days * config.dayWidth;
-                    }
-                    return (
-                        <div
-                            key={index}
-                            className="grid-line"
-                            style={{ left: `${offset}px` }}
-                        />
-                    );
-                })}
+                {generateDayColumns.map((col, index) => (
+                    <div
+                        key={index}
+                        className={`grid-column ${col.isMonthStart ? 'grid-column-month' : ''} ${col.isWeekend ? 'grid-column-weekend' : ''}`}
+                        style={{
+                            left: `${col.offset}px`,
+                            width: `${config.dayWidth}px`
+                        }}
+                    />
+                ))}
             </div>
 
             {/* Employee rows */}
