@@ -24,7 +24,7 @@ const Scheduler: React.FC<SchedulerProps> = ({
 }) => {
     const timelineRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
-    const [dayWidth, setDayWidth] = useState(32);
+    const [containerWidth, setContainerWidth] = useState(0);
 
     // Calculate total days in the view
     const getTotalDays = useCallback(() => {
@@ -38,26 +38,26 @@ const Scheduler: React.FC<SchedulerProps> = ({
         return days;
     }, [startDate, endDate]);
 
-    // Calculate day width to fill container - ensure no horizontal scroll
+    // Get container width on mount and resize
     useEffect(() => {
-        const updateDayWidth = () => {
+        const updateContainerWidth = () => {
             if (timelineRef.current) {
-                const containerWidth = timelineRef.current.clientWidth;
-                const totalDays = getTotalDays();
-                // Always fit all days within the container width
-                const calculatedWidth = Math.floor(containerWidth / totalDays);
-                setDayWidth(Math.max(calculatedWidth, 8)); // Minimum 8px per day
+                setContainerWidth(timelineRef.current.clientWidth);
             }
         };
 
         // Use setTimeout to ensure DOM is ready
-        const timer = setTimeout(updateDayWidth, 0);
-        window.addEventListener('resize', updateDayWidth);
+        const timer = setTimeout(updateContainerWidth, 0);
+        window.addEventListener('resize', updateContainerWidth);
         return () => {
             clearTimeout(timer);
-            window.removeEventListener('resize', updateDayWidth);
+            window.removeEventListener('resize', updateContainerWidth);
         };
-    }, [viewMode, getTotalDays, startDate, endDate]);
+    }, [viewMode, startDate, endDate]);
+
+    // Calculate day width to exactly fill container with no gaps
+    const totalDays = getTotalDays();
+    const dayWidth = containerWidth > 0 ? containerWidth / totalDays : 10;
 
     const config: TimelineConfig = generateTimelineConfig(startDate, endDate, dayWidth);
     const currentMonth = dayjs();

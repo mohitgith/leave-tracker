@@ -5,11 +5,11 @@ import './EventBlock.css';
 
 interface EventBlockProps {
     leave: LeaveRecord;
-    left: number;
-    width: number;
+    leftPercent: number;
+    widthPercent: number;
 }
 
-const EventBlock: React.FC<EventBlockProps> = ({ leave, left, width }) => {
+const EventBlock: React.FC<EventBlockProps> = ({ leave, leftPercent, widthPercent }) => {
     const colors = LEAVE_TYPE_COLORS[leave.type];
     const label = LEAVE_TYPE_LABELS[leave.type];
 
@@ -20,8 +20,8 @@ const EventBlock: React.FC<EventBlockProps> = ({ leave, left, width }) => {
     const isPending = leave.status === 'pending';
     const isRejected = leave.status === 'rejected';
 
-    // Show label text if width is sufficient
-    const showLabel = width > 60;
+    // Show label text if width is sufficient (roughly more than 5% of container)
+    const showLabel = widthPercent > 5;
     const displayText = showLabel ? label : '';
 
     const tooltipContent = (
@@ -40,8 +40,8 @@ const EventBlock: React.FC<EventBlockProps> = ({ leave, left, width }) => {
             <div
                 className={`event-block ${isPending ? 'event-pending' : ''} ${isRejected ? 'event-rejected' : ''}`}
                 style={{
-                    left: `${left}px`,
-                    width: `${Math.max(width - 2, 8)}px`,
+                    left: `${leftPercent}%`,
+                    width: `calc(${widthPercent}% - 2px)`,
                     backgroundColor: colors.bg,
                     borderColor: colors.border,
                 }}

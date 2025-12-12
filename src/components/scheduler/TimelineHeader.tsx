@@ -9,6 +9,7 @@ interface TimelineHeaderProps {
 
 const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth }) => {
     const today = dayjs();
+    const totalDays = config.totalDays;
 
     // Generate all days for the visible range
     const generateDays = () => {
@@ -45,13 +46,14 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth })
             <div className="timeline-months-row">
                 {config.months.map((monthData, index) => {
                     const isCurrentMonth = currentMonth && monthData.month.isSame(currentMonth, 'month');
-                    const width = monthData.days * config.dayWidth;
+                    // Use percentage width based on proportion of days
+                    const widthPercent = (monthData.days / totalDays) * 100;
 
                     return (
                         <div
                             key={index}
                             className={`timeline-month ${isCurrentMonth ? 'timeline-month-current' : ''}`}
-                            style={{ width: `${width}px` }}
+                            style={{ width: `${widthPercent}%` }}
                         >
                             <span className="month-label">{monthData.label}</span>
                         </div>
@@ -65,7 +67,7 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth })
                     <div
                         key={index}
                         className={`timeline-day ${day.isWeekend ? 'timeline-day-weekend' : ''} ${day.isMonthStart && index > 0 ? 'timeline-day-month-start' : ''} ${day.isToday ? 'timeline-day-today' : ''}`}
-                        style={{ width: `${config.dayWidth}px` }}
+                        style={{ flex: 1 }}
                     >
                         <span className="day-letter">{day.dayOfWeek}</span>
                         <span className="day-number">{day.dayNum}</span>

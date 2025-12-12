@@ -13,6 +13,7 @@ interface TimelineGridProps {
 
 const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }) => {
     const today = dayjs();
+    const totalDays = config.totalDays;
 
     const leavesByEmployee = useMemo(() => {
         const grouped: Record<string, LeaveRecord[]> = {};
@@ -22,14 +23,12 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }
         return grouped;
     }, [employees, leaves]);
 
-    const gridWidth = config.totalDays * config.dayWidth;
-
-    // Generate all day columns for grid lines
+    // Generate all day columns for grid lines with percentage positions
     const generateDayColumns = useMemo(() => {
-        const columns: { offset: number; isMonthStart: boolean; isWeekend: boolean; isToday: boolean }[] = [];
+        const columns: { percentOffset: number; percentWidth: number; isMonthStart: boolean; isWeekend: boolean; isToday: boolean }[] = [];
         let currentDate = config.startDate.startOf('month');
         const endDate = config.endDate.endOf('month');
-        let offset = 0;
+        let dayIndex = 0;
 
         while (currentDate.isBefore(endDate) || currentDate.isSame(endDate, 'day')) {
             const isMonthStart = currentDate.date() === 1;
@@ -37,20 +36,21 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }
             const isToday = currentDate.isSame(today, 'day');
 
             columns.push({
-                offset,
+                percentOffset: (dayIndex / totalDays) * 100,
+                percentWidth: (1 / totalDays) * 100,
                 isMonthStart,
                 isWeekend,
                 isToday,
             });
 
-            offset += config.dayWidth;
+            dayIndex++;
             currentDate = currentDate.add(1, 'day');
         }
         return columns;
-    }, [config, today]);
+    }, [config, today, totalDays]);
 
     return (
-        <div className="timeline-grid" style={{ width: `${gridWidth}px` }}>
+        <div className="timeline-grid">
             {/* Day column grid lines */}
             <div className="grid-lines">
                 {generateDayColumns.map((col, index) => (
@@ -58,8 +58,8 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }
                         key={index}
                         className={`grid-column ${col.isMonthStart ? 'grid-column-month' : ''} ${col.isWeekend ? 'grid-column-weekend' : ''} ${col.isToday ? 'grid-column-today' : ''}`}
                         style={{
-                            left: `${col.offset}px`,
-                            width: `${config.dayWidth}px`
+                            left: `${col.percentOffset}%`,
+                            width: `${col.percentWidth}%`
                         }}
                     />
                 ))}
@@ -72,12 +72,16 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }
                         const position = calculateLeavePosition(leave, config);
                         if (!position.visible) return null;
 
+                        // Convert pixel position to percentage
+                        const leftPercent = (position.left / (totalDays * config.dayWidth)) * 100;
+                        const widthPercent = (position.width / (totalDays * config.dayWidth)) * 100;
+
                         return (
                             <EventBlock
                                 key={leave.id}
                                 leave={leave}
-                                left={position.left}
-                                width={position.width}
+                                leftPercent={leftPercent}
+                                widthPercent={widthPercent}
                             />
                         );
                     })}
