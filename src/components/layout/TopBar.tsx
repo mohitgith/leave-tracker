@@ -43,10 +43,7 @@ const TopBar: React.FC = () => {
                             size={32}
                             src="https://ui-avatars.com/api/?name=Antonina&background=e91e63&color=fff&size=32&bold=true"
                         />
-                        <div className="user-info">
-                            <span className="user-name">Antonina</span>
-                            <span className="manager-name">Manager: Lohit Ganta</span>
-                        </div>
+                        <span className="user-name">Antonina</span>
                         <DownOutlined className="dropdown-icon" />
                     </div>
                 </Dropdown>

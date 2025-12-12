@@ -1,4 +1,4 @@
-import { Employee, LeaveRecord, LeaveType, LeaveStatus } from '../types';
+import { Employee, LeaveRecord } from '../types';
 
 // Generate avatar URLs using UI Avatars service
 const getAvatarUrl = (name: string): string => {
@@ -26,70 +26,30 @@ export const employees: Employee[] = [
     { id: '15', name: 'Oleh Herasymets Jr', role: 'Intern', department: 'Finance', avatarUrl: getAvatarUrl('Oleh Herasymets Jr') },
 ];
 
-// Helper to generate random leaves
-const generateLeaves = (): LeaveRecord[] => {
-    const leaves: LeaveRecord[] = [];
-    const types: LeaveType[] = ['vacation', 'sick', 'remote', 'unpaid', 'personal'];
-    const statuses: LeaveStatus[] = ['approved', 'approved', 'approved', 'pending', 'rejected']; // weighted towards approved
+// Specific leaves for current quarter (Dec 2025 - Feb 2026)
+export const leaveRecords: LeaveRecord[] = [
+    // December 2025
+    { id: 'leave-1', employeeId: '1', startDate: '2025-12-16', endDate: '2025-12-20', type: 'vacation', status: 'approved' },
+    { id: 'leave-2', employeeId: '3', startDate: '2025-12-23', endDate: '2025-12-31', type: 'vacation', status: 'approved' },
+    { id: 'leave-3', employeeId: '5', startDate: '2025-12-09', endDate: '2025-12-13', type: 'sick', status: 'approved' },
+    { id: 'leave-4', employeeId: '7', startDate: '2025-12-02', endDate: '2025-12-06', type: 'remote', status: 'approved' },
 
-    // Specific leaves matching the design mockup
-    const specificLeaves: Omit<LeaveRecord, 'id'>[] = [
-        // January
-        { employeeId: '5', startDate: '2024-01-08', endDate: '2024-01-12', type: 'vacation', status: 'approved' },
+    // January 2026
+    { id: 'leave-5', employeeId: '2', startDate: '2026-01-06', endDate: '2026-01-10', type: 'vacation', status: 'approved' },
+    { id: 'leave-6', employeeId: '4', startDate: '2026-01-13', endDate: '2026-01-17', type: 'sick', status: 'approved' },
+    { id: 'leave-7', employeeId: '6', startDate: '2026-01-20', endDate: '2026-01-31', type: 'vacation', status: 'approved' },
+    { id: 'leave-8', employeeId: '8', startDate: '2026-01-27', endDate: '2026-01-31', type: 'personal', status: 'pending' },
 
-        // February
-        { employeeId: '4', startDate: '2024-02-05', endDate: '2024-02-09', type: 'sick', status: 'approved' },
-        { employeeId: '10', startDate: '2024-02-12', endDate: '2024-02-16', type: 'sick', status: 'approved' },
+    // February 2026
+    { id: 'leave-9', employeeId: '9', startDate: '2026-02-02', endDate: '2026-02-06', type: 'vacation', status: 'approved' },
+    { id: 'leave-10', employeeId: '10', startDate: '2026-02-09', endDate: '2026-02-13', type: 'sick', status: 'approved' },
+    { id: 'leave-11', employeeId: '11', startDate: '2026-02-16', endDate: '2026-02-20', type: 'vacation', status: 'approved' },
+    { id: 'leave-12', employeeId: '12', startDate: '2026-02-23', endDate: '2026-02-27', type: 'remote', status: 'approved' },
 
-        // March
-        { employeeId: '9', startDate: '2024-03-11', endDate: '2024-03-15', type: 'vacation', status: 'approved' },
-        { employeeId: '6', startDate: '2024-03-18', endDate: '2024-04-05', type: 'vacation', status: 'approved' },
-        { employeeId: '12', startDate: '2024-03-04', endDate: '2024-03-08', type: 'sick', status: 'approved' },
-
-        // April
-        { employeeId: '13', startDate: '2024-04-15', endDate: '2024-04-19', type: 'vacation', status: 'approved' },
-
-        // May
-        { employeeId: '8', startDate: '2024-05-06', endDate: '2024-05-17', type: 'vacation', status: 'approved' },
-        { employeeId: '11', startDate: '2024-04-29', endDate: '2024-05-10', type: 'vacation', status: 'approved' },
-
-        // June
-        { employeeId: '14', startDate: '2024-06-03', endDate: '2024-06-07', type: 'remote', status: 'pending' },
-    ];
-
-    specificLeaves.forEach((leave, index) => {
-        leaves.push({
-            ...leave,
-            id: `leave-${index + 1}`,
-        });
-    });
-
-    // Add some random additional leaves
-    employees.forEach((emp) => {
-        const numLeaves = Math.floor(Math.random() * 2); // 0-1 additional leaves per employee
-        for (let i = 0; i < numLeaves; i++) {
-            const month = Math.floor(Math.random() * 6) + 1; // Jan-June
-            const startDay = Math.floor(Math.random() * 20) + 1;
-            const duration = Math.floor(Math.random() * 7) + 1; // 1-7 days
-
-            const startDate = `2024-${String(month).padStart(2, '0')}-${String(startDay).padStart(2, '0')}`;
-            const endDay = Math.min(startDay + duration, 28);
-            const endDate = `2024-${String(month).padStart(2, '0')}-${String(endDay).padStart(2, '0')}`;
-
-            leaves.push({
-                id: `leave-random-${emp.id}-${i}`,
-                employeeId: emp.id,
-                startDate,
-                endDate,
-                type: types[Math.floor(Math.random() * types.length)],
-                status: statuses[Math.floor(Math.random() * statuses.length)],
-            });
-        }
-    });
-
-    return leaves;
-};
-
-export const leaveRecords: LeaveRecord[] = generateLeaves();
+    // Some pending/rejected for variety
+    { id: 'leave-13', employeeId: '13', startDate: '2025-12-18', endDate: '2025-12-19', type: 'personal', status: 'pending' },
+    { id: 'leave-14', employeeId: '14', startDate: '2026-01-08', endDate: '2026-01-10', type: 'vacation', status: 'rejected' },
+    { id: 'leave-15', employeeId: '15', startDate: '2026-02-10', endDate: '2026-02-14', type: 'sick', status: 'pending' },
+];
 
 export const departments = [...new Set(employees.map(e => e.department))];

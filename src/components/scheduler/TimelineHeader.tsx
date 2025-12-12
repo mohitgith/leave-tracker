@@ -8,9 +8,19 @@ interface TimelineHeaderProps {
 }
 
 const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth }) => {
+    const today = dayjs();
+    const totalDays = config.totalDays;
+
     // Generate all days for the visible range
     const generateDays = () => {
-        const days: { date: dayjs.Dayjs; dayOfWeek: string; dayNum: number; isWeekend: boolean; isMonthStart: boolean }[] = [];
+        const days: {
+            date: dayjs.Dayjs;
+            dayOfWeek: string;
+            dayNum: number;
+            isWeekend: boolean;
+            isMonthStart: boolean;
+            isToday: boolean;
+        }[] = [];
         let currentDate = config.startDate.startOf('month');
         const endDate = config.endDate.endOf('month');
 
@@ -21,6 +31,7 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth })
                 dayNum: currentDate.date(),
                 isWeekend: currentDate.day() === 0 || currentDate.day() === 6,
                 isMonthStart: currentDate.date() === 1,
+                isToday: currentDate.isSame(today, 'day'),
             });
             currentDate = currentDate.add(1, 'day');
         }
@@ -35,13 +46,14 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth })
             <div className="timeline-months-row">
                 {config.months.map((monthData, index) => {
                     const isCurrentMonth = currentMonth && monthData.month.isSame(currentMonth, 'month');
-                    const width = monthData.days * config.dayWidth;
+                    // Use percentage width based on proportion of days
+                    const widthPercent = (monthData.days / totalDays) * 100;
 
                     return (
                         <div
                             key={index}
                             className={`timeline-month ${isCurrentMonth ? 'timeline-month-current' : ''}`}
-                            style={{ width: `${width}px` }}
+                            style={{ width: `${widthPercent}%` }}
                         >
                             <span className="month-label">{monthData.label}</span>
                         </div>
@@ -54,8 +66,8 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth })
                 {days.map((day, index) => (
                     <div
                         key={index}
-                        className={`timeline-day ${day.isWeekend ? 'timeline-day-weekend' : ''} ${day.isMonthStart && index > 0 ? 'timeline-day-month-start' : ''}`}
-                        style={{ width: `${config.dayWidth}px` }}
+                        className={`timeline-day ${day.isWeekend ? 'timeline-day-weekend' : ''} ${day.isMonthStart && index > 0 ? 'timeline-day-month-start' : ''} ${day.isToday ? 'timeline-day-today' : ''}`}
+                        style={{ flex: 1 }}
                     >
                         <span className="day-letter">{day.dayOfWeek}</span>
                         <span className="day-number">{day.dayNum}</span>

@@ -2,6 +2,7 @@
     position: relative;
     background: #fff;
     min-height: 100%;
+    width: 100%;
 }
 
 .grid-lines {
@@ -11,7 +12,6 @@
     right: 0;
     bottom: 0;
     pointer-events: none;
-    display: flex;
 }
 
 .grid-column {
@@ -28,6 +28,10 @@
 
 .grid-column-weekend {
     background: rgba(0, 0, 0, 0.02);
+}
+
+.grid-column-today {
+    background: rgba(238, 53, 36, 0.08);
 }
 
 .timeline-row {

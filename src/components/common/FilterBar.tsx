@@ -3,6 +3,7 @@ import {
     FilterOutlined,
     UserOutlined,
     CloseOutlined,
+    PlusOutlined,
 } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';
 import './FilterBar.css';
@@ -10,11 +11,13 @@ import './FilterBar.css';
 interface FilterBarProps {
     viewMode: '1' | '3';
     onViewModeChange: (mode: '1' | '3') => void;
+    onCreateLeave: () => void;
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({
     viewMode,
     onViewModeChange,
+    onCreateLeave,
 }) => {
     const handleViewChange = (e: RadioChangeEvent) => {
         onViewModeChange(e.target.value);
@@ -51,6 +54,15 @@ const FilterBar: React.FC<FilterBarProps> = ({
                         <span className="leave-icon remote">🏠</span>
                     </div>
                 </Tag>
+
+                <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    className="create-leave-button"
+                    onClick={onCreateLeave}
+                >
+                    Create Leave
+                </Button>
             </div>
 
             <div className="filter-right">
