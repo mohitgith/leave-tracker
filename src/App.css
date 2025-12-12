@@ -1,3 +1,12 @@
+:root {
+    --hsbc-red: #EE3524;
+    --hsbc-dark: #231F20;
+    --hsbc-white: #FFFFFF;
+    --hsbc-gray: #9FA1A4;
+    --hsbc-red-hover: #D42E1F;
+    --hsbc-red-light: rgba(238, 53, 36, 0.08);
+}
+
 .app-layout {
     min-height: 100vh;
 }
@@ -25,7 +34,7 @@
 .date-range {
     font-size: 18px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: var(--hsbc-dark);
 }
 
 .nav-arrows {
@@ -48,8 +57,8 @@
 }
 
 .nav-arrow:hover {
-    border-color: #0066b3;
-    color: #0066b3;
+    border-color: var(--hsbc-red);
+    color: var(--hsbc-red);
 }
 
 .scheduler-container {

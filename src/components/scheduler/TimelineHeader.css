@@ -31,7 +31,7 @@
 }
 
 .timeline-month-current .month-label {
-    color: #0066b3;
+    color: #EE3524;
 }
 
 .timeline-days-row {
@@ -84,7 +84,7 @@
 
 /* Today's date highlight */
 .timeline-day-today {
-    background: #0066b3;
+    background: #EE3524;
     border-radius: 0;
 }
 

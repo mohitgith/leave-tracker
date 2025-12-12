@@ -42,7 +42,7 @@
 .working-days-value {
     font-size: 16px;
     font-weight: 600;
-    color: #0066b3;
+    color: #EE3524;
 }
 
 .working-days-note {
@@ -51,11 +51,11 @@
 }
 
 .create-leave-modal .ant-btn-primary {
-    background: #0066b3;
-    border-color: #0066b3;
+    background: #EE3524;
+    border-color: #EE3524;
 }
 
 .create-leave-modal .ant-btn-primary:hover {
-    background: #0052a3 !important;
-    border-color: #0052a3 !important;
+    background: #D42E1F !important;
+    border-color: #D42E1F !important;
 }
