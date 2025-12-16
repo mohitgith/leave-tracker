@@ -6,8 +6,8 @@ export interface Employee {
     department: string;
 }
 
-export type LeaveType = 'vacation' | 'sick' | 'remote' | 'unpaid' | 'personal';
-export type LeaveStatus = 'approved' | 'rejected' | 'pending';
+export type LeaveType = 'vacation' | 'sick';
+export type LeaveStatus = 'Applied';
 
 export interface LeaveRecord {
     id: string;
@@ -29,15 +29,9 @@ export interface FilterState {
 export const LEAVE_TYPE_COLORS: Record<LeaveType, { bg: string; border: string }> = {
     vacation: { bg: '#4db6ac', border: '#26a69a' },
     sick: { bg: '#f5a623', border: '#e09915' },
-    remote: { bg: '#64b5f6', border: '#42a5f5' },
-    unpaid: { bg: '#90a4ae', border: '#78909c' },
-    personal: { bg: '#ba68c8', border: '#ab47bc' },
 };
 
 export const LEAVE_TYPE_LABELS: Record<LeaveType, string> = {
-    vacation: 'Vacation',
+    vacation: 'Annual Leave',
     sick: 'Sick Leave',
-    remote: 'Remote Work',
-    unpaid: 'Unpaid Leave',
-    personal: 'Personal Day',
 };
