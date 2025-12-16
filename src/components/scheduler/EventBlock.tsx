@@ -17,8 +17,7 @@ const EventBlock: React.FC<EventBlockProps> = ({ leave, leftPercent, widthPercen
     const endDate = dayjs(leave.endDate).format('MMM D, YYYY');
     const duration = dayjs(leave.endDate).diff(dayjs(leave.startDate), 'day') + 1;
 
-    const isPending = leave.status === 'pending';
-    const isRejected = leave.status === 'rejected';
+
 
     // Show label text if width is sufficient (roughly more than 5% of container)
     const showLabel = widthPercent > 5;
@@ -38,7 +37,7 @@ const EventBlock: React.FC<EventBlockProps> = ({ leave, leftPercent, widthPercen
     return (
         <Tooltip title={tooltipContent} placement="top">
             <div
-                className={`event-block ${isPending ? 'event-pending' : ''} ${isRejected ? 'event-rejected' : ''}`}
+                className="event-block"
                 style={{
                     left: `${leftPercent}%`,
                     width: `calc(${widthPercent}% - 2px)`,

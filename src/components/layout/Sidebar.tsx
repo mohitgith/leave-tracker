@@ -11,6 +11,8 @@ const { Sider } = Layout;
 
 interface SidebarProps {
     collapsed?: boolean;
+    onNavigate: (key: string) => void;
+    selectedKey?: string;
 }
 
 const menuItems = [
@@ -23,7 +25,7 @@ const bottomItems = [
     { key: 'settings', icon: <SettingOutlined />, label: 'Settings' },
 ];
 
-const Sidebar: React.FC<SidebarProps> = ({ collapsed = true }) => {
+const Sidebar: React.FC<SidebarProps> = ({ collapsed = true, onNavigate, selectedKey = 'dashboard' }) => {
     return (
         <Sider
             collapsed={collapsed}
@@ -39,8 +41,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed = true }) => {
             <Menu
                 theme="dark"
                 mode="inline"
-                defaultSelectedKeys={['documents']}
+                selectedKeys={[selectedKey]}
                 className="sidebar-menu"
+                onClick={({ key }) => onNavigate(key)}
                 items={menuItems.map(item => ({
                     key: item.key,
                     icon: collapsed ? (
@@ -57,6 +60,8 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed = true }) => {
                     theme="dark"
                     mode="inline"
                     className="sidebar-menu"
+                    selectedKeys={[selectedKey]}
+                    onClick={({ key }) => onNavigate(key)}
                     items={bottomItems.map(item => ({
                         key: item.key,
                         icon: collapsed ? (
