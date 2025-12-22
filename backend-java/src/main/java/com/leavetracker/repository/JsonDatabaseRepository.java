@@ -85,6 +85,33 @@ public class JsonDatabaseRepository {
                 .findFirst();
     }
 
+    public synchronized Employee createEmployee(Employee employee) {
+        database.getEmployees().add(employee);
+        saveDatabase();
+        return employee;
+    }
+
+    public synchronized Optional<Employee> updateEmployee(String id, Employee updatedEmployee) {
+        List<Employee> employees = database.getEmployees();
+        for (int i = 0; i < employees.size(); i++) {
+            if (employees.get(i).getId().equals(id)) {
+                updatedEmployee.setId(id); // Ensure ID consistency
+                employees.set(i, updatedEmployee);
+                saveDatabase();
+                return Optional.of(updatedEmployee);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public synchronized boolean deleteEmployee(String id) {
+        boolean removed = database.getEmployees().removeIf(e -> e.getId().equals(id));
+        if (removed) {
+            saveDatabase();
+        }
+        return removed;
+    }
+
     // ==================== Leave Operations ====================
 
     public synchronized List<LeaveRecord> getAllLeaves() {
@@ -95,6 +122,27 @@ public class JsonDatabaseRepository {
         database.getLeaves().add(leave);
         saveDatabase();
         return leave;
+    }
+
+    public synchronized Optional<LeaveRecord> updateLeave(String id, LeaveRecord updatedLeave) {
+        List<LeaveRecord> leaves = database.getLeaves();
+        for (int i = 0; i < leaves.size(); i++) {
+            if (leaves.get(i).getId().equals(id)) {
+                updatedLeave.setId(id); // Ensure ID consistency
+                leaves.set(i, updatedLeave);
+                saveDatabase();
+                return Optional.of(updatedLeave);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public synchronized boolean deleteLeave(String id) {
+        boolean removed = database.getLeaves().removeIf(l -> l.getId().equals(id));
+        if (removed) {
+            saveDatabase();
+        }
+        return removed;
     }
 
     // ==================== Org Chart Operations ====================
@@ -142,90 +190,80 @@ public class JsonDatabaseRepository {
     private Database createInitialDatabase() {
         Database db = new Database();
 
-        // Create employees with hierarchy
+        // Create employees with hierarchy - Lohit Ganta as manager (root)
         List<Employee> employees = new ArrayList<>();
 
-        // CEO (root)
-        employees.add(new Employee("1", "Mark Bohlers", "Founder and CEO", "Executive",
-                getAvatarUrl("Mark Bohlers"), "Steller Foods Headquarters",
-                "mark.bohlers@stellerfoods.com", "+1 (555) 123-4567", null));
+        // Manager (root) - Lohit Ganta
+        employees.add(new Employee("0", "Lohit Ganta", "MANAGER", "ENABLEMENT R&C",
+                getAvatarUrl("Lohit Ganta"), "Office",
+                "lohit.ganta@company.com", "+1 (555) 000-0000", null));
 
-        // VP of Sales reports to CEO
-        employees.add(new Employee("2", "Michelle Fillet", "VP of Sales", "Sales",
-                getAvatarUrl("Michelle Fillet"), "Steller Foods Headquarters",
-                "michelle.fillet@stellerfoods.com", "+1 (555) 234-5678", "1"));
+        // Team members report to Lohit
+        employees.add(new Employee("1", "Aditya Pathak", "SOFTWARE DEVELOPER", "ENABLEMENT R&C",
+                getAvatarUrl("Aditya Pathak"), "Office",
+                "aditya.pathak@company.com", "+1 (555) 100-0001", "0"));
 
-        // Sales team reports to VP of Sales
-        employees.add(new Employee("3", "Brandon Septimus", "Sales Manager", "Sales",
-                getAvatarUrl("Brandon Septimus"), "Steller Foods Headquarters",
-                "brandon.s@stellerfoods.com", "+1 (555) 345-6789", "2"));
+        employees.add(new Employee("2", "Atul Tewathia", "SOFTWARE DEVELOPER", "ENABLEMENT R&C",
+                getAvatarUrl("Atul Tewathia"), "Office",
+                "atul.tewathia@company.com", "+1 (555) 100-0002", "0"));
 
-        employees.add(new Employee("4", "Cristofer Curtis", "Associate Director of Sales", "Sales",
-                getAvatarUrl("Cristofer Curtis"), "Steller Foods Headquarters",
-                "cris.curtis@stellerfoods.com", "+1 (555) 456-7890", "2"));
+        employees.add(new Employee("3", "Bertrand Iwunna", "SOFTWARE DEVELOPER", "ENABLEMENT R&C",
+                getAvatarUrl("Bertrand Iwunna"), "Office",
+                "bertrand.iwunna@company.com", "+1 (555) 100-0003", "0"));
 
-        employees.add(new Employee("5", "Jocelyn Lubin", "Associate Director of Sales", "Sales",
-                getAvatarUrl("Jocelyn Lubin"), "Steller Foods Headquarters",
-                "j.lubin@stellerfoods.com", "+1 (555) 567-8901", "2"));
+        employees.add(new Employee("4", "Carrick Mak", "DATA RISK AND CONTROLS MANAGEMENT", "ENABLEMENT R&C",
+                getAvatarUrl("Carrick Mak"), "Office",
+                "carrick.mak@company.com", "+1 (555) 100-0004", "0"));
 
-        employees.add(new Employee("6", "Talan Passaquindici", "Senior Director of Sales", "Sales",
-                getAvatarUrl("Talan Passaquindici"), "Steller Foods Headquarters",
-                "talan.p@stellerfoods.com", "+1 (555) 678-9012", "2"));
+        employees.add(new Employee("5", "Chris C Lee", "CONSULTANT SPECIALIST", "ENABLEMENT R&C",
+                getAvatarUrl("Chris C Lee"), "Office",
+                "chris.lee@company.com", "+1 (555) 100-0005", "0"));
 
-        employees.add(new Employee("7", "Ashlynn Calzoni", "Sales and Marketing Manager", "Marketing",
-                getAvatarUrl("Ashlynn Calzoni"), "Steller Foods Headquarters",
-                "ashlynn.c@stellerfoods.com", "+1 (555) 890-1234", "2"));
+        employees.add(new Employee("6", "Dhanashree Vishwasrao", "ASSOCIATE PROJECT MANAGER - IT SEC ANALYST",
+                "ENABLEMENT R&C",
+                getAvatarUrl("Dhanashree Vishwasrao"), "Office",
+                "dhanashree.v@company.com", "+1 (555) 100-0006", "0"));
 
-        employees.add(new Employee("8", "Angel Vetrovs", "Sales and Marketing Manager", "Marketing",
-                getAvatarUrl("Angel Vetrovs"), "Steller Foods Headquarters",
-                "angel.v@stellerfoods.com", "+1 (555) 901-2345", "2"));
+        employees.add(new Employee("7", "Eric Luo", "DEVELOPMENT ENGINEERING", "ENABLEMENT R&C",
+                getAvatarUrl("Eric Luo"), "Office",
+                "eric.luo@company.com", "+1 (555) 100-0007", "0"));
 
-        // Kaylynn reports to Talan
-        employees.add(new Employee("9", "Kaylynn Geidt", "NW Regional Sales Architect", "Sales",
-                getAvatarUrl("Kaylynn Geidt"), "Steller Foods Headquarters",
-                "k.geidt@stellerfoods.com", "+1 (555) 789-0123", "6"));
+        employees.add(new Employee("8", "Gavin Guan", "SERVICE MANAGEMENT", "ENABLEMENT R&C",
+                getAvatarUrl("Gavin Guan"), "Office",
+                "gavin.guan@company.com", "+1 (555) 100-0008", "0"));
 
-        // Additional employees from original mockData
-        employees.add(new Employee("10", "Aditya Pathak", "Java Developer", "Engineering",
-                getAvatarUrl("Aditya Pathak"), "Steller Foods Headquarters",
-                "aditya.pathak@stellerfoods.com", "+1 (555) 100-0001", "1"));
+        employees.add(new Employee("9", "Jacky Hu", "SERVICE MANAGEMENT", "ENABLEMENT R&C",
+                getAvatarUrl("Jacky Hu"), "Office",
+                "jacky.hu@company.com", "+1 (555) 100-0009", "0"));
 
-        employees.add(new Employee("11", "Lev Levko", "System Administrator", "IT",
-                getAvatarUrl("Lev Levko"), "Steller Foods Headquarters",
-                "lev.levko@stellerfoods.com", "+1 (555) 100-0002", "1"));
+        employees.add(new Employee("10", "Mohit Shrivastava", "CONSULTANT SPECIALIST", "ENABLEMENT R&C",
+                getAvatarUrl("Mohit Shrivastava"), "Office",
+                "mohit.shrivastava@company.com", "+1 (555) 100-0010", "0"));
 
-        employees.add(new Employee("12", "Antonina Lysenko", "HR Manager", "HR",
-                getAvatarUrl("Antonina Lysenko"), "Steller Foods Headquarters",
-                "antonina.lysenko@stellerfoods.com", "+1 (555) 100-0003", "1"));
+        employees.add(new Employee("11", "Sameer Kumar Sahu", "SENIOR CONSULTANT SPECIALIST", "ENABLEMENT R&C",
+                getAvatarUrl("Sameer Kumar Sahu"), "Office",
+                "sameer.sahu@company.com", "+1 (555) 100-0011", "0"));
 
-        employees.add(new Employee("13", "Fedir Dudko", "CFO", "Finance",
-                getAvatarUrl("Fedir Dudko"), "Steller Foods Headquarters",
-                "fedir.dudko@stellerfoods.com", "+1 (555) 100-0004", "1"));
-
-        employees.add(new Employee("14", "Margaryta Voloshyna", "Accountant", "Finance",
-                getAvatarUrl("Margaryta Voloshyna"), "Steller Foods Headquarters",
-                "margaryta.v@stellerfoods.com", "+1 (555) 100-0005", "13"));
-
-        employees.add(new Employee("15", "Oleh Herasymets", "Accountant", "Finance",
-                getAvatarUrl("Oleh Herasymets"), "Steller Foods Headquarters",
-                "oleh.h@stellerfoods.com", "+1 (555) 100-0006", "13"));
+        employees.add(new Employee("12", "Sreelakshmi Vineetha Movva", "TRAINEE SOFTWARE ENGINEER", "ENABLEMENT R&C",
+                getAvatarUrl("Sreelakshmi Vineetha Movva"), "Office",
+                "sreelakshmi.movva@company.com", "+1 (555) 100-0012", "0"));
 
         db.setEmployees(employees);
 
-        // Create leave records
+        // Create leave records matching the mockData employee IDs
         List<LeaveRecord> leaves = new ArrayList<>();
-        leaves.add(new LeaveRecord("leave-1", "10", "2025-12-16", "2025-12-20", "vacation", "Applied"));
-        leaves.add(new LeaveRecord("leave-2", "12", "2025-12-23", "2025-12-31", "vacation", "Applied"));
+        leaves.add(new LeaveRecord("leave-1", "1", "2025-12-16", "2025-12-20", "vacation", "Applied"));
+        leaves.add(new LeaveRecord("leave-2", "3", "2025-12-23", "2025-12-31", "vacation", "Applied"));
         leaves.add(new LeaveRecord("leave-3", "5", "2025-12-09", "2025-12-13", "sick", "Applied"));
         leaves.add(new LeaveRecord("leave-4", "7", "2025-12-02", "2025-12-06", "vacation", "Applied"));
-        leaves.add(new LeaveRecord("leave-5", "11", "2026-01-06", "2026-01-10", "vacation", "Applied"));
+        leaves.add(new LeaveRecord("leave-5", "2", "2026-01-06", "2026-01-10", "vacation", "Applied"));
         leaves.add(new LeaveRecord("leave-6", "4", "2026-01-13", "2026-01-17", "sick", "Applied"));
-        leaves.add(new LeaveRecord("leave-7", "8", "2026-01-20", "2026-01-31", "vacation", "Applied"));
-        leaves.add(new LeaveRecord("leave-8", "3", "2026-01-27", "2026-01-31", "vacation", "Applied"));
+        leaves.add(new LeaveRecord("leave-7", "6", "2026-01-20", "2026-01-31", "vacation", "Applied"));
+        leaves.add(new LeaveRecord("leave-8", "8", "2026-01-27", "2026-01-31", "vacation", "Applied"));
         leaves.add(new LeaveRecord("leave-9", "9", "2026-02-02", "2026-02-06", "vacation", "Applied"));
-        leaves.add(new LeaveRecord("leave-10", "13", "2026-02-09", "2026-02-13", "sick", "Applied"));
-        leaves.add(new LeaveRecord("leave-11", "14", "2026-02-16", "2026-02-20", "vacation", "Applied"));
-        leaves.add(new LeaveRecord("leave-12", "15", "2026-02-23", "2026-02-27", "vacation", "Applied"));
+        leaves.add(new LeaveRecord("leave-10", "10", "2026-02-09", "2026-02-13", "sick", "Applied"));
+        leaves.add(new LeaveRecord("leave-11", "11", "2026-02-16", "2026-02-20", "vacation", "Applied"));
+        leaves.add(new LeaveRecord("leave-12", "12", "2026-02-23", "2026-02-27", "vacation", "Applied"));
 
         db.setLeaves(leaves);
 

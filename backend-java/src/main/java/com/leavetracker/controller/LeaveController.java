@@ -34,4 +34,19 @@ public class LeaveController {
         LeaveRecord created = repository.createLeave(leave);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateLeave(@PathVariable String id, @RequestBody LeaveRecord leave) {
+        return repository.updateLeave(id, leave)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteLeave(@PathVariable String id) {
+        if (repository.deleteLeave(id)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
