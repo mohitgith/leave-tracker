@@ -39,8 +39,8 @@
 }
 
 .global-add-btn:hover {
-    color: #db0011;
-    border-color: #db0011;
+    color: #EE3524;
+    border-color: #EE3524;
     background: #fff;
 }
 
@@ -74,8 +74,8 @@
 
 .zoom-btn:hover {
     background: #f0f0f0;
-    color: #db0011;
-    border-color: #db0011;
+    color: #EE3524;
+    border-color: #EE3524;
 }
 
 /* Viewport for Drag/Scroll */
@@ -99,7 +99,7 @@
 }
 
 /* =========================================
-   Compact Tree Implementation - Grid Layout
+   Tree with Connectors - Compact Grid Layout
    ========================================= */
 
 .tree {
@@ -110,9 +110,9 @@
     position: relative;
 }
 
-/* Root node (Manager) */
+/* Root node (Manager) - no top connector */
 .tree>.tree-node {
-    padding: 0;
+    padding-top: 0;
 }
 
 .tree>.tree-node::before,
@@ -125,36 +125,53 @@
     text-align: center;
     list-style-type: none;
     position: relative;
-    padding: 15px 5px 0 5px;
+    padding: 20px 8px 0 8px;
     transition: all 0.3s;
 }
 
-/* Connectors disabled for grid layout */
-.tree-node::before,
-.tree-node::after {
-    display: none;
+/* Top connector line for each node */
+.tree-node::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 20px;
+    background: #9FA1A4;
 }
 
-/* Children Container - Grid Layout for many children */
+/* Children Container - Grid Layout */
 .children-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 12px;
-    padding: 20px 10px;
+    gap: 16px;
+    padding: 30px 10px 10px;
     position: relative;
     max-width: calc(100vw - 120px);
 }
 
-/* Connector line down from parent */
+/* Connector line down from parent to children */
 .children-container::before {
     content: '';
     position: absolute;
     top: 0;
     left: 50%;
-    border-left: 2px solid #ccc;
-    width: 0;
-    height: 20px;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 30px;
+    background: #9FA1A4;
+}
+
+/* Horizontal line connecting all children */
+.children-container::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: #9FA1A4;
 }
 
 /* =========================================
@@ -179,7 +196,7 @@
 .employee-card:hover {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
-    border-color: #db0011;
+    border-color: #EE3524;
 }
 
 /* Manager card - larger */
@@ -219,7 +236,7 @@
 .emp-name {
     font-size: 12px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: #231F20;
     margin-bottom: 2px;
     white-space: nowrap;
     overflow: hidden;
@@ -233,7 +250,7 @@
 
 .emp-role {
     font-size: 10px;
-    color: #666;
+    color: #9FA1A4;
     margin-bottom: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -242,7 +259,7 @@
 
 .emp-dept {
     font-size: 9px;
-    color: #999;
+    color: #9FA1A4;
     text-transform: uppercase;
     font-weight: 500;
     letter-spacing: 0.5px;
@@ -257,7 +274,7 @@
 .email-row {
     display: flex;
     align-items: center;
-    color: #666;
+    color: #9FA1A4;
     font-size: 10px;
     overflow: hidden;
 }
@@ -302,70 +319,94 @@
 }
 
 .delete-btn:hover {
-    color: #db0011;
-    border-color: #db0011;
+    color: #EE3524;
+    border-color: #EE3524;
 }
 
 /* =========================================
-   Dark Mode Styles
+   Dark Mode Styles - HSBC Colors
+   231F20 (dark), FFFFFF (white), 9FA1A4 (gray), EE3524 (red)
    ========================================= */
 
 .dark-mode .org-chart-wrapper {
-    background: #1a1a2e;
+    background: #231F20;
 }
 
 .dark-mode .employee-card {
-    background: #16213e;
-    border-color: #0f3460;
+    background: #2d2a2b;
+    border-color: #3a3a3a;
 }
 
 .dark-mode .employee-card:hover {
-    border-color: #db0011;
+    border-color: #EE3524;
 }
 
 .dark-mode .emp-name {
-    color: #e8e8e8;
+    color: #FFFFFF;
 }
 
 .dark-mode .emp-role,
 .dark-mode .emp-dept,
-.dark-mode .email-text {
-    color: #a0a0a0;
+.dark-mode .email-text,
+.dark-mode .email-row {
+    color: #9FA1A4;
 }
 
 .dark-mode .card-header,
 .dark-mode .card-body {
-    border-color: #0f3460;
+    border-color: #3a3a3a;
 }
 
 .dark-mode .card-footer {
-    background: #0f3460;
-    border-color: #0f3460;
+    background: #1a1818;
+    border-color: #3a3a3a;
 }
 
 .dark-mode .edit-btn,
 .dark-mode .delete-btn {
-    background: #16213e;
-    border-color: #3a3a5c;
-    color: #e8e8e8;
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #FFFFFF;
 }
 
 .dark-mode .global-add-btn {
-    background: #16213e;
-    border-color: #3a3a5c;
-    color: #e8e8e8;
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #FFFFFF;
+}
+
+.dark-mode .global-add-btn:hover {
+    border-color: #EE3524;
+    color: #EE3524;
 }
 
 .dark-mode .zoom-controls {
-    background: #16213e;
+    background: #2d2a2b;
 }
 
 .dark-mode .zoom-btn {
-    background: #16213e;
-    border-color: #3a3a5c;
-    color: #e8e8e8;
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #FFFFFF;
 }
 
-.dark-mode .children-container::before {
-    border-color: #3a3a5c;
+.dark-mode .zoom-btn:hover {
+    border-color: #EE3524;
+    color: #EE3524;
+}
+
+.dark-mode .tree-node::before,
+.dark-mode .children-container::before,
+.dark-mode .children-container::after {
+    background: #4a4a4a;
+}
+
+.dark-mode .search-input .ant-input {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #FFFFFF;
+}
+
+.dark-mode .search-input .ant-input-prefix {
+    color: #9FA1A4;
 }

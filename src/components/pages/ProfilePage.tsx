@@ -1,30 +1,21 @@
 import React, { useState } from 'react';
-import { Card, Avatar, Typography, Button, Form, Input, Divider, message, Upload } from 'antd';
-import { CameraOutlined, MailOutlined, PhoneOutlined, TeamOutlined, IdcardOutlined } from '@ant-design/icons';
+import { Card, Avatar, Typography, Button, Form, Input, Divider, message, Upload, Modal } from 'antd';
+import { CameraOutlined, MailOutlined, PhoneOutlined, TeamOutlined, IdcardOutlined, UploadOutlined } from '@ant-design/icons';
 import { useAuth } from '../../context/AuthContext';
-import type { UploadChangeParam } from 'antd/es/upload';
 import './ProfilePage.css';
 
 const { Title, Text } = Typography;
 
 const ProfilePage: React.FC = () => {
     const { user } = useAuth();
-    const [isEditing, setIsEditing] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState<string>(
         user ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=e91e63&color=fff&size=128&bold=true` : ''
     );
 
-    const handleAvatarChange = (info: UploadChangeParam) => {
-        if (info.file.status === 'done' && info.file.response) {
-            setAvatarUrl(info.file.response.url);
-            message.success('Profile picture updated!');
-        }
-    };
-
-    // Fake upload handling - just show a success message
-    const handleCustomUpload = () => {
-        message.info('Profile picture upload is simulated in this demo');
-        setIsEditing(false);
+    const handleSaveAvatar = () => {
+        message.success('Profile picture updated!');
+        setIsModalOpen(false);
     };
 
     return (
@@ -44,7 +35,7 @@ const ProfilePage: React.FC = () => {
                             className="edit-avatar-btn"
                             icon={<CameraOutlined />}
                             shape="circle"
-                            onClick={() => setIsEditing(!isEditing)}
+                            onClick={() => setIsModalOpen(true)}
                         />
                     </div>
                     <div className="profile-name">
@@ -52,23 +43,6 @@ const ProfilePage: React.FC = () => {
                         <Text type="secondary">{user?.role || 'Employee'}</Text>
                     </div>
                 </div>
-
-                {isEditing && (
-                    <div className="avatar-upload-section">
-                        <Text>Edit Profile Picture</Text>
-                        <div className="upload-actions">
-                            <Upload
-                                showUploadList={false}
-                                onChange={handleAvatarChange}
-                                beforeUpload={() => false}
-                            >
-                                <Button type="primary">Choose File</Button>
-                            </Upload>
-                            <Button onClick={handleCustomUpload}>Save</Button>
-                            <Button onClick={() => setIsEditing(false)}>Cancel</Button>
-                        </div>
-                    </div>
-                )}
 
                 <Divider />
 
@@ -114,6 +88,45 @@ const ProfilePage: React.FC = () => {
                     </Form.Item>
                 </Form>
             </Card>
+
+            {/* Avatar Upload Modal */}
+            <Modal
+                title="Change Profile Picture"
+                open={isModalOpen}
+                onOk={handleSaveAvatar}
+                onCancel={() => setIsModalOpen(false)}
+                okText="Save"
+                cancelText="Cancel"
+            >
+                <div className="avatar-modal-content">
+                    <div className="current-avatar">
+                        <Avatar size={100} src={avatarUrl} />
+                        <Text type="secondary">Current Avatar</Text>
+                    </div>
+                    <div className="avatar-upload-area">
+                        <Upload.Dragger
+                            showUploadList={false}
+                            beforeUpload={(file) => {
+                                // Preview the image
+                                const reader = new FileReader();
+                                reader.onload = (e) => {
+                                    if (e.target?.result) {
+                                        setAvatarUrl(e.target.result as string);
+                                    }
+                                };
+                                reader.readAsDataURL(file);
+                                return false;
+                            }}
+                        >
+                            <p className="upload-icon">
+                                <UploadOutlined style={{ fontSize: 32, color: '#9FA1A4' }} />
+                            </p>
+                            <p className="upload-text">Click or drag file to upload</p>
+                            <p className="upload-hint">Support JPG, PNG up to 5MB</p>
+                        </Upload.Dragger>
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 };

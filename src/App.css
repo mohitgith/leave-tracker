@@ -101,57 +101,144 @@
 
 .manager-name {
     font-size: 12px;
-    color: #1a1a1a;
+    color: var(--hsbc-dark);
     font-weight: 500;
 }
 
 /* =========================================
-   Dark Mode Styles
+   Dark Mode Styles - HSBC Colors
+   231F20 (dark), FFFFFF (white), 9FA1A4 (gray), EE3524 (red)
    ========================================= */
 
 .dark-mode {
-    --bg-primary: #1a1a2e;
-    --bg-secondary: #16213e;
-    --bg-tertiary: #0f3460;
-    --text-primary: #e8e8e8;
-    --text-secondary: #a0a0a0;
-    --border-color: #3a3a5c;
+    --bg-primary: #231F20;
+    --bg-secondary: #2d2a2b;
+    --bg-tertiary: #1a1818;
+    --text-primary: #FFFFFF;
+    --text-secondary: #9FA1A4;
+    --border-color: #3a3a3a;
 }
 
 .dark-mode .main-layout {
-    background: #1a1a2e;
+    background: #231F20;
 }
 
 .dark-mode .main-content {
-    background: #1a1a2e;
+    background: #231F20;
 }
 
 .dark-mode .scheduler-container {
-    background: #16213e;
-    border-color: #0f3460;
+    background: #2d2a2b;
+    border-color: #3a3a3a;
 }
 
 .dark-mode .scheduler-search-row {
-    background: #16213e;
-    border-color: #0f3460;
+    background: #2d2a2b;
+    border-color: #3a3a3a;
 }
 
 .dark-mode .date-range,
 .dark-mode .manager-name {
-    color: #e8e8e8;
+    color: #FFFFFF;
 }
 
 .dark-mode .manager-label {
-    color: #a0a0a0;
+    color: #9FA1A4;
 }
 
 .dark-mode .nav-arrow {
-    background: #16213e;
-    border-color: #3a3a5c;
-    color: #e8e8e8;
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #FFFFFF;
 }
 
 .dark-mode .nav-arrow:hover {
     border-color: var(--hsbc-red);
     color: var(--hsbc-red);
+}
+
+/* Dark mode for Ant Design components */
+.dark-mode .ant-card {
+    background: #2d2a2b;
+    border-color: #3a3a3a;
+}
+
+.dark-mode .ant-card-head {
+    background: #1a1818;
+    border-color: #3a3a3a;
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-card-head-title {
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-typography {
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-typography.ant-typography-secondary {
+    color: #9FA1A4;
+}
+
+.dark-mode .ant-switch {
+    background: #4a4a4a;
+}
+
+.dark-mode .ant-switch-checked {
+    background: #EE3524;
+}
+
+.dark-mode .ant-radio-button-wrapper {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-radio-button-wrapper-checked {
+    background: #EE3524 !important;
+    border-color: #EE3524 !important;
+}
+
+.dark-mode .ant-btn-primary {
+    background: #EE3524;
+    border-color: #EE3524;
+}
+
+.dark-mode .ant-btn-primary:hover {
+    background: #D42E1F;
+    border-color: #D42E1F;
+}
+
+.dark-mode .ant-input {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-input::placeholder {
+    color: #9FA1A4;
+}
+
+.dark-mode .ant-select-selector {
+    background: #2d2a2b !important;
+    border-color: #4a4a4a !important;
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-modal-content {
+    background: #2d2a2b;
+}
+
+.dark-mode .ant-modal-header {
+    background: #2d2a2b;
+    border-color: #3a3a3a;
+}
+
+.dark-mode .ant-modal-title {
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-modal-close-x {
+    color: #9FA1A4;
 }

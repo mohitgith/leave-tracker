@@ -41,7 +41,7 @@
 
 .setting-icon {
     font-size: 20px;
-    color: #666;
+    color: #9FA1A4;
 }
 
 .setting-info .ant-typography-secondary {
@@ -55,21 +55,33 @@
 }
 
 /* Dark mode overrides */
+.dark-mode .settings-page .ant-typography {
+    color: #FFFFFF;
+}
+
 .dark-mode .settings-card {
-    background: #16213e;
-    border-color: #0f3460;
+    background: #2d2a2b;
+    border-color: #3a3a3a;
 }
 
 .dark-mode .settings-card .ant-card-head {
-    background: #0f3460;
-    border-color: #0f3460;
-    color: #fff;
+    background: #1a1818;
+    border-color: #3a3a3a;
+    color: #FFFFFF;
+}
+
+.dark-mode .settings-card .ant-card-body {
+    background: #2d2a2b;
 }
 
 .dark-mode .setting-row .ant-typography {
-    color: #e8e8e8;
+    color: #FFFFFF;
 }
 
 .dark-mode .setting-row .ant-typography-secondary {
-    color: #a0a0a0;
+    color: #9FA1A4;
+}
+
+.dark-mode .ant-divider {
+    border-color: #3a3a3a;
 }

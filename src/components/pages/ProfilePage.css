@@ -46,22 +46,68 @@
     margin-bottom: 4px !important;
 }
 
-.avatar-upload-section {
-    background: #fafafa;
-    padding: 16px;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    text-align: center;
-}
-
-.upload-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-top: 12px;
-}
-
 .profile-form .ant-input-disabled {
     background: #fafafa;
     color: #1a1a1a;
+}
+
+/* Modal Styles */
+.avatar-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 16px 0;
+}
+
+.current-avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.avatar-upload-area {
+    width: 100%;
+}
+
+.upload-text {
+    margin: 8px 0 4px;
+    color: #231F20;
+}
+
+.upload-hint {
+    color: #9FA1A4;
+    font-size: 12px;
+}
+
+/* Dark Mode */
+.dark-mode .profile-page .ant-typography {
+    color: #FFFFFF;
+}
+
+.dark-mode .profile-card {
+    background: #231F20;
+    border-color: #3a3a3a;
+}
+
+.dark-mode .profile-card .ant-card-body {
+    background: #231F20;
+}
+
+.dark-mode .profile-form .ant-form-item-label>label {
+    color: #9FA1A4;
+}
+
+.dark-mode .profile-form .ant-input-disabled {
+    background: #1a1a1a;
+    color: #FFFFFF;
+    border-color: #3a3a3a;
+}
+
+.dark-mode .profile-form .ant-input-prefix {
+    color: #9FA1A4;
+}
+
+.dark-mode .ant-divider {
+    border-color: #3a3a3a;
 }
