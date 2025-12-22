@@ -222,13 +222,13 @@ const OrgChart: React.FC = () => {
                 <Tooltip title="Zoom Out">
                     <div className="zoom-btn" onClick={handleZoomOut}><MinusOutlined /></div>
                 </Tooltip>
-                <div style={{ minWidth: 40, textAlign: 'center', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="zoom-value">
                     {Math.round(scale * 100)}%
                 </div>
                 <Tooltip title="Zoom In">
                     <div className="zoom-btn" onClick={handleZoomIn}><PlusOutlined /></div>
                 </Tooltip>
-                <div style={{ width: 1, height: 20, background: '#eee', margin: '0 4px' }} />
+                <div className="zoom-divider" />
                 <Tooltip title="Fit Screen">
                     <div className="zoom-btn" onClick={handleResetZoom}><CompressOutlined /></div>
                 </Tooltip>

@@ -78,6 +78,24 @@
     border-color: #EE3524;
 }
 
+.zoom-value {
+    min-width: 40px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+}
+
+.zoom-divider {
+    width: 1px;
+    height: 20px;
+    background: #eee;
+    margin: 0 4px;
+}
+
 /* Viewport for Drag/Scroll */
 .org-chart-viewport {
     flex: 1;
@@ -409,4 +427,12 @@
 
 .dark-mode .search-input .ant-input-prefix {
     color: #9FA1A4;
+}
+
+.dark-mode .zoom-value {
+    color: #FFFFFF;
+}
+
+.dark-mode .zoom-divider {
+    background: #4a4a4a;
 }
