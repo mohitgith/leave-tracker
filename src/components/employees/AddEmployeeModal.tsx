@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
-import { Modal, Form, Input, Select, Button, message } from 'antd';
-import { OrgEmployee } from '../../data/orgChartData';
+import { Modal, Form, Input, Select, message } from 'antd';
+import { OrgEmployeeAPI } from '../../services/api';
+
+type OrgEmployee = OrgEmployeeAPI;
 
 interface AddEmployeeModalProps {
     open: boolean;

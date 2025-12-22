@@ -1,27 +1,31 @@
-import React, { useState } from 'react';
-import { Input, Tooltip, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Input, Tooltip, message, Popconfirm, Spin } from 'antd';
 import {
     SearchOutlined,
     CompressOutlined,
     PlusOutlined,
     MinusOutlined,
-    TeamOutlined,
     EditOutlined,
     MailOutlined,
-    UserAddOutlined
+    UserAddOutlined,
+    DeleteOutlined
 } from '@ant-design/icons';
-import { orgChartData, OrgEmployee } from '../../data/orgChartData';
+import { fetchOrgChart, createEmployee, updateEmployee, deleteEmployee, OrgEmployeeAPI } from '../../services/api';
 import EmployeeDetailModal from './EmployeeDetailModal';
 import AddEmployeeModal from './AddEmployeeModal';
 import './OrgChart.css';
+
+// Use API type for OrgEmployee
+type OrgEmployee = OrgEmployeeAPI;
 
 interface RecursiveNodeProps {
     employee: OrgEmployee;
     onNodeClick: (emp: OrgEmployee) => void;
     onEditClick: (emp: OrgEmployee) => void;
+    onDeleteClick: (emp: OrgEmployee) => void;
 }
 
-const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, onEditClick }) => {
+const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, onEditClick, onDeleteClick }) => {
     const hasChildren = employee.children && employee.children.length > 0;
 
     return (
@@ -53,6 +57,23 @@ const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, on
                     }}>
                         <EditOutlined style={{ marginRight: 4 }} /> Edit
                     </div>
+                    {!hasChildren && (
+                        <Popconfirm
+                            title="Delete Employee"
+                            description="Are you sure you want to delete this employee?"
+                            onConfirm={(e) => {
+                                e?.stopPropagation();
+                                onDeleteClick(employee);
+                            }}
+                            onCancel={(e) => e?.stopPropagation()}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <div className="delete-btn" onClick={(e) => e.stopPropagation()}>
+                                <DeleteOutlined style={{ marginRight: 4 }} /> Delete
+                            </div>
+                        </Popconfirm>
+                    )}
                 </div>
             </div>
 
@@ -64,6 +85,7 @@ const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, on
                             employee={child}
                             onNodeClick={onNodeClick}
                             onEditClick={onEditClick}
+                            onDeleteClick={onDeleteClick}
                         />
                     ))}
                 </div>
@@ -77,6 +99,26 @@ const OrgChart: React.FC = () => {
     const [selectedEmployee, setSelectedEmployee] = useState<OrgEmployee | null>(null);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [editingEmployee, setEditingEmployee] = useState<OrgEmployee | null>(null);
+    const [orgChartData, setOrgChartData] = useState<OrgEmployee | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    // Fetch org chart data from API
+    const loadOrgChart = async () => {
+        try {
+            setLoading(true);
+            const data = await fetchOrgChart();
+            setOrgChartData(data);
+        } catch (error) {
+            message.error('Failed to load org chart data');
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadOrgChart();
+    }, []);
 
     // Zoom Logic
     const handleZoomIn = () => setScale(prev => Math.min(prev + 0.1, 1.5));
@@ -93,12 +135,53 @@ const OrgChart: React.FC = () => {
         setIsAddModalOpen(true);
     };
 
-    const handleFormSubmit = (values: any) => {
-        console.log('Form Values:', values);
-        // Here you would typically update the orgChartData state
-        setIsAddModalOpen(false);
-        message.success(editingEmployee ? 'Updated successfully' : 'Added successfully');
+    const handleDeleteClick = async (emp: OrgEmployee) => {
+        try {
+            await deleteEmployee(emp.id);
+            message.success('Employee deleted successfully');
+            loadOrgChart(); // Refresh data
+        } catch (error) {
+            message.error('Failed to delete employee');
+            console.error(error);
+        }
     };
+
+    const handleFormSubmit = async (values: any) => {
+        try {
+            if (editingEmployee) {
+                // Update existing employee
+                await updateEmployee(editingEmployee.id, {
+                    ...values,
+                    id: editingEmployee.id,
+                    avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(values.name)}&background=random&color=fff&size=64&bold=true`,
+                    managerId: '0', // Default to manager
+                    department: 'ENABLEMENT R&C',
+                });
+                message.success('Employee updated successfully');
+            } else {
+                // Create new employee
+                await createEmployee({
+                    ...values,
+                    managerId: '0', // Default to manager
+                    department: 'ENABLEMENT R&C',
+                });
+                message.success('Employee added successfully');
+            }
+            setIsAddModalOpen(false);
+            loadOrgChart(); // Refresh data
+        } catch (error) {
+            message.error(editingEmployee ? 'Failed to update employee' : 'Failed to add employee');
+            console.error(error);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <Spin size="large" />
+            </div>
+        );
+    }
 
     return (
         <div className="org-chart-wrapper">
@@ -117,11 +200,14 @@ const OrgChart: React.FC = () => {
             <div className="org-chart-viewport">
                 <div className="transform-container" style={{ transform: `scale(${scale})` }}>
                     <div className="tree">
-                        <RecursiveNode
-                            employee={orgChartData}
-                            onNodeClick={setSelectedEmployee}
-                            onEditClick={handleEditClick}
-                        />
+                        {orgChartData && (
+                            <RecursiveNode
+                                employee={orgChartData}
+                                onNodeClick={setSelectedEmployee}
+                                onEditClick={handleEditClick}
+                                onDeleteClick={handleDeleteClick}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

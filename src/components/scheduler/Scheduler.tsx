@@ -13,6 +13,8 @@ interface SchedulerProps {
     startDate: dayjs.Dayjs;
     endDate: dayjs.Dayjs;
     viewMode: '1' | '3'; // months
+    onEditLeave?: (leave: LeaveRecord) => void;
+    onDeleteLeave?: (leaveId: string) => void;
 }
 
 const Scheduler: React.FC<SchedulerProps> = ({
@@ -21,6 +23,8 @@ const Scheduler: React.FC<SchedulerProps> = ({
     startDate,
     endDate,
     viewMode,
+    onEditLeave,
+    onDeleteLeave,
 }) => {
     const timelineRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
@@ -106,6 +110,8 @@ const Scheduler: React.FC<SchedulerProps> = ({
                         employees={employees}
                         leaves={leaves}
                         config={config}
+                        onEditLeave={onEditLeave}
+                        onDeleteLeave={onDeleteLeave}
                     />
                 </div>
             </div>

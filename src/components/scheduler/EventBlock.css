@@ -91,3 +91,41 @@
     background: rgba(24, 144, 255, 0.2);
     color: #1890ff;
 }
+
+/* Popover styles for edit/delete actions */
+.event-popover {
+    min-width: 180px;
+}
+
+.popover-header {
+    margin-bottom: 12px;
+}
+
+.popover-type {
+    font-weight: 600;
+    font-size: 14px;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+.popover-dates {
+    font-size: 12px;
+    color: #666;
+}
+
+.popover-duration {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+}
+
+.popover-actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.event-popover-overlay .ant-popover-inner {
+    border-radius: 8px;
+}

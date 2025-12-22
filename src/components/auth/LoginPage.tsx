@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
-    const onFinish = (values: any) => {
+    const onFinish = (_values: any) => {
         setLoading(true);
         // Fake login delay
         setTimeout(() => {

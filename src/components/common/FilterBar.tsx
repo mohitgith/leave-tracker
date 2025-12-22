@@ -1,8 +1,6 @@
-import { Tag, Button, Radio, Avatar, Tooltip } from 'antd';
+import { Button, Radio, Tooltip } from 'antd';
 import {
     FilterOutlined,
-    UserOutlined,
-    CloseOutlined,
     PlusOutlined,
 } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';
