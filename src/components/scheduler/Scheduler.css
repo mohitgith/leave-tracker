@@ -67,3 +67,26 @@
 .scheduler-header-right {
     overflow-x: hidden;
 }
+
+/* =========================================
+   Dark Mode
+   ========================================= */
+
+.dark-mode .scheduler {
+    background: #3a3737;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .scheduler-header {
+    background: #3a3737;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .scheduler-header-left {
+    border-color: #4a4a4a;
+}
+
+.dark-mode .scheduler-employees {
+    background: #3a3737;
+    border-color: #4a4a4a;
+}

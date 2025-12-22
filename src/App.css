@@ -107,7 +107,9 @@
 
 /* =========================================
    Dark Mode Styles - HSBC Colors
-   231F20 (dark), FFFFFF (white), 9FA1A4 (gray), EE3524 (red)
+   TopBar: #231F20 (darker)
+   Page bg: #2d2a2b (slightly lighter for contrast)
+   Cards: #3a3737
    ========================================= */
 
 .dark-mode {
@@ -116,25 +118,27 @@
     --bg-tertiary: #1a1818;
     --text-primary: #FFFFFF;
     --text-secondary: #9FA1A4;
-    --border-color: #3a3a3a;
+    --border-color: #4a4a4a;
 }
 
+/* Page background - slightly lighter than topbar for contrast */
 .dark-mode .main-layout {
-    background: #231F20;
+    background: #2d2a2b;
 }
 
 .dark-mode .main-content {
-    background: #231F20;
+    background: #2d2a2b;
 }
 
+/* Scheduler container */
 .dark-mode .scheduler-container {
-    background: #2d2a2b;
-    border-color: #3a3a3a;
+    background: #3a3737;
+    border-color: #4a4a4a;
 }
 
 .dark-mode .scheduler-search-row {
-    background: #2d2a2b;
-    border-color: #3a3a3a;
+    background: #3a3737;
+    border-color: #4a4a4a;
 }
 
 .dark-mode .date-range,
@@ -147,8 +151,8 @@
 }
 
 .dark-mode .nav-arrow {
-    background: #2d2a2b;
-    border-color: #4a4a4a;
+    background: #3a3737;
+    border-color: #5a5a5a;
     color: #FFFFFF;
 }
 
@@ -157,20 +161,43 @@
     color: var(--hsbc-red);
 }
 
+/* Search input in both pages */
+.dark-mode .ant-input-affix-wrapper {
+    background: #3a3737 !important;
+    border-color: #5a5a5a !important;
+}
+
+.dark-mode .ant-input-affix-wrapper .ant-input {
+    background: transparent !important;
+    color: #FFFFFF !important;
+}
+
+.dark-mode .ant-input-affix-wrapper .ant-input::placeholder {
+    color: #9FA1A4 !important;
+}
+
+.dark-mode .ant-input-affix-wrapper .ant-input-prefix {
+    color: #9FA1A4 !important;
+}
+
 /* Dark mode for Ant Design components */
 .dark-mode .ant-card {
-    background: #2d2a2b;
-    border-color: #3a3a3a;
+    background: #3a3737;
+    border-color: #4a4a4a;
 }
 
 .dark-mode .ant-card-head {
-    background: #1a1818;
-    border-color: #3a3a3a;
+    background: #2d2a2b;
+    border-color: #4a4a4a;
     color: #FFFFFF;
 }
 
 .dark-mode .ant-card-head-title {
     color: #FFFFFF;
+}
+
+.dark-mode .ant-card-body {
+    background: #3a3737;
 }
 
 .dark-mode .ant-typography {
@@ -182,7 +209,7 @@
 }
 
 .dark-mode .ant-switch {
-    background: #4a4a4a;
+    background: #5a5a5a;
 }
 
 .dark-mode .ant-switch-checked {
@@ -190,8 +217,8 @@
 }
 
 .dark-mode .ant-radio-button-wrapper {
-    background: #2d2a2b;
-    border-color: #4a4a4a;
+    background: #3a3737;
+    border-color: #5a5a5a;
     color: #FFFFFF;
 }
 
@@ -200,6 +227,7 @@
     border-color: #EE3524 !important;
 }
 
+/* Primary buttons */
 .dark-mode .ant-btn-primary {
     background: #EE3524;
     border-color: #EE3524;
@@ -210,29 +238,99 @@
     border-color: #D42E1F;
 }
 
-.dark-mode .ant-input {
-    background: #2d2a2b;
-    border-color: #4a4a4a;
+/* Default buttons */
+.dark-mode .ant-btn-default {
+    background: #3a3737;
+    border-color: #5a5a5a;
     color: #FFFFFF;
+}
+
+.dark-mode .ant-btn-default:hover {
+    border-color: #EE3524;
+    color: #EE3524;
+}
+
+/* Input fields */
+.dark-mode .ant-input {
+    background: #3a3737 !important;
+    border-color: #5a5a5a !important;
+    color: #FFFFFF !important;
 }
 
 .dark-mode .ant-input::placeholder {
+    color: #9FA1A4 !important;
+}
+
+.dark-mode .ant-input-disabled {
+    background: #2d2a2b !important;
+    color: #9FA1A4 !important;
+}
+
+/* Select fields */
+.dark-mode .ant-select-selector {
+    background: #3a3737 !important;
+    border-color: #5a5a5a !important;
+    color: #FFFFFF !important;
+}
+
+.dark-mode .ant-select-arrow {
     color: #9FA1A4;
 }
 
-.dark-mode .ant-select-selector {
-    background: #2d2a2b !important;
-    border-color: #4a4a4a !important;
-    color: #FFFFFF;
+.dark-mode .ant-select-selection-placeholder {
+    color: #9FA1A4 !important;
 }
 
+/* Date picker */
+.dark-mode .ant-picker {
+    background: #3a3737 !important;
+    border-color: #5a5a5a !important;
+}
+
+.dark-mode .ant-picker-input>input {
+    color: #FFFFFF !important;
+}
+
+.dark-mode .ant-picker-input>input::placeholder {
+    color: #9FA1A4 !important;
+}
+
+.dark-mode .ant-picker-suffix {
+    color: #9FA1A4;
+}
+
+/* Text area */
+.dark-mode .ant-input-textarea textarea {
+    background: #3a3737 !important;
+    border-color: #5a5a5a !important;
+    color: #FFFFFF !important;
+}
+
+.dark-mode .ant-input-textarea textarea::placeholder {
+    color: #9FA1A4 !important;
+}
+
+.dark-mode .ant-input-textarea-show-count::after {
+    color: #9FA1A4;
+}
+
+/* Form labels */
+.dark-mode .ant-form-item-label>label {
+    color: #FFFFFF !important;
+}
+
+.dark-mode .ant-form-item-required::before {
+    color: #EE3524 !important;
+}
+
+/* Modal */
 .dark-mode .ant-modal-content {
-    background: #2d2a2b;
+    background: #3a3737;
 }
 
 .dark-mode .ant-modal-header {
-    background: #2d2a2b;
-    border-color: #3a3a3a;
+    background: #3a3737;
+    border-color: #4a4a4a;
 }
 
 .dark-mode .ant-modal-title {
@@ -241,4 +339,26 @@
 
 .dark-mode .ant-modal-close-x {
     color: #9FA1A4;
+}
+
+.dark-mode .ant-modal-footer {
+    border-color: #4a4a4a;
+}
+
+/* Divider */
+.dark-mode .ant-divider {
+    border-color: #4a4a4a;
+}
+
+/* Dropdown menu */
+.dark-mode .ant-dropdown-menu {
+    background: #3a3737;
+}
+
+.dark-mode .ant-dropdown-menu-item {
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-dropdown-menu-item:hover {
+    background: #4a4a4a;
 }

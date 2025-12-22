@@ -96,3 +96,50 @@
     color: #fff;
     font-weight: 600;
 }
+
+/* =========================================
+   Dark Mode
+   ========================================= */
+
+.dark-mode .timeline-header {
+    background: #3a3737;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .timeline-months-row {
+    border-color: #4a4a4a;
+}
+
+.dark-mode .timeline-month {
+    background: #2d2a2b;
+    border-color: #5a5a5a;
+}
+
+.dark-mode .month-label {
+    color: #FFFFFF;
+}
+
+.dark-mode .timeline-day {
+    border-color: #4a4a4a;
+}
+
+.dark-mode .timeline-day-weekend {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.dark-mode .day-letter {
+    color: #9FA1A4;
+}
+
+.dark-mode .day-number {
+    color: #FFFFFF;
+}
+
+.dark-mode .timeline-day-weekend .day-letter,
+.dark-mode .timeline-day-weekend .day-number {
+    color: #6a6a6a;
+}
+
+.dark-mode .timeline-day-month-start {
+    border-left-color: #5a5a5a;
+}

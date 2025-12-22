@@ -35,3 +35,20 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* =========================================
+   Dark Mode
+   ========================================= */
+
+.dark-mode .employee-row {
+    background: #3a3737;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .employee-name {
+    color: #FFFFFF;
+}
+
+.dark-mode .employee-role {
+    color: #9FA1A4;
+}

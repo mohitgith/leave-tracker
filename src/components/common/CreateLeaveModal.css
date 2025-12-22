@@ -59,3 +59,91 @@
     background: #D42E1F !important;
     border-color: #D42E1F !important;
 }
+
+/* =========================================
+   Dark Mode
+   ========================================= */
+
+.dark-mode .create-leave-modal .ant-modal-content {
+    background: #3a3737;
+}
+
+.dark-mode .create-leave-modal .ant-modal-header {
+    background: #3a3737;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .create-leave-modal .ant-modal-title {
+    color: #FFFFFF;
+}
+
+.dark-mode .create-leave-modal .ant-modal-close-x {
+    color: #9FA1A4;
+}
+
+.dark-mode .create-leave-modal .ant-form-item-label>label {
+    color: #FFFFFF !important;
+}
+
+.dark-mode .create-leave-modal .ant-picker {
+    background: #3a3737 !important;
+    border-color: #5a5a5a !important;
+}
+
+.dark-mode .create-leave-modal .ant-picker-input>input {
+    color: #FFFFFF !important;
+}
+
+.dark-mode .create-leave-modal .ant-picker-input>input::placeholder {
+    color: #9FA1A4 !important;
+}
+
+.dark-mode .create-leave-modal .ant-picker-suffix {
+    color: #9FA1A4;
+}
+
+.dark-mode .create-leave-modal .ant-select-selector {
+    background: #3a3737 !important;
+    border-color: #5a5a5a !important;
+}
+
+.dark-mode .create-leave-modal .ant-select-selection-placeholder {
+    color: #9FA1A4 !important;
+}
+
+.dark-mode .create-leave-modal .ant-select-selection-item {
+    color: #FFFFFF !important;
+}
+
+.dark-mode .create-leave-modal .ant-input-textarea textarea {
+    background: #3a3737 !important;
+    border-color: #5a5a5a !important;
+    color: #FFFFFF !important;
+}
+
+.dark-mode .create-leave-modal .ant-input-textarea textarea::placeholder {
+    color: #9FA1A4 !important;
+}
+
+.dark-mode .working-days-display {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .working-days-label {
+    color: #9FA1A4;
+}
+
+.dark-mode .working-days-note {
+    color: #9FA1A4;
+}
+
+.dark-mode .create-leave-modal .ant-btn-default {
+    background: #3a3737;
+    border-color: #5a5a5a;
+    color: #FFFFFF;
+}
+
+.dark-mode .create-leave-modal .ant-modal-footer {
+    border-color: #4a4a4a;
+}

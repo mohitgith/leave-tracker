@@ -120,3 +120,42 @@
 .view-mode-group .ant-radio-button-wrapper-checked .view-sublabel {
     color: #fff;
 }
+
+/* =========================================
+   Dark Mode
+   ========================================= */
+
+.dark-mode .filter-bar {
+    background: #2d2a2b;
+}
+
+.dark-mode .filter-button {
+    background: #3a3737;
+    border-color: #5a5a5a;
+    color: #FFFFFF;
+}
+
+.dark-mode .filter-tag {
+    background: #3a3737;
+    border-color: #5a5a5a;
+    color: #FFFFFF;
+}
+
+.dark-mode .filter-tag:hover {
+    background: #4a4a4a;
+}
+
+.dark-mode .view-mode-group .ant-radio-button-wrapper {
+    background: #3a3737;
+    border-color: #5a5a5a;
+    color: #FFFFFF;
+}
+
+.dark-mode .view-mode-group .ant-radio-button-wrapper:hover {
+    color: #EE3524;
+}
+
+.dark-mode .view-mode-group .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    background: #EE3524 !important;
+    border-color: #EE3524 !important;
+}
