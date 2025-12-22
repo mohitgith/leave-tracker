@@ -55,18 +55,22 @@
 }
 
 /* Dark mode overrides */
+.dark-mode .settings-page {
+    background: #3a3737;
+}
+
 .dark-mode .settings-page .ant-typography {
     color: #FFFFFF;
 }
 
 .dark-mode .settings-card {
     background: #2d2a2b;
-    border-color: #3a3a3a;
+    border-color: #4a4a4a;
 }
 
 .dark-mode .settings-card .ant-card-head {
     background: #1a1818;
-    border-color: #3a3a3a;
+    border-color: #4a4a4a;
     color: #FFFFFF;
 }
 
@@ -83,5 +87,5 @@
 }
 
 .dark-mode .ant-divider {
-    border-color: #3a3a3a;
+    border-color: #4a4a4a;
 }

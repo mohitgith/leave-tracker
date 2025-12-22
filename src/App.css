@@ -108,26 +108,26 @@
 /* =========================================
    Dark Mode Styles - HSBC Colors
    TopBar: #231F20 (darker)
-   Page bg: #2d2a2b (slightly lighter for contrast)
-   Cards: #3a3737
+   Page bg: #3a3737 (lighter for contrast)
+   Cards: #2d2a2b
    ========================================= */
 
 .dark-mode {
     --bg-primary: #231F20;
-    --bg-secondary: #2d2a2b;
+    --bg-secondary: #3a3737;
     --bg-tertiary: #1a1818;
     --text-primary: #FFFFFF;
     --text-secondary: #9FA1A4;
     --border-color: #4a4a4a;
 }
 
-/* Page background - slightly lighter than topbar for contrast */
+/* Page background - lighter than topbar for contrast */
 .dark-mode .main-layout {
-    background: #2d2a2b;
+    background: #3a3737;
 }
 
 .dark-mode .main-content {
-    background: #2d2a2b;
+    background: #3a3737;
 }
 
 /* Scheduler container */
@@ -352,7 +352,8 @@
 
 /* Dropdown menu */
 .dark-mode .ant-dropdown-menu {
-    background: #3a3737;
+    background: #2d2a2b;
+    border: 1px solid #4a4a4a;
 }
 
 .dark-mode .ant-dropdown-menu-item {
@@ -360,5 +361,17 @@
 }
 
 .dark-mode .ant-dropdown-menu-item:hover {
+    background: #3a3737;
+}
+
+.dark-mode .ant-dropdown-menu-item-divider {
     background: #4a4a4a;
+}
+
+.dark-mode .ant-dropdown-menu-item-danger {
+    color: #EE3524;
+}
+
+.dark-mode .ant-dropdown-menu-item-danger:hover {
+    background: rgba(238, 53, 36, 0.1);
 }

@@ -1,5 +1,5 @@
 .profile-page {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 24px;
 }
@@ -81,17 +81,21 @@
 }
 
 /* Dark Mode */
+.dark-mode .profile-page {
+    background: #3a3737;
+}
+
 .dark-mode .profile-page .ant-typography {
     color: #FFFFFF;
 }
 
 .dark-mode .profile-card {
-    background: #231F20;
-    border-color: #3a3a3a;
+    background: #2d2a2b;
+    border-color: #4a4a4a;
 }
 
 .dark-mode .profile-card .ant-card-body {
-    background: #231F20;
+    background: #2d2a2b;
 }
 
 .dark-mode .profile-form .ant-form-item-label>label {
@@ -99,9 +103,9 @@
 }
 
 .dark-mode .profile-form .ant-input-disabled {
-    background: #1a1a1a;
+    background: #1a1818;
     color: #FFFFFF;
-    border-color: #3a3a3a;
+    border-color: #4a4a4a;
 }
 
 .dark-mode .profile-form .ant-input-prefix {
@@ -109,5 +113,5 @@
 }
 
 .dark-mode .ant-divider {
-    border-color: #3a3a3a;
+    border-color: #4a4a4a;
 }
