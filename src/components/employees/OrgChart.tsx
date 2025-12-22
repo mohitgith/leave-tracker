@@ -11,6 +11,7 @@ import {
     DeleteOutlined
 } from '@ant-design/icons';
 import { fetchOrgChart, createEmployee, updateEmployee, deleteEmployee, OrgEmployeeAPI } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 import EmployeeDetailModal from './EmployeeDetailModal';
 import AddEmployeeModal from './AddEmployeeModal';
 import './OrgChart.css';
@@ -95,12 +96,15 @@ const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, on
 };
 
 const OrgChart: React.FC = () => {
+    const { user } = useAuth();
     const [scale, setScale] = useState(1);
     const [selectedEmployee, setSelectedEmployee] = useState<OrgEmployee | null>(null);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [editingEmployee, setEditingEmployee] = useState<OrgEmployee | null>(null);
     const [orgChartData, setOrgChartData] = useState<OrgEmployee | null>(null);
     const [loading, setLoading] = useState(true);
+    
+    const isManager = user?.isManager ?? false;
 
     // Fetch org chart data from API
     const loadOrgChart = async () => {
@@ -192,9 +196,11 @@ const OrgChart: React.FC = () => {
                     className="search-input"
                     size="large"
                 />
-                <button className="global-add-btn" onClick={handleAddClick}>
-                    <UserAddOutlined style={{ marginRight: 8 }} /> Add Member
-                </button>
+                {isManager && (
+                    <button className="global-add-btn" onClick={handleAddClick}>
+                        <UserAddOutlined style={{ marginRight: 8 }} /> Add Member
+                    </button>
+                )}
             </div>
 
             <div className="org-chart-viewport">

@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { Scheduler } from '../scheduler';
 import { FilterBar, SearchInput, CreateLeaveModal } from '../common';
 import { LeaveType, LeaveRecord, Employee } from '../../types';
+import { useAuth } from '../../context/AuthContext';
 import { 
     fetchEmployees, 
     fetchLeaves, 
@@ -17,6 +18,7 @@ import {
 const { Text } = Typography;
 
 const LeaveTrackerPage: React.FC = () => {
+    const { user } = useAuth();
     const [searchValue, setSearchValue] = useState('');
     const [viewMode, setViewMode] = useState<'1' | '3'>('1');
     const [startDate, setStartDate] = useState(dayjs().startOf('month'));
@@ -105,11 +107,23 @@ const LeaveTrackerPage: React.FC = () => {
     };
 
     const handleEditLeave = (leave: LeaveRecord) => {
+        // Only allow editing own leaves
+        if (leave.employeeId !== user?.id) {
+            message.warning('You can only edit your own leaves');
+            return;
+        }
         setEditingLeave(leave);
         setCreateLeaveModalOpen(true);
     };
 
     const handleDeleteLeave = async (leaveId: string) => {
+        // Find the leave to check ownership
+        const leave = leaves.find(l => l.id === leaveId);
+        if (leave && leave.employeeId !== user?.id) {
+            message.warning('You can only delete your own leaves');
+            return;
+        }
+        
         try {
             await deleteLeaveAPI(leaveId);
             message.success('Leave deleted successfully');
@@ -129,7 +143,11 @@ const LeaveTrackerPage: React.FC = () => {
     }) => {
         try {
             if (editingLeave) {
-                // Update existing leave
+                // Update existing leave - only own leaves allowed
+                if (editingLeave.employeeId !== user?.id) {
+                    message.error('You can only edit your own leaves');
+                    return;
+                }
                 await updateLeaveAPI(editingLeave.id, {
                     id: editingLeave.id,
                     employeeId: editingLeave.employeeId,
@@ -140,10 +158,14 @@ const LeaveTrackerPage: React.FC = () => {
                 });
                 message.success('Leave updated successfully!');
             } else {
-                // Create new leave
+                // Create new leave - always for the logged-in user
+                if (!user) {
+                    message.error('You must be logged in to create a leave');
+                    return;
+                }
                 const newLeave: LeaveRecordAPI = {
                     id: `leave-${Date.now()}`,
-                    employeeId: values.employeeId || '1', // Use selected employee or default
+                    employeeId: user.id, // Always use logged-in user's ID
                     startDate: values.startDate,
                     endDate: values.endDate,
                     type: values.type,
@@ -213,6 +235,7 @@ const LeaveTrackerPage: React.FC = () => {
                         viewMode={viewMode}
                         onEditLeave={handleEditLeave}
                         onDeleteLeave={handleDeleteLeave}
+                        currentUserId={user?.id}
                     />
                 </div>
             </div>
@@ -225,7 +248,6 @@ const LeaveTrackerPage: React.FC = () => {
                 }}
                 onSubmit={handleLeaveSubmit}
                 initialValues={editingLeave}
-                employees={employees}
             />
         </div>
     );

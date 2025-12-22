@@ -15,6 +15,7 @@ interface SchedulerProps {
     viewMode: '1' | '3'; // months
     onEditLeave?: (leave: LeaveRecord) => void;
     onDeleteLeave?: (leaveId: string) => void;
+    currentUserId?: string;
 }
 
 const Scheduler: React.FC<SchedulerProps> = ({
@@ -25,6 +26,7 @@ const Scheduler: React.FC<SchedulerProps> = ({
     viewMode,
     onEditLeave,
     onDeleteLeave,
+    currentUserId,
 }) => {
     const timelineRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
@@ -112,6 +114,7 @@ const Scheduler: React.FC<SchedulerProps> = ({
                         config={config}
                         onEditLeave={onEditLeave}
                         onDeleteLeave={onDeleteLeave}
+                        currentUserId={currentUserId}
                     />
                 </div>
             </div>

@@ -32,7 +32,8 @@ const CreateLeaveModal: React.FC<CreateLeaveModalProps> = ({
     onClose,
     onSubmit,
     initialValues,
-    employees = [],
+    // employees prop kept for backwards compatibility but not used
+    // since users can only create leaves for themselves
 }) => {
     const [form] = Form.useForm();
     const [startDate, setStartDate] = useState<Dayjs | null>(null);
@@ -133,24 +134,6 @@ const CreateLeaveModal: React.FC<CreateLeaveModalProps> = ({
                 layout="vertical"
                 className="leave-form"
             >
-                {!isEditMode && employees.length > 0 && (
-                    <Form.Item
-                        name="employeeId"
-                        label="Employee"
-                        rules={[{ required: true, message: 'Please select an employee' }]}
-                    >
-                        <Select
-                            placeholder="Select employee"
-                            showSearch
-                            optionFilterProp="label"
-                            options={employees.map(emp => ({
-                                value: emp.id,
-                                label: emp.name,
-                            }))}
-                        />
-                    </Form.Item>
-                )}
-
                 <div className="date-row">
                     <Form.Item
                         name="startDate"

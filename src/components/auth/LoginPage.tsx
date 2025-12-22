@@ -1,26 +1,35 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Checkbox, message } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Checkbox, message, Divider } from 'antd';
+import { UserOutlined, LockOutlined, WindowsOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import hsbcLogo from '../../assets/hsbc-logo.png';
 
 const HSBCLogo = () => (
     <img src={hsbcLogo} alt="HSBC Logo" width="200" height="70" />
 );
 
-
 const LoginPage: React.FC = () => {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [loading, setLoading] = useState(false);
 
-    const onFinish = (_values: any) => {
+    const onFinish = async (values: { username: string; password: string }) => {
         setLoading(true);
-        // Fake login delay
-        setTimeout(() => {
-            localStorage.setItem('isAuthenticated', 'true');
+        const success = await login(values.username, values.password);
+        setLoading(false);
+        
+        if (success) {
             message.success('Login successful');
-            navigate('/dashboard'); // Use navigate instead of window.location for smoother transition
-        }, 1000);
+            navigate('/dashboard');
+        } else {
+            message.error('Invalid username or password');
+        }
+    };
+
+    const handleSSOLogin = () => {
+        // No operation - SSO not implemented
+        message.info('SSO Login is not available at this time');
     };
 
     return (
@@ -85,10 +94,27 @@ const LoginPage: React.FC = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" style={{ width: '100%', background: '#db0011', borderColor: '#db0011' }} size="large" loading={loading}>
+                        <Button 
+                            type="primary" 
+                            htmlType="submit" 
+                            style={{ width: '100%', background: '#db0011', borderColor: '#db0011' }} 
+                            size="large" 
+                            loading={loading}
+                        >
                             Log In
                         </Button>
                     </Form.Item>
+
+                    <Divider>or</Divider>
+
+                    <Button 
+                        icon={<WindowsOutlined />}
+                        style={{ width: '100%' }} 
+                        size="large"
+                        onClick={handleSSOLogin}
+                    >
+                        Login with SSO
+                    </Button>
                 </Form>
             </div>
 
