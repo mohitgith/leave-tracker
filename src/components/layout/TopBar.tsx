@@ -5,6 +5,7 @@ import {
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
+import { useAuth } from '../../context/AuthContext';
 import './TopBar.css';
 
 const { Header } = Layout;
@@ -12,14 +13,17 @@ const { Text } = Typography;
 
 const TopBar: React.FC = () => {
     const navigate = useNavigate();
+    const { user, logout } = useAuth();
 
     const handleMenuClick: MenuProps['onClick'] = (e) => {
         if (e.key === 'logout') {
-            localStorage.removeItem('isAuthenticated');
+            logout();
             message.success('Logged out successfully');
             navigate('/login');
         } else if (e.key === 'settings') {
             navigate('/settings');
+        } else if (e.key === 'profile') {
+            navigate('/profile');
         }
     };
 
@@ -29,6 +33,11 @@ const TopBar: React.FC = () => {
         { type: 'divider' },
         { key: 'logout', label: 'Logout', danger: true },
     ];
+
+    // Generate avatar URL from user name
+    const avatarUrl = user 
+        ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=e91e63&color=fff&size=32&bold=true`
+        : '';
 
     return (
         <Header className="topbar">
@@ -55,9 +64,9 @@ const TopBar: React.FC = () => {
                     <div className="user-profile">
                         <Avatar
                             size={32}
-                            src="https://ui-avatars.com/api/?name=Antonina&background=e91e63&color=fff&size=32&bold=true"
+                            src={avatarUrl}
                         />
-                        <span className="user-name">Antonina</span>
+                        <span className="user-name">{user?.name || 'User'}</span>
                         <DownOutlined className="dropdown-icon" />
                     </div>
                 </Dropdown>

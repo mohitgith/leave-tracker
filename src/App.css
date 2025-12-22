@@ -104,3 +104,54 @@
     color: #1a1a1a;
     font-weight: 500;
 }
+
+/* =========================================
+   Dark Mode Styles
+   ========================================= */
+
+.dark-mode {
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-tertiary: #0f3460;
+    --text-primary: #e8e8e8;
+    --text-secondary: #a0a0a0;
+    --border-color: #3a3a5c;
+}
+
+.dark-mode .main-layout {
+    background: #1a1a2e;
+}
+
+.dark-mode .main-content {
+    background: #1a1a2e;
+}
+
+.dark-mode .scheduler-container {
+    background: #16213e;
+    border-color: #0f3460;
+}
+
+.dark-mode .scheduler-search-row {
+    background: #16213e;
+    border-color: #0f3460;
+}
+
+.dark-mode .date-range,
+.dark-mode .manager-name {
+    color: #e8e8e8;
+}
+
+.dark-mode .manager-label {
+    color: #a0a0a0;
+}
+
+.dark-mode .nav-arrow {
+    background: #16213e;
+    border-color: #3a3a5c;
+    color: #e8e8e8;
+}
+
+.dark-mode .nav-arrow:hover {
+    border-color: var(--hsbc-red);
+    color: var(--hsbc-red);
+}

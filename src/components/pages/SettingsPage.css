@@ -1,0 +1,75 @@
+.settings-page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.settings-header {
+    margin-bottom: 24px;
+}
+
+.settings-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 16px;
+}
+
+.settings-card .ant-card-head-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.setting-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.setting-info>div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.setting-icon {
+    font-size: 20px;
+    color: #666;
+}
+
+.setting-info .ant-typography-secondary {
+    font-size: 12px;
+}
+
+.settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+/* Dark mode overrides */
+.dark-mode .settings-card {
+    background: #16213e;
+    border-color: #0f3460;
+}
+
+.dark-mode .settings-card .ant-card-head {
+    background: #0f3460;
+    border-color: #0f3460;
+    color: #fff;
+}
+
+.dark-mode .setting-row .ant-typography {
+    color: #e8e8e8;
+}
+
+.dark-mode .setting-row .ant-typography-secondary {
+    color: #a0a0a0;
+}
