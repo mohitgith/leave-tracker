@@ -1,5 +1,5 @@
 .profile-page {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 24px;
 }
@@ -29,13 +29,14 @@
     position: absolute;
     bottom: 4px;
     right: 4px;
-    background: #db0011 !important;
-    border-color: #db0011 !important;
+    background: #EE3524 !important;
+    border-color: #EE3524 !important;
     color: #fff !important;
 }
 
 .edit-avatar-btn:hover {
-    background: #b0000e !important;
+    background: #D42E1F !important;
+    border-color: #D42E1F !important;
 }
 
 .profile-name {
