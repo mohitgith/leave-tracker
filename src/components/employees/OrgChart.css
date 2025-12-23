@@ -17,11 +17,41 @@
     position: relative;
     z-index: 10;
     align-items: center;
+    gap: 16px;
 }
 
 .search-input {
     width: 300px;
     border-radius: 20px;
+}
+
+/* Employee Type Legend */
+.employee-type-legend {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #666;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.legend-dot.permanent-dot {
+    background: #64b5f6;
+}
+
+.legend-dot.contractor-dot {
+    background: #ff9800;
 }
 
 .global-add-btn {
@@ -117,7 +147,7 @@
 }
 
 /* =========================================
-   Tree with Connectors - Compact Grid Layout
+   Tree Layout
    ========================================= */
 
 .tree {
@@ -128,72 +158,137 @@
     position: relative;
 }
 
-/* Root node (Manager) - no top connector */
-.tree>.tree-node {
+/* Tree Node */
+.tree-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.tree-node.root-node {
     padding-top: 0;
 }
 
-.tree>.tree-node::before,
-.tree>.tree-node::after {
-    display: none;
-}
+/* =========================================
+   Connector Lines
+   ========================================= */
 
-/* Tree Node */
-.tree-node {
-    text-align: center;
-    list-style-type: none;
-    position: relative;
-    padding: 20px 8px 0 8px;
-    transition: all 0.3s;
-}
-
-/* Top connector line for each node */
-.tree-node::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 2px;
-    height: 20px;
-    background: #9FA1A4;
-}
-
-/* Children Container - Grid Layout */
-.children-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-    padding: 30px 10px 10px;
-    position: relative;
-    max-width: calc(100vw - 120px);
-}
-
-/* Connector line down from parent to children */
-.children-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
+/* Vertical line from parent card DOWN to horizontal connector */
+.connector-vertical-down {
     width: 2px;
     height: 30px;
     background: #9FA1A4;
 }
 
-/* Horizontal line connecting all children */
-.children-container::after {
-    content: '';
-    position: absolute;
-    top: 30px;
-    left: 10%;
-    right: 10%;
+/* Children wrapper - contains horizontal line and children */
+.children-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* Horizontal connector - will span full width */
+.connector-horizontal {
     height: 2px;
+    background: #9FA1A4;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    right: 50%;
+}
+
+/* Children container - holds all child nodes */
+.children-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 0;
+    position: relative;
+}
+
+/* Child node wrapper - each child with its vertical connector */
+.child-node-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* Vertical line from horizontal connector UP to child card */
+.connector-vertical-up {
+    width: 2px;
+    height: 30px;
     background: #9FA1A4;
 }
 
+/* Make horizontal line span from first to last child center */
+.children-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 2px;
+    background: #9FA1A4;
+    left: calc(50% - 1px);
+    right: calc(50% - 1px);
+}
+
+.child-node-wrapper:first-child~.child-node-wrapper:last-child~.children-container::before,
+.children-container::before {
+    left: 0;
+    right: 0;
+}
+
+/* Adjust horizontal line to span from centers of first to last child */
+.children-container {
+    position: relative;
+}
+
+/* Override - use flexbox gap and ensure horizontal line connects all */
+.children-wrapper .connector-horizontal {
+    display: none;
+    /* We'll use the pseudo-element instead */
+}
+
+/* Horizontal line spanning from first child center to last child center */
+.children-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 2px;
+    background: #9FA1A4;
+    /* Will calculate dynamically */
+}
+
+/* For single child - just vertical line */
+.children-container:has(.child-node-wrapper:only-child)::before {
+    display: none;
+}
+
+/* For multiple children - span full width */
+.children-container:not(:has(.child-node-wrapper:only-child))::before {
+    left: 50%;
+    right: 50%;
+    width: auto;
+}
+
+/* Make the horizontal line actually work */
+.children-container {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* Proper horizontal line using direct calculation */
+.children-container::before {
+    left: calc(100px + 10px);
+    /* half of card width + padding */
+    right: calc(100px + 10px);
+}
+
 /* =========================================
-   Compact Card Design
+   Employee Card Design
    ========================================= */
 
 .employee-card {
@@ -209,6 +304,31 @@
     z-index: 2;
     transition: all 0.2s;
     cursor: pointer;
+    overflow: hidden;
+}
+
+/* Permanent employee - blue accent */
+.employee-card.permanent-card {
+    border-left: 3px solid #64b5f6;
+}
+
+/* Contractor employee - orange accent */
+.employee-card.contractor-card {
+    border-left: 3px solid #ff9800;
+}
+
+/* Root node (Manager) - larger card */
+.root-node>.employee-card {
+    width: 260px;
+}
+
+.root-node>.employee-card .card-avatar {
+    width: 42px;
+    height: 42px;
+}
+
+.root-node>.employee-card .emp-name {
+    font-size: 14px;
 }
 
 .employee-card:hover {
@@ -217,13 +337,33 @@
     border-color: #EE3524;
 }
 
-/* Manager card - larger */
-.tree>.tree-node>.employee-card {
-    width: 260px;
+/* Employee Type Badge */
+.employee-type-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.employee-type-badge.permanent-badge {
+    background: rgba(100, 181, 246, 0.15);
+    color: #1976d2;
+}
+
+.employee-type-badge.contractor-badge {
+    background: rgba(255, 152, 0, 0.15);
+    color: #e65100;
 }
 
 .card-header {
     padding: 12px;
+    padding-top: 28px;
+    /* Space for badge */
     border-bottom: 1px solid #f0f0f0;
     display: flex;
     gap: 10px;
@@ -240,12 +380,6 @@
     flex-shrink: 0;
 }
 
-/* Manager has larger avatar */
-.tree>.tree-node>.employee-card .card-avatar {
-    width: 42px;
-    height: 42px;
-}
-
 .card-info {
     flex: 1;
     min-width: 0;
@@ -259,11 +393,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-/* Manager has larger name */
-.tree>.tree-node>.employee-card .emp-name {
-    font-size: 14px;
 }
 
 .emp-role {
@@ -342,8 +471,7 @@
 }
 
 /* =========================================
-   Dark Mode Styles - HSBC Colors
-   231F20 (dark), FFFFFF (white), 9FA1A4 (gray), EE3524 (red)
+   Dark Mode Styles
    ========================================= */
 
 .dark-mode .org-chart-wrapper {
@@ -355,8 +483,26 @@
     border-color: #3a3a3a;
 }
 
+.dark-mode .employee-card.permanent-card {
+    border-left-color: #64b5f6;
+}
+
+.dark-mode .employee-card.contractor-card {
+    border-left-color: #ff9800;
+}
+
 .dark-mode .employee-card:hover {
     border-color: #EE3524;
+}
+
+.dark-mode .employee-type-badge.permanent-badge {
+    background: rgba(100, 181, 246, 0.2);
+    color: #90caf9;
+}
+
+.dark-mode .employee-type-badge.contractor-badge {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ffb74d;
 }
 
 .dark-mode .emp-name {
@@ -413,9 +559,10 @@
     color: #EE3524;
 }
 
-.dark-mode .tree-node::before,
-.dark-mode .children-container::before,
-.dark-mode .children-container::after {
+.dark-mode .connector-vertical-down,
+.dark-mode .connector-vertical-up,
+.dark-mode .connector-horizontal,
+.dark-mode .children-container::before {
     background: #4a4a4a;
 }
 
@@ -435,4 +582,8 @@
 
 .dark-mode .zoom-divider {
     background: #4a4a4a;
+}
+
+.dark-mode .legend-item {
+    color: #9FA1A4;
 }

@@ -1,5 +1,7 @@
 package com.leavetracker.controller;
 
+import com.leavetracker.model.AppNotification;
+import com.leavetracker.model.Employee;
 import com.leavetracker.model.LeaveRecord;
 import com.leavetracker.repository.JsonDatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/leaves")
@@ -16,6 +19,8 @@ public class LeaveController {
 
     @Autowired
     private JsonDatabaseRepository repository;
+
+    private static final String MANAGER_ID = "0"; // Lohit Ganta is the manager
 
     @GetMapping
     public List<LeaveRecord> getAllLeaves() {
@@ -32,6 +37,12 @@ public class LeaveController {
         }
 
         LeaveRecord created = repository.createLeave(leave);
+
+        // Create notification for manager when an employee applies for leave
+        if (!leave.getEmployeeId().equals(MANAGER_ID)) {
+            createLeaveNotification(leave);
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -48,5 +59,29 @@ public class LeaveController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Create a notification for the manager when an employee applies for leave.
+     */
+    private void createLeaveNotification(LeaveRecord leave) {
+        Optional<Employee> employeeOpt = repository.getEmployeeById(leave.getEmployeeId());
+        if (employeeOpt.isEmpty())
+            return;
+
+        Employee employee = employeeOpt.get();
+        String leaveType = leave.getType().equals("vacation") ? "Annual Leave" : "Sick Leave";
+
+        AppNotification notification = new AppNotification(
+                "notif-" + System.currentTimeMillis(),
+                "leave_applied",
+                "New Leave Request",
+                employee.getName() + " has applied for " + leaveType +
+                        " from " + leave.getStartDate() + " to " + leave.getEndDate(),
+                MANAGER_ID, // For the manager
+                leave.getEmployeeId(), // From the employee
+                leave.getId());
+
+        repository.createNotification(notification);
     }
 }

@@ -129,3 +129,31 @@
 .event-popover-overlay .ant-popover-inner {
     border-radius: 8px;
 }
+
+/* =========================================
+   Dark Mode
+   ========================================= */
+
+.dark-mode .event-popover-overlay .ant-popover-inner {
+    background: #2d2a2b;
+}
+
+.dark-mode .event-popover-overlay .ant-popover-arrow::before {
+    background: #2d2a2b;
+}
+
+.dark-mode .popover-type {
+    color: #FFFFFF;
+}
+
+.dark-mode .popover-dates {
+    color: #9FA1A4;
+}
+
+.dark-mode .popover-duration {
+    color: #9FA1A4;
+}
+
+.dark-mode .popover-actions {
+    border-color: #4a4a4a;
+}

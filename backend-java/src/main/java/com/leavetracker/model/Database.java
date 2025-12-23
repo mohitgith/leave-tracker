@@ -9,6 +9,8 @@ import java.util.List;
 public class Database {
     private List<Employee> employees = new ArrayList<>();
     private List<LeaveRecord> leaves = new ArrayList<>();
+    private NotificationSettings notificationSettings = new NotificationSettings();
+    private List<AppNotification> appNotifications = new ArrayList<>();
 
     public Database() {
     }
@@ -28,5 +30,21 @@ public class Database {
 
     public void setLeaves(List<LeaveRecord> leaves) {
         this.leaves = leaves;
+    }
+
+    public NotificationSettings getNotificationSettings() {
+        return notificationSettings;
+    }
+
+    public void setNotificationSettings(NotificationSettings notificationSettings) {
+        this.notificationSettings = notificationSettings;
+    }
+
+    public List<AppNotification> getAppNotifications() {
+        return appNotifications;
+    }
+
+    public void setAppNotifications(List<AppNotification> appNotifications) {
+        this.appNotifications = appNotifications;
     }
 }

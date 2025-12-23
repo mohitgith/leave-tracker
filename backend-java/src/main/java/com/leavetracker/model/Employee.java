@@ -16,6 +16,7 @@ public class Employee {
     private String email;
     private String phone;
     private String managerId; // null for CEO/root, parent ID otherwise
+    private String employeeType; // "permanent" or "contractor"
 
     public Employee() {
     }
@@ -104,5 +105,13 @@ public class Employee {
 
     public void setManagerId(String managerId) {
         this.managerId = managerId;
+    }
+
+    public String getEmployeeType() {
+        return employeeType;
+    }
+
+    public void setEmployeeType(String employeeType) {
+        this.employeeType = employeeType;
     }
 }

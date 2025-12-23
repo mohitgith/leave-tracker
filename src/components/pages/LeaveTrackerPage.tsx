@@ -4,6 +4,7 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { Scheduler } from '../scheduler';
 import { FilterBar, SearchInput, CreateLeaveModal } from '../common';
+import { FilterOptions } from '../common/FilterBar';
 import { LeaveType, LeaveRecord, Employee } from '../../types';
 import { useAuth } from '../../context/AuthContext';
 import { 
@@ -17,16 +18,25 @@ import {
 
 const { Text } = Typography;
 
+interface EmployeeWithType extends Employee {
+    employeeType?: 'permanent' | 'contractor';
+}
+
 const LeaveTrackerPage: React.FC = () => {
     const { user } = useAuth();
     const [searchValue, setSearchValue] = useState('');
     const [viewMode, setViewMode] = useState<'1' | '3'>('1');
     const [startDate, setStartDate] = useState(dayjs().startOf('month'));
     const [leaves, setLeaves] = useState<LeaveRecord[]>([]);
-    const [employees, setEmployees] = useState<Employee[]>([]);
+    const [employees, setEmployees] = useState<EmployeeWithType[]>([]);
     const [createLeaveModalOpen, setCreateLeaveModalOpen] = useState(false);
     const [editingLeave, setEditingLeave] = useState<LeaveRecord | null>(null);
     const [loading, setLoading] = useState(true);
+    const [filters, setFilters] = useState<FilterOptions>({
+        leaveTypes: [],
+        employeeTypes: [],
+        daysRange: [0, 15],
+    });
 
     // Fetch data from API
     const loadData = async () => {
@@ -37,13 +47,14 @@ const LeaveTrackerPage: React.FC = () => {
                 fetchLeaves()
             ]);
             
-            // Map API data to frontend types
+            // Map API data to frontend types (include employeeType)
             setEmployees(empData.map(e => ({
                 id: e.id,
                 name: e.name,
                 role: e.role,
                 department: e.department,
-                avatarUrl: e.avatarUrl
+                avatarUrl: e.avatarUrl,
+                employeeType: e.employeeType || 'permanent'
             })));
             
             setLeaves(leaveData.map(l => ({
@@ -72,16 +83,65 @@ const LeaveTrackerPage: React.FC = () => {
         return startDate.add(months, 'month').subtract(1, 'day');
     }, [startDate, viewMode]);
 
-    // Filter employees based on search
+    // Calculate leave days for an employee
+    const getEmployeeLeaveDays = (employeeId: string): number => {
+        return leaves
+            .filter(l => l.employeeId === employeeId)
+            .reduce((total, leave) => {
+                const start = dayjs(leave.startDate);
+                const end = dayjs(leave.endDate);
+                return total + end.diff(start, 'day') + 1;
+            }, 0);
+    };
+
+    // Filter employees based on search and filters
     const filteredEmployees = useMemo(() => {
-        if (!searchValue.trim()) return employees;
-        const search = searchValue.toLowerCase();
-        return employees.filter(
-            emp =>
-                emp.name.toLowerCase().includes(search) ||
-                emp.role.toLowerCase().includes(search)
-        );
-    }, [searchValue, employees]);
+        let result = employees;
+
+        // Search filter
+        if (searchValue.trim()) {
+            const search = searchValue.toLowerCase();
+            result = result.filter(
+                emp =>
+                    emp.name.toLowerCase().includes(search) ||
+                    emp.role.toLowerCase().includes(search)
+            );
+        }
+
+        // Employee type filter - only apply if at least one type is selected
+        if (filters.employeeTypes.length > 0) {
+            result = result.filter(emp => {
+                const empType = emp.employeeType || 'permanent';
+                return filters.employeeTypes.includes(empType);
+            });
+        }
+
+        // Leave type filter - show only employees with matching leave types
+        if (filters.leaveTypes.length > 0) {
+            const employeeIdsWithMatchingLeaves = leaves
+                .filter(l => filters.leaveTypes.includes(l.type))
+                .map(l => l.employeeId);
+            result = result.filter(emp => 
+                employeeIdsWithMatchingLeaves.includes(emp.id)
+            );
+        }
+
+        // Leave days filter using slider range
+        if (filters.daysRange[0] !== 0 || filters.daysRange[1] !== 15) {
+            result = result.filter(emp => {
+                const days = getEmployeeLeaveDays(emp.id);
+                return days >= filters.daysRange[0] && days <= filters.daysRange[1];
+            });
+        }
+
+        return result;
+    }, [searchValue, employees, filters, leaves]);
+
+    // Filter leaves based on leave type filter
+    const filteredLeaves = useMemo(() => {
+        if (filters.leaveTypes.length === 0) return leaves;
+        return leaves.filter(l => filters.leaveTypes.includes(l.type));
+    }, [leaves, filters.leaveTypes]);
 
     // Format date range display
     const dateRangeDisplay = useMemo(() => {
@@ -209,6 +269,8 @@ const LeaveTrackerPage: React.FC = () => {
                 viewMode={viewMode}
                 onViewModeChange={setViewMode}
                 onCreateLeave={handleCreateLeave}
+                filters={filters}
+                onFiltersChange={setFilters}
             />
 
             {/* Search and Scheduler Container */}
@@ -220,16 +282,12 @@ const LeaveTrackerPage: React.FC = () => {
                             onChange={setSearchValue}
                             placeholder="Find employee"
                         />
-                        <div className="manager-info">
-                            <span className="manager-label">Manager:</span>
-                            <span className="manager-name">Lohit Ganta</span>
-                        </div>
                     </div>
                 </div>
                 <div style={{ flex: 1, overflow: 'auto' }}>
                     <Scheduler
                         employees={filteredEmployees}
-                        leaves={leaves}
+                        leaves={filteredLeaves}
                         startDate={startDate}
                         endDate={endDate}
                         viewMode={viewMode}

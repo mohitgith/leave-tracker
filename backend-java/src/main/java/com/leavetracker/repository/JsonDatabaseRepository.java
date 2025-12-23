@@ -2,9 +2,11 @@ package com.leavetracker.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.leavetracker.model.AppNotification;
 import com.leavetracker.model.Database;
 import com.leavetracker.model.Employee;
 import com.leavetracker.model.LeaveRecord;
+import com.leavetracker.model.NotificationSettings;
 import com.leavetracker.model.OrgEmployeeDTO;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -183,6 +185,64 @@ public class JsonDatabaseRepository {
 
         dto.setChildren(children);
         return dto;
+    }
+
+    // ==================== Notification Settings Operations ====================
+
+    public synchronized NotificationSettings getNotificationSettings() {
+        return database.getNotificationSettings();
+    }
+
+    public synchronized NotificationSettings updateNotificationSettings(NotificationSettings settings) {
+        database.setNotificationSettings(settings);
+        saveDatabase();
+        return settings;
+    }
+
+    // ==================== App Notifications Operations ====================
+
+    public synchronized List<AppNotification> getNotificationsForUser(String userId) {
+        return database.getAppNotifications().stream()
+                .filter(n -> n.getForUserId().equals(userId))
+                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+                .collect(Collectors.toList());
+    }
+
+    public synchronized List<AppNotification> getUnreadNotificationsForUser(String userId) {
+        return database.getAppNotifications().stream()
+                .filter(n -> n.getForUserId().equals(userId) && !n.isRead())
+                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+                .collect(Collectors.toList());
+    }
+
+    public synchronized AppNotification createNotification(AppNotification notification) {
+        database.getAppNotifications().add(notification);
+        saveDatabase();
+        return notification;
+    }
+
+    public synchronized boolean markNotificationAsRead(String notificationId) {
+        for (AppNotification n : database.getAppNotifications()) {
+            if (n.getId().equals(notificationId)) {
+                n.setRead(true);
+                saveDatabase();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public synchronized int markAllNotificationsAsRead(String userId) {
+        int count = 0;
+        for (AppNotification n : database.getAppNotifications()) {
+            if (n.getForUserId().equals(userId) && !n.isRead()) {
+                n.setRead(true);
+                count++;
+            }
+        }
+        if (count > 0)
+            saveDatabase();
+        return count;
     }
 
     // ==================== Initial Data ====================

@@ -24,17 +24,28 @@ interface RecursiveNodeProps {
     onNodeClick: (emp: OrgEmployee) => void;
     onEditClick: (emp: OrgEmployee) => void;
     onDeleteClick: (emp: OrgEmployee) => void;
+    isRoot?: boolean;
 }
 
-const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, onEditClick, onDeleteClick }) => {
+const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, onEditClick, onDeleteClick, isRoot = false }) => {
     const hasChildren = employee.children && employee.children.length > 0;
+    const employeeType = (employee as any).employeeType || 'permanent';
+    const isContractor = employeeType === 'contractor';
 
     return (
-        <div className="tree-node">
-            <div className="employee-card" onClick={(e) => {
-                e.stopPropagation();
-                onNodeClick(employee);
-            }}>
+        <div className={`tree-node ${isRoot ? 'root-node' : ''}`}>
+            <div
+                className={`employee-card ${isContractor ? 'contractor-card' : 'permanent-card'}`}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onNodeClick(employee);
+                }}
+            >
+                {/* Employee Type Badge */}
+                <div className={`employee-type-badge ${isContractor ? 'contractor-badge' : 'permanent-badge'}`}>
+                    {isContractor ? 'Contractor' : 'Permanent'}
+                </div>
+
                 <div className="card-header">
                     <img src={employee.avatarUrl} alt={employee.name} className="card-avatar" />
                     <div className="card-info">
@@ -79,17 +90,29 @@ const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, on
             </div>
 
             {hasChildren && (
-                <div className="children-container">
-                    {employee.children?.map(child => (
-                        <RecursiveNode
-                            key={child.id}
-                            employee={child}
-                            onNodeClick={onNodeClick}
-                            onEditClick={onEditClick}
-                            onDeleteClick={onDeleteClick}
-                        />
-                    ))}
-                </div>
+                <>
+                    {/* Vertical line from parent to horizontal connector */}
+                    <div className="connector-vertical-down"></div>
+
+                    {/* Horizontal connector spanning all children */}
+                    <div className="children-wrapper">
+                        <div className="connector-horizontal"></div>
+                        <div className="children-container">
+                            {employee.children?.map((child) => (
+                                <div key={child.id} className="child-node-wrapper">
+                                    {/* Vertical line from horizontal connector to child */}
+                                    <div className="connector-vertical-up"></div>
+                                    <RecursiveNode
+                                        employee={child}
+                                        onNodeClick={onNodeClick}
+                                        onEditClick={onEditClick}
+                                        onDeleteClick={onDeleteClick}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </>
             )}
         </div>
     );
@@ -103,7 +126,7 @@ const OrgChart: React.FC = () => {
     const [editingEmployee, setEditingEmployee] = useState<OrgEmployee | null>(null);
     const [orgChartData, setOrgChartData] = useState<OrgEmployee | null>(null);
     const [loading, setLoading] = useState(true);
-    
+
     const isManager = user?.isManager ?? false;
 
     // Fetch org chart data from API
@@ -196,6 +219,19 @@ const OrgChart: React.FC = () => {
                     className="search-input"
                     size="large"
                 />
+
+                {/* Legend for employee types */}
+                <div className="employee-type-legend">
+                    <div className="legend-item">
+                        <div className="legend-dot permanent-dot"></div>
+                        <span>Permanent</span>
+                    </div>
+                    <div className="legend-item">
+                        <div className="legend-dot contractor-dot"></div>
+                        <span>Contractor</span>
+                    </div>
+                </div>
+
                 {isManager && (
                     <button className="global-add-btn" onClick={handleAddClick}>
                         <UserAddOutlined style={{ marginRight: 8 }} /> Add Member
@@ -212,6 +248,7 @@ const OrgChart: React.FC = () => {
                                 onNodeClick={setSelectedEmployee}
                                 onEditClick={handleEditClick}
                                 onDeleteClick={handleDeleteClick}
+                                isRoot={true}
                             />
                         )}
                     </div>

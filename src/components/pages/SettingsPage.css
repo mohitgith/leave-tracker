@@ -1,5 +1,6 @@
 .settings-page {
     max-width: 700px;
+    min-width: 700px;
     margin: 0 auto;
     padding: 24px;
 }
@@ -48,6 +49,24 @@
     font-size: 12px;
 }
 
+/* Setting row with description on new line */
+.setting-row-with-description {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.setting-header-row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.setting-description {
+    font-size: 12px;
+}
+
 .settings-actions {
     display: flex;
     justify-content: flex-end;
@@ -88,4 +107,200 @@
 
 .dark-mode .ant-divider {
     border-color: #4a4a4a;
+}
+
+/* Email Settings Section */
+.setting-row-recipients {
+    margin-bottom: 12px;
+}
+
+.recipients-container {
+    padding-left: 32px;
+}
+
+.recipients-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.recipient-tag {
+    font-size: 13px;
+    padding: 4px 10px;
+}
+
+.add-recipient-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.email-settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.schedule-time-picker {
+    width: 100px;
+}
+
+/* Dark mode email settings */
+.dark-mode .recipients-container .ant-typography {
+    color: #9FA1A4;
+}
+
+.dark-mode .email-settings-actions {
+    border-color: #4a4a4a;
+}
+
+.dark-mode .schedule-time-picker {
+    background: #3a3737;
+    border-color: #5a5a5a;
+}
+
+.dark-mode .schedule-time-picker input {
+    color: #FFFFFF;
+    background: transparent;
+}
+
+.dark-mode .add-recipient-row .ant-input {
+    background: #3a3737;
+    border-color: #5a5a5a;
+    color: #FFFFFF;
+}
+
+.dark-mode .add-recipient-row .ant-input::placeholder {
+    color: #9FA1A4;
+}
+
+/* Edit button styles */
+.settings-card .ant-card-extra .ant-btn-text {
+    color: inherit;
+}
+
+.settings-card .ant-card-extra .ant-btn-text:hover {
+    color: #EE3524 !important;
+    background: transparent;
+}
+
+.dark-mode .settings-card .ant-card-extra .ant-btn-text {
+    color: #FFFFFF;
+}
+
+.dark-mode .settings-card .ant-card-extra .ant-btn-text:hover {
+    color: #EE3524 !important;
+}
+
+/* Switch icon alignment */
+.switch-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    line-height: 1;
+}
+
+.switch-icon svg {
+    display: block;
+}
+
+.settings-card .ant-switch {
+    min-width: 44px;
+}
+
+.settings-card .ant-switch-inner-checked,
+.settings-card .ant-switch-inner-unchecked {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Schedule button */
+.schedule-button {
+    color: #595959;
+    font-size: 16px;
+    padding: 4px 8px;
+}
+
+.schedule-button:hover {
+    color: #EE3524 !important;
+    background: rgba(238, 53, 36, 0.1) !important;
+}
+
+.dark-mode .schedule-button {
+    color: #9FA1A4;
+}
+
+.dark-mode .schedule-button:hover {
+    color: #EE3524 !important;
+    background: rgba(238, 53, 36, 0.1) !important;
+}
+
+/* Email Schedule Drawer */
+.email-schedule-drawer .ant-drawer-header {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.email-schedule-drawer .ant-drawer-header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.drawer-setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+}
+
+.drawer-setting-row-recipients {
+    margin-bottom: 8px;
+}
+
+/* Dark mode drawer */
+.dark-mode .email-schedule-drawer .ant-drawer-content {
+    background: #2d2a2b;
+}
+
+.dark-mode .email-schedule-drawer .ant-drawer-header {
+    background: #1a1818;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .email-schedule-drawer .ant-drawer-title {
+    color: #FFFFFF;
+}
+
+.dark-mode .email-schedule-drawer .ant-drawer-close {
+    color: #9FA1A4;
+}
+
+.dark-mode .email-schedule-drawer .ant-drawer-body {
+    background: #2d2a2b;
+}
+
+.dark-mode .email-schedule-drawer .ant-typography {
+    color: #FFFFFF;
+}
+
+.dark-mode .email-schedule-drawer .ant-typography-secondary {
+    color: #9FA1A4;
+}
+
+.dark-mode .email-schedule-drawer .ant-divider {
+    border-color: #4a4a4a;
+}
+
+.dark-mode .email-schedule-drawer .ant-btn-text {
+    color: #FFFFFF;
+}
+
+.dark-mode .email-schedule-drawer .ant-btn-text:hover {
+    color: #EE3524;
 }

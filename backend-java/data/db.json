@@ -8,7 +8,8 @@
     "location" : "Office",
     "email" : "lohit.ganta@company.com",
     "phone" : "+1 (555) 000-0000",
-    "managerId" : null
+    "managerId" : null,
+    "employeeType" : "permanent"
   }, {
     "id" : "1",
     "name" : "Aditya Pathak",
@@ -18,7 +19,8 @@
     "location" : "Office",
     "email" : "aditya.pathak@company.com",
     "phone" : "+1 (555) 100-0001",
-    "managerId" : "0"
+    "managerId" : "0",
+    "employeeType" : "contractor"
   }, {
     "id" : "2",
     "name" : "Atul Tewathia",
@@ -28,7 +30,8 @@
     "location" : "Office",
     "email" : "atul.tewathia@company.com",
     "phone" : "+1 (555) 100-0002",
-    "managerId" : "0"
+    "managerId" : "0",
+    "employeeType" : "contractor"
   }, {
     "id" : "3",
     "name" : "Bertrand Iwunna",
@@ -38,7 +41,8 @@
     "location" : "Office",
     "email" : "bertrand.iwunna@company.com",
     "phone" : "+1 (555) 100-0003",
-    "managerId" : "0"
+    "managerId" : "0",
+    "employeeType" : "contractor"
   }, {
     "id" : "4",
     "name" : "Carrick Mak",
@@ -48,7 +52,8 @@
     "location" : "Office",
     "email" : "carrick.mak@company.com",
     "phone" : "+1 (555) 100-0004",
-    "managerId" : "0"
+    "managerId" : "0",
+    "employeeType" : "permanent"
   }, {
     "id" : "5",
     "name" : "Chris C Lee",
@@ -58,7 +63,8 @@
     "location" : "Office",
     "email" : "chris.lee@company.com",
     "phone" : "+1 (555) 100-0005",
-    "managerId" : "0"
+    "managerId" : "0",
+    "employeeType" : "permanent"
   }, {
     "id" : "6",
     "name" : "Dhanashree Vishwasrao",
@@ -68,7 +74,8 @@
     "location" : "Office",
     "email" : "dhanashree.v@company.com",
     "phone" : "+1 (555) 100-0006",
-    "managerId" : "0"
+    "managerId" : "0",
+    "employeeType" : "permanent"
   }, {
     "id" : "7",
     "name" : "Eric Luo",
@@ -78,7 +85,8 @@
     "location" : "Office",
     "email" : "eric.luo@company.com",
     "phone" : "+1 (555) 100-0007",
-    "managerId" : "0"
+    "managerId" : "0",
+    "employeeType" : "contractor"
   }, {
     "id" : "8",
     "name" : "Gavin Guan",
@@ -88,7 +96,8 @@
     "location" : "Office",
     "email" : "gavin.guan@company.com",
     "phone" : "+1 (555) 100-0008",
-    "managerId" : "0"
+    "managerId" : "0",
+    "employeeType" : "contractor"
   }, {
     "id" : "9",
     "name" : "Jacky Hu",
@@ -98,7 +107,8 @@
     "location" : "Office",
     "email" : "jacky.hu@company.com",
     "phone" : "+1 (555) 100-0009",
-    "managerId" : "0"
+    "managerId" : "0",
+    "employeeType" : "contractor"
   }, {
     "id" : "10",
     "name" : "Mohit Shrivastava",
@@ -108,7 +118,8 @@
     "location" : "Office",
     "email" : "mohit.shrivastava@company.com",
     "phone" : "+1 (555) 100-0010",
-    "managerId" : "0"
+    "managerId" : "0",
+    "employeeType" : "permanent"
   }, {
     "id" : "11",
     "name" : "Sameer Kumar Sahu",
@@ -118,7 +129,8 @@
     "location" : "Office",
     "email" : "sameer.sahu@company.com",
     "phone" : "+1 (555) 100-0011",
-    "managerId" : "0"
+    "managerId" : "0",
+    "employeeType" : "permanent"
   }, {
     "id" : "12",
     "name" : "Sreelakshmi Vineetha Movva",
@@ -128,13 +140,14 @@
     "location" : "Office",
     "email" : "sreelakshmi.movva@company.com",
     "phone" : "+1 (555) 100-0012",
-    "managerId" : "0"
+    "managerId" : "0",
+    "employeeType" : "permanent"
   } ],
   "leaves" : [ {
     "id" : "leave-1",
     "employeeId" : "1",
-    "startDate" : "2025-12-18",
-    "endDate" : "2025-12-22",
+    "startDate" : "2025-12-16",
+    "endDate" : "2025-12-20",
     "type" : "vacation",
     "status" : "Applied"
   }, {
@@ -207,5 +220,53 @@
     "endDate" : "2026-02-20",
     "type" : "vacation",
     "status" : "Applied"
+  }, {
+    "id" : "leave-12",
+    "employeeId" : "12",
+    "startDate" : "2026-02-23",
+    "endDate" : "2026-02-27",
+    "type" : "vacation",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-1766513318113",
+    "employeeId" : "10",
+    "startDate" : "2025-12-24",
+    "endDate" : "2025-12-25",
+    "type" : "sick",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-1766513387471",
+    "employeeId" : "1",
+    "startDate" : "2025-12-24",
+    "endDate" : "2025-12-31",
+    "type" : "vacation",
+    "status" : "Applied"
+  } ],
+  "notificationSettings" : {
+    "id" : "default",
+    "recipients" : [ ],
+    "scheduledTime" : "09:00",
+    "enabled" : true
+  },
+  "appNotifications" : [ {
+    "id" : "notif-1766513318133",
+    "type" : "leave_applied",
+    "title" : "New Leave Request",
+    "message" : "Mohit Shrivastava has applied for Sick Leave from 2025-12-24 to 2025-12-25",
+    "forUserId" : "0",
+    "fromUserId" : "10",
+    "leaveId" : "leave-1766513318113",
+    "createdAt" : "2025-12-23T23:38:38.134684",
+    "read" : true
+  }, {
+    "id" : "notif-1766513387483",
+    "type" : "leave_applied",
+    "title" : "New Leave Request",
+    "message" : "Aditya Pathak has applied for Annual Leave from 2025-12-24 to 2025-12-31",
+    "forUserId" : "0",
+    "fromUserId" : "1",
+    "leaveId" : "leave-1766513387471",
+    "createdAt" : "2025-12-23T23:39:47.483707",
+    "read" : true
   } ]
 }

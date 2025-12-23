@@ -17,8 +17,7 @@
 }
 
 .main-content {
-    margin-top: 56px;
-    padding: 20px 24px;
+    padding: 20px 12px;
     min-height: calc(100vh - 56px);
     display: flex;
     flex-direction: column;
@@ -103,6 +102,26 @@
     font-size: 12px;
     color: var(--hsbc-dark);
     font-weight: 500;
+}
+
+/* =========================================
+   Global Overrides (Light Mode)
+   ========================================= */
+
+/* Primary Button Red Override */
+.ant-btn-primary {
+    background-color: #EE3524 !important;
+    border-color: #EE3524 !important;
+}
+
+.ant-btn-primary:hover {
+    background-color: #D42E1F !important;
+    border-color: #D42E1F !important;
+}
+
+.ant-btn-default:hover {
+    border-color: #EE3524 !important;
+    color: #EE3524 !important;
 }
 
 /* =========================================
@@ -373,5 +392,204 @@
 }
 
 .dark-mode .ant-dropdown-menu-item-danger:hover {
-    background: rgba(238, 53, 36, 0.1);
+    background: rgba(238, 53, 36, 0.2);
+    color: #FFFFFF;
+}
+
+/* =========================================
+   Switch - HSBC Red (Both Modes)
+   ========================================= */
+
+/* Light mode switches */
+.ant-switch-checked {
+    background: #EE3524 !important;
+}
+
+.ant-switch:hover:not(.ant-switch-disabled) {
+    background: #9FA1A4;
+}
+
+.ant-switch-checked:hover:not(.ant-switch-disabled) {
+    background: #D42E1F !important;
+}
+
+/* Dark mode switches */
+.dark-mode .ant-switch {
+    background: #5a5a5a;
+}
+
+.dark-mode .ant-switch-checked {
+    background: #EE3524 !important;
+}
+
+.dark-mode .ant-switch:hover:not(.ant-switch-disabled) {
+    background: #6a6a6a;
+}
+
+.dark-mode .ant-switch-checked:hover:not(.ant-switch-disabled) {
+    background: #D42E1F !important;
+}
+
+/* =========================================
+   DatePicker Popup - Dark Mode
+   ========================================= */
+
+.dark-mode .ant-picker-dropdown {
+    background: transparent;
+}
+
+.dark-mode .ant-picker-panel-container {
+    background: #2d2a2b;
+    border: 1px solid #4a4a4a;
+}
+
+.dark-mode .ant-picker-header {
+    color: #FFFFFF;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .ant-picker-header button {
+    color: #9FA1A4;
+}
+
+.dark-mode .ant-picker-header button:hover {
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-picker-content th {
+    color: #9FA1A4;
+}
+
+.dark-mode .ant-picker-cell {
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end) .ant-picker-cell-inner {
+    background: #3a3737;
+}
+
+/* Today's date - HSBC Red border */
+.dark-mode .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+    border-color: #EE3524 !important;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+    border-color: #EE3524 !important;
+}
+
+/* Selected date - HSBC Red background */
+.dark-mode .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
+    background: #EE3524 !important;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
+    background: #EE3524 !important;
+}
+
+.dark-mode .ant-picker-cell-disabled {
+    color: #5a5a5a;
+}
+
+.dark-mode .ant-picker-footer {
+    border-color: #4a4a4a;
+}
+
+.dark-mode .ant-picker-today-btn {
+    color: #EE3524 !important;
+}
+
+/* Today button in all modes - HSBC Red */
+.ant-picker-today-btn {
+    color: #EE3524 !important;
+}
+
+.ant-picker-today-btn:hover {
+    color: #D42E1F !important;
+}
+
+/* Calendar footer link */
+.ant-picker-footer a {
+    color: #EE3524 !important;
+}
+
+.dark-mode .ant-picker-footer a {
+    color: #EE3524 !important;
+}
+
+/* =========================================
+   Select Dropdown - Dark Mode
+   ========================================= */
+
+.dark-mode .ant-select-dropdown {
+    background: #2d2a2b;
+    border: 1px solid #4a4a4a;
+}
+
+.dark-mode .ant-select-item {
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    background: #3a3737;
+}
+
+.dark-mode .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background: #3a3737;
+    color: #EE3524;
+}
+
+/* =========================================
+   Textarea Character Count - Dark Mode
+   ========================================= */
+
+.dark-mode .ant-input-textarea-show-count::after {
+    color: #9FA1A4 !important;
+}
+
+/* =========================================
+   Tooltip - Dark Mode
+   ========================================= */
+
+.dark-mode .ant-tooltip-inner {
+    background: #1a1818;
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-tooltip-arrow::before {
+    background: #1a1818;
+}
+
+/* =========================================
+   Dropdown Menu Item Colors Fix
+   ========================================= */
+
+.dark-mode .ant-dropdown-menu-title-content {
+    color: #FFFFFF;
+}
+
+.dark-mode .ant-dropdown-menu-item-danger .ant-dropdown-menu-title-content {
+    color: #EE3524;
+}
+
+.dark-mode .ant-dropdown-menu-item-danger:hover {
+    background: #EE3524 !important;
+}
+
+.dark-mode .ant-dropdown-menu-item-danger:hover .ant-dropdown-menu-title-content {
+    color: #FFFFFF !important;
+}
+
+/* =========================================
+   Settings Page - Vertical Row for Dark Mode Toggle
+   ========================================= */
+
+.setting-row-vertical {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 12px;
+}
+
+.setting-row-vertical .setting-info {
+    flex-direction: column;
+    align-items: flex-start;
 }

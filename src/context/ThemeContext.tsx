@@ -22,7 +22,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         // Apply theme to document
         if (theme === 'dark') {
             document.documentElement.classList.add('dark-mode');
-            document.body.style.backgroundColor = '#1a1a2e';
+            document.body.style.backgroundColor = '#3a3737';
         } else {
             document.documentElement.classList.remove('dark-mode');
             document.body.style.backgroundColor = '#f5f7fa';

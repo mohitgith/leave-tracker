@@ -1,9 +1,12 @@
+export type EmployeeType = 'permanent' | 'contractor';
+
 export interface Employee {
     id: string;
     name: string;
     role: string;
     avatarUrl: string;
     department: string;
+    employeeType?: EmployeeType;
 }
 
 export type LeaveType = 'vacation' | 'sick';

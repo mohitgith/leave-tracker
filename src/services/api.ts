@@ -13,6 +13,7 @@ export interface EmployeeAPI {
     email: string;
     phone: string;
     managerId: string | null;
+    employeeType?: 'permanent' | 'contractor';
 }
 
 export interface OrgEmployeeAPI {
@@ -112,4 +113,72 @@ export const deleteLeave = async (id: string): Promise<void> => {
         method: 'DELETE',
     });
     if (!response.ok) throw new Error('Failed to delete leave');
+};
+
+// ==================== Notification Settings APIs ====================
+
+export interface NotificationSettingsAPI {
+    id: string;
+    recipients: string[];
+    scheduledTime: string; // HH:mm format
+    enabled: boolean;
+}
+
+export const fetchNotificationSettings = async (): Promise<NotificationSettingsAPI> => {
+    const response = await fetch(`${API_BASE_URL}/notification-settings`);
+    if (!response.ok) throw new Error('Failed to fetch notification settings');
+    return response.json();
+};
+
+export const updateNotificationSettings = async (settings: NotificationSettingsAPI): Promise<NotificationSettingsAPI> => {
+    const response = await fetch(`${API_BASE_URL}/notification-settings`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settings),
+    });
+    if (!response.ok) throw new Error('Failed to update notification settings');
+    return response.json();
+};
+
+// ==================== App Notifications APIs ====================
+
+export interface AppNotificationAPI {
+    id: string;
+    type: string;
+    title: string;
+    message: string;
+    forUserId: string;
+    fromUserId: string;
+    leaveId?: string;
+    createdAt: string;
+    read: boolean;
+}
+
+export const fetchNotificationsForUser = async (userId: string): Promise<AppNotificationAPI[]> => {
+    const response = await fetch(`${API_BASE_URL}/notifications/user/${userId}`);
+    if (!response.ok) throw new Error('Failed to fetch notifications');
+    return response.json();
+};
+
+export const fetchUnreadNotificationCount = async (userId: string): Promise<number> => {
+    const response = await fetch(`${API_BASE_URL}/notifications/user/${userId}/unread-count`);
+    if (!response.ok) throw new Error('Failed to fetch unread count');
+    const data = await response.json();
+    return data.count;
+};
+
+export const markNotificationAsRead = async (notificationId: string): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/notifications/${notificationId}/read`, {
+        method: 'PUT',
+    });
+    if (!response.ok) throw new Error('Failed to mark notification as read');
+};
+
+export const markAllNotificationsAsRead = async (userId: string): Promise<number> => {
+    const response = await fetch(`${API_BASE_URL}/notifications/user/${userId}/read-all`, {
+        method: 'PUT',
+    });
+    if (!response.ok) throw new Error('Failed to mark all as read');
+    const data = await response.json();
+    return data.markedAsRead;
 };
