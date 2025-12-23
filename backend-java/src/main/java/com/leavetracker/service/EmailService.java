@@ -3,7 +3,9 @@ package com.leavetracker.service;
 import com.leavetracker.model.Employee;
 import com.leavetracker.model.LeaveRecord;
 import com.leavetracker.model.NotificationSettings;
-import com.leavetracker.repository.JsonDatabaseRepository;
+import com.leavetracker.repository.EmployeeRepository;
+import com.leavetracker.repository.LeaveRepository;
+import com.leavetracker.repository.NotificationSettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,13 @@ import java.util.stream.Collectors;
 public class EmailService {
 
     @Autowired
-    private JsonDatabaseRepository repository;
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private LeaveRepository leaveRepository;
+
+    @Autowired
+    private NotificationSettingsRepository notificationSettingsRepository;
 
     private static final String MANAGER_EMAIL = "lohit.ganta@company.com";
 
@@ -30,7 +38,8 @@ public class EmailService {
      * If recipients list is empty, sends to manager only.
      */
     public void sendLeaveSummaryEmail() {
-        NotificationSettings settings = repository.getNotificationSettings();
+        NotificationSettings settings = notificationSettingsRepository.findById("default")
+                .orElse(new NotificationSettings());
 
         if (!settings.isEnabled()) {
             System.out.println("[EMAIL SERVICE] Notifications are disabled, skipping send.");
@@ -59,8 +68,8 @@ public class EmailService {
      * Build the email content with leave summary.
      */
     private String buildEmailContent() {
-        List<LeaveRecord> allLeaves = repository.getAllLeaves();
-        List<Employee> employees = repository.getAllEmployees();
+        List<LeaveRecord> allLeaves = leaveRepository.findAll();
+        List<Employee> employees = employeeRepository.findAll();
 
         // Create employee lookup map
         Map<String, String> employeeNames = employees.stream()

@@ -1,7 +1,8 @@
 package com.leavetracker.controller;
 
 import com.leavetracker.model.AppNotification;
-import com.leavetracker.repository.JsonDatabaseRepository;
+import com.leavetracker.repository.AppNotificationRepository;
+import com.leavetracker.service.DataPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +19,17 @@ import java.util.Map;
 public class AppNotificationController {
 
     @Autowired
-    private JsonDatabaseRepository repository;
+    private AppNotificationRepository appNotificationRepository;
+
+    @Autowired
+    private DataPersistenceService dataPersistenceService;
 
     /**
      * Get all notifications for a user.
      */
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<AppNotification>> getNotificationsForUser(@PathVariable String userId) {
-        List<AppNotification> notifications = repository.getNotificationsForUser(userId);
+        List<AppNotification> notifications = appNotificationRepository.findByForUserIdOrderByCreatedAtDesc(userId);
         return ResponseEntity.ok(notifications);
     }
 
@@ -33,9 +37,9 @@ public class AppNotificationController {
      * Get unread notification count for a user.
      */
     @GetMapping("/user/{userId}/unread-count")
-    public ResponseEntity<Map<String, Integer>> getUnreadCount(@PathVariable String userId) {
-        List<AppNotification> unread = repository.getUnreadNotificationsForUser(userId);
-        return ResponseEntity.ok(Map.of("count", unread.size()));
+    public ResponseEntity<Map<String, Long>> getUnreadCount(@PathVariable String userId) {
+        long count = appNotificationRepository.countByForUserIdAndReadFalse(userId);
+        return ResponseEntity.ok(Map.of("count", count));
     }
 
     /**
@@ -43,7 +47,11 @@ public class AppNotificationController {
      */
     @PostMapping
     public ResponseEntity<AppNotification> createNotification(@RequestBody AppNotification notification) {
-        AppNotification created = repository.createNotification(notification);
+        if (notification.getId() == null || notification.getId().isEmpty()) {
+            notification.setId("notif-" + System.currentTimeMillis());
+        }
+        AppNotification created = appNotificationRepository.save(notification);
+        dataPersistenceService.triggerImmediateSync();
         return ResponseEntity.ok(created);
     }
 
@@ -52,11 +60,14 @@ public class AppNotificationController {
      */
     @PutMapping("/{notificationId}/read")
     public ResponseEntity<Void> markAsRead(@PathVariable String notificationId) {
-        boolean success = repository.markNotificationAsRead(notificationId);
-        if (success) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+        return appNotificationRepository.findById(notificationId)
+                .map(notification -> {
+                    notification.setRead(true);
+                    appNotificationRepository.save(notification);
+                    dataPersistenceService.triggerImmediateSync();
+                    return ResponseEntity.ok().<Void>build();
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     /**
@@ -64,7 +75,11 @@ public class AppNotificationController {
      */
     @PutMapping("/user/{userId}/read-all")
     public ResponseEntity<Map<String, Integer>> markAllAsRead(@PathVariable String userId) {
-        int count = repository.markAllNotificationsAsRead(userId);
-        return ResponseEntity.ok(Map.of("markedAsRead", count));
+        List<AppNotification> unread = appNotificationRepository
+                .findByForUserIdAndReadFalseOrderByCreatedAtDesc(userId);
+        unread.forEach(n -> n.setRead(true));
+        appNotificationRepository.saveAll(unread);
+        dataPersistenceService.triggerImmediateSync();
+        return ResponseEntity.ok(Map.of("markedAsRead", unread.size()));
     }
 }

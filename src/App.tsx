@@ -5,6 +5,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import LoginPage from './components/auth/LoginPage';
 import MainLayout from './components/layout/MainLayout';
+import DashboardPage from './components/pages/DashboardPage';
 import LeaveTrackerPage from './components/pages/LeaveTrackerPage';
 import ProfilePage from './components/pages/ProfilePage';
 import SettingsPage from './components/pages/SettingsPage';
@@ -25,12 +26,7 @@ const App: React.FC = () => {
                             </ProtectedRoute>
                         }>
                             <Route index element={<Navigate to="/dashboard" replace />} />
-                            <Route path="dashboard" element={
-                                <div style={{ padding: 24 }}>
-                                    <h2>Dashboard View</h2>
-                                    <p>Work in progress. Please check specific modules.</p>
-                                </div>
-                            } />
+                            <Route path="dashboard" element={<DashboardPage />} />
                             <Route path="employees" element={<OrgChart />} />
                             <Route path="leave-tracker" element={<LeaveTrackerPage />} />
                             <Route path="profile" element={<ProfilePage />} />
@@ -44,3 +40,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

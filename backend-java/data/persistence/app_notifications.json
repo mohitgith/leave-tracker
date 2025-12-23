@@ -1,0 +1,21 @@
+[ {
+  "id" : "notif-1766513318133",
+  "type" : "leave_applied",
+  "title" : "New Leave Request",
+  "message" : "Mohit Shrivastava has applied for Sick Leave from 2025-12-24 to 2025-12-25",
+  "forUserId" : "0",
+  "fromUserId" : "10",
+  "leaveId" : "leave-1766513318113",
+  "createdAt" : "2025-12-23T23:38:38.134684",
+  "read" : true
+}, {
+  "id" : "notif-1766513387483",
+  "type" : "leave_applied",
+  "title" : "New Leave Request",
+  "message" : "Aditya Pathak has applied for Annual Leave from 2025-12-24 to 2025-12-31",
+  "forUserId" : "0",
+  "fromUserId" : "1",
+  "leaveId" : "leave-1766513387471",
+  "createdAt" : "2025-12-23T23:39:47.483707",
+  "read" : true
+} ]

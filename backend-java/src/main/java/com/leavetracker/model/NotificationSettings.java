@@ -1,5 +1,13 @@
 package com.leavetracker.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,9 +15,17 @@ import java.util.List;
  * Notification settings for scheduled email notifications.
  * Managed by the manager, read-only for other employees.
  */
+@Entity
+@Table(name = "notification_settings")
 public class NotificationSettings {
+    @Id
     private String id;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "notification_recipients", joinColumns = @JoinColumn(name = "settings_id"))
+    @Column(name = "email")
     private List<String> recipients; // List of email addresses
+
     private String scheduledTime; // Time in HH:mm format
     private boolean enabled;
 

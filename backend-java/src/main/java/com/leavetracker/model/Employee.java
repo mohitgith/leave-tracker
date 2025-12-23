@@ -1,14 +1,27 @@
 package com.leavetracker.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+
 /**
  * Unified Employee entity with hierarchy support.
  * Used for both employee list and org chart (via managerId relationship).
  */
+@Entity
+@Table(name = "employees")
 public class Employee {
+    @Id
     private String id;
+
+    @Column(nullable = false)
     private String name;
+
     private String role;
     private String department;
+
+    @Column(length = 500)
     private String avatarUrl;
 
     // Additional fields for org chart

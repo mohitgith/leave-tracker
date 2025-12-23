@@ -1,30 +1,33 @@
 package com.leavetracker.controller;
 
 import com.leavetracker.model.Employee;
-import com.leavetracker.repository.JsonDatabaseRepository;
+import com.leavetracker.repository.EmployeeRepository;
+import com.leavetracker.service.DataPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
 
     @Autowired
-    private JsonDatabaseRepository repository;
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private DataPersistenceService dataPersistenceService;
 
     @GetMapping
     public List<Employee> getAllEmployees() {
-        return repository.getAllEmployees();
+        return employeeRepository.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getEmployeeById(@PathVariable String id) {
-        return repository.getEmployeeById(id)
+        return employeeRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -32,25 +35,40 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<?> createEmployee(@RequestBody Employee employee) {
         if (employee.getId() == null || employee.getId().isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Employee ID is required"));
+            // Generate ID if not provided
+            employee.setId(String.valueOf(System.currentTimeMillis()));
         }
-        Employee created = repository.createEmployee(employee);
+
+        // Generate avatar URL if not provided
+        if (employee.getAvatarUrl() == null || employee.getAvatarUrl().isEmpty()) {
+            employee.setAvatarUrl("https://ui-avatars.com/api/?name=" +
+                    employee.getName().replace(" ", "%20") +
+                    "&background=random&color=fff&size=64&bold=true");
+        }
+
+        Employee created = employeeRepository.save(employee);
+        dataPersistenceService.triggerImmediateSync();
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEmployee(@PathVariable String id, @RequestBody Employee employee) {
-        return repository.updateEmployee(id, employee)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        if (!employeeRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        employee.setId(id);
+        Employee updated = employeeRepository.save(employee);
+        dataPersistenceService.triggerImmediateSync();
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable String id) {
-        if (repository.deleteEmployee(id)) {
-            return ResponseEntity.noContent().build();
+        if (!employeeRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        employeeRepository.deleteById(id);
+        dataPersistenceService.triggerImmediateSync();
+        return ResponseEntity.noContent().build();
     }
 }

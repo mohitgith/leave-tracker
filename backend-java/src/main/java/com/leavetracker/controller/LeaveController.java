@@ -3,7 +3,10 @@ package com.leavetracker.controller;
 import com.leavetracker.model.AppNotification;
 import com.leavetracker.model.Employee;
 import com.leavetracker.model.LeaveRecord;
-import com.leavetracker.repository.JsonDatabaseRepository;
+import com.leavetracker.repository.EmployeeRepository;
+import com.leavetracker.repository.LeaveRepository;
+import com.leavetracker.repository.AppNotificationRepository;
+import com.leavetracker.service.DataPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,59 +21,79 @@ import java.util.Optional;
 public class LeaveController {
 
     @Autowired
-    private JsonDatabaseRepository repository;
+    private LeaveRepository leaveRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private AppNotificationRepository appNotificationRepository;
+
+    @Autowired
+    private DataPersistenceService dataPersistenceService;
 
     private static final String MANAGER_ID = "0"; // Lohit Ganta is the manager
 
     @GetMapping
     public List<LeaveRecord> getAllLeaves() {
-        return repository.getAllLeaves();
+        return leaveRepository.findAll();
     }
 
     @PostMapping
     public ResponseEntity<?> createLeave(@RequestBody LeaveRecord leave) {
-        // Basic validation
-        if (leave.getId() == null || leave.getId().isEmpty() ||
-                leave.getEmployeeId() == null || leave.getEmployeeId().isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Invalid leave data"));
+        // Generate ID if not provided
+        if (leave.getId() == null || leave.getId().isEmpty()) {
+            leave.setId("leave-" + System.currentTimeMillis());
         }
 
-        LeaveRecord created = repository.createLeave(leave);
+        // Basic validation
+        if (leave.getEmployeeId() == null || leave.getEmployeeId().isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Employee ID is required"));
+        }
+
+        LeaveRecord created = leaveRepository.save(leave);
 
         // Create notification for manager when an employee applies for leave
         if (!leave.getEmployeeId().equals(MANAGER_ID)) {
             createLeaveNotification(leave);
         }
 
+        dataPersistenceService.triggerImmediateSync();
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateLeave(@PathVariable String id, @RequestBody LeaveRecord leave) {
-        return repository.updateLeave(id, leave)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        if (!leaveRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        leave.setId(id);
+        LeaveRecord updated = leaveRepository.save(leave);
+        dataPersistenceService.triggerImmediateSync();
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteLeave(@PathVariable String id) {
-        if (repository.deleteLeave(id)) {
-            return ResponseEntity.noContent().build();
+        if (!leaveRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        leaveRepository.deleteById(id);
+        dataPersistenceService.triggerImmediateSync();
+        return ResponseEntity.noContent().build();
     }
 
     /**
      * Create a notification for the manager when an employee applies for leave.
      */
     private void createLeaveNotification(LeaveRecord leave) {
-        Optional<Employee> employeeOpt = repository.getEmployeeById(leave.getEmployeeId());
+        Optional<Employee> employeeOpt = employeeRepository.findById(leave.getEmployeeId());
         if (employeeOpt.isEmpty())
             return;
 
         Employee employee = employeeOpt.get();
-        String leaveType = leave.getType().equals("vacation") ? "Annual Leave" : "Sick Leave";
+        String leaveType = "vacation".equalsIgnoreCase(leave.getType()) ? "Annual Leave" : "Sick Leave";
 
         AppNotification notification = new AppNotification(
                 "notif-" + System.currentTimeMillis(),
@@ -82,6 +105,6 @@ public class LeaveController {
                 leave.getEmployeeId(), // From the employee
                 leave.getId());
 
-        repository.createNotification(notification);
+        appNotificationRepository.save(notification);
     }
 }

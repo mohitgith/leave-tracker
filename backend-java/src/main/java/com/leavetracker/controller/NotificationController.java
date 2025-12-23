@@ -1,7 +1,8 @@
 package com.leavetracker.controller;
 
 import com.leavetracker.model.NotificationSettings;
-import com.leavetracker.repository.JsonDatabaseRepository;
+import com.leavetracker.repository.NotificationSettingsRepository;
+import com.leavetracker.service.DataPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +18,21 @@ import org.springframework.web.bind.annotation.*;
 public class NotificationController {
 
     @Autowired
-    private JsonDatabaseRepository repository;
+    private NotificationSettingsRepository notificationSettingsRepository;
+
+    @Autowired
+    private DataPersistenceService dataPersistenceService;
 
     /**
      * Get current notification settings.
      */
     @GetMapping
     public ResponseEntity<NotificationSettings> getNotificationSettings() {
-        NotificationSettings settings = repository.getNotificationSettings();
+        NotificationSettings settings = notificationSettingsRepository.findById("default")
+                .orElseGet(() -> {
+                    NotificationSettings defaultSettings = new NotificationSettings();
+                    return notificationSettingsRepository.save(defaultSettings);
+                });
         return ResponseEntity.ok(settings);
     }
 
@@ -34,7 +42,9 @@ public class NotificationController {
     @PutMapping
     public ResponseEntity<NotificationSettings> updateNotificationSettings(
             @RequestBody NotificationSettings settings) {
-        NotificationSettings updated = repository.updateNotificationSettings(settings);
+        settings.setId("default"); // Always use default ID
+        NotificationSettings updated = notificationSettingsRepository.save(settings);
+        dataPersistenceService.triggerImmediateSync();
         return ResponseEntity.ok(updated);
     }
 }

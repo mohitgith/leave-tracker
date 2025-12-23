@@ -1,15 +1,30 @@
 package com.leavetracker.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+
 /**
  * Leave record entity.
  */
+@Entity
+@Table(name = "leave_records")
 public class LeaveRecord {
+    @Id
     private String id;
+
+    @Column(nullable = false)
     private String employeeId;
+
+    @Column(nullable = false)
     private String startDate; // ISO Date string (yyyy-MM-dd)
+
+    @Column(nullable = false)
     private String endDate; // ISO Date string (yyyy-MM-dd)
+
     private String type; // "vacation" or "sick"
-    private String status; // "Applied"
+    private String status; // "Applied", "Approved", "Rejected"
 
     public LeaveRecord() {
     }

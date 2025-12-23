@@ -1,7 +1,7 @@
 package com.leavetracker.service;
 
 import com.leavetracker.model.NotificationSettings;
-import com.leavetracker.repository.JsonDatabaseRepository;
+import com.leavetracker.repository.NotificationSettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 public class NotificationScheduler {
 
     @Autowired
-    private JsonDatabaseRepository repository;
+    private NotificationSettingsRepository notificationSettingsRepository;
 
     @Autowired
     private EmailService emailService;
@@ -32,7 +32,8 @@ public class NotificationScheduler {
      */
     @Scheduled(cron = "0 * * * * *") // Every minute at 0 seconds
     public void checkAndSendNotifications() {
-        NotificationSettings settings = repository.getNotificationSettings();
+        NotificationSettings settings = notificationSettingsRepository.findById("default")
+                .orElse(new NotificationSettings());
 
         if (!settings.isEnabled()) {
             return;

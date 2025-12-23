@@ -1,20 +1,35 @@
 package com.leavetracker.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
  * Web app notification for in-app notification system.
  */
+@Entity
+@Table(name = "app_notifications")
 public class AppNotification {
+    @Id
     private String id;
+
     private String type; // "leave_applied", "leave_approved", etc.
     private String title;
+
+    @Column(length = 1000)
     private String message;
+
+    @Column(nullable = false)
     private String forUserId; // User ID this notification is for
+
     private String fromUserId; // User who triggered the notification
     private String leaveId; // Optional: related leave ID
     private String createdAt;
+
+    @Column(name = "is_read")
     private boolean read;
 
     public AppNotification() {
