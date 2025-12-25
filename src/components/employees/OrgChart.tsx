@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Tooltip, message, Popconfirm, Spin } from 'antd';
+import { Input, Tooltip, message, Spin } from 'antd';
 import {
     SearchOutlined,
     CompressOutlined,
     PlusOutlined,
     MinusOutlined,
-    EditOutlined,
     UserAddOutlined,
-    DeleteOutlined
+    FilterOutlined,
+    DownloadOutlined
 } from '@ant-design/icons';
 import { fetchOrgChart, createEmployee, updateEmployee, deleteEmployee, OrgEmployeeAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
@@ -17,27 +17,38 @@ import './OrgChart.css';
 
 type OrgEmployee = OrgEmployeeAPI;
 
-// Manager/Root Card Component
+// Status types for employees
+type EmployeeStatus = 'in-office' | 'remote' | 'on-leave' | 'sick-leave';
+
+// Get status based on employee (simulated - in real app this would come from backend)
+const getEmployeeStatus = (employee: OrgEmployee): EmployeeStatus => {
+    // Simulate different statuses based on name hash
+    const hash = employee.name.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+    const statuses: EmployeeStatus[] = ['in-office', 'in-office', 'in-office', 'remote', 'on-leave', 'sick-leave'];
+    return statuses[hash % statuses.length];
+};
+
+// Manager Card Component
 const ManagerCard: React.FC<{
     employee: OrgEmployee;
     onNodeClick: (emp: OrgEmployee) => void;
     childrenCount: number;
-}> = ({ employee, onNodeClick, childrenCount }) => {
+    children?: OrgEmployee[];
+}> = ({ employee, onNodeClick, childrenCount, children = [] }) => {
     return (
         <div className="manager-section">
             <div className="manager-card" onClick={() => onNodeClick(employee)}>
-                <div className="manager-badge">Team Lead</div>
+                <div className="manager-badge">TEAM LEAD</div>
                 <div className="manager-content">
                     <div className="manager-avatar-section">
                         <img src={employee.avatarUrl} alt={employee.name} className="manager-avatar" />
-                        <span className="status-dot online"></span>
                     </div>
                     <div className="manager-info">
                         <h3 className="manager-name">{employee.name}</h3>
                         <p className="manager-role">{employee.role}</p>
                         <div className="manager-meta">
                             <div className="reports-avatars">
-                                {employee.children?.slice(0, 3).map((child) => (
+                                {children.slice(0, 3).map((child) => (
                                     <div
                                         key={child.id}
                                         className="mini-avatar"
@@ -50,70 +61,71 @@ const ManagerCard: React.FC<{
                     </div>
                 </div>
                 <div className="team-status-bar">
-                    <div className="status-segment active" style={{ width: '75%' }}></div>
-                    <div className="status-segment remote" style={{ width: '15%' }}></div>
-                    <div className="status-segment leave" style={{ width: '10%' }}></div>
+                    <div className="status-segment active"></div>
+                    <div className="status-segment remote"></div>
+                    <div className="status-segment leave"></div>
                 </div>
             </div>
-            {/* Vertical connector down from manager */}
             <div className="connector-down"></div>
         </div>
     );
 };
 
-// Employee Card for column
+// Employee Card - compact uniform design
 const EmployeeCard: React.FC<{
     employee: OrgEmployee;
     onNodeClick: (emp: OrgEmployee) => void;
-    side: 'left' | 'right';
-}> = ({ employee, onNodeClick, side }) => {
-    const employeeType = (employee as any).employeeType || 'permanent';
-    const isContractor = employeeType === 'contractor';
-    const colorClass = side === 'left' ? 'blue' : 'purple';
+    position: 'left' | 'center' | 'right';
+}> = ({ employee, onNodeClick, position }) => {
+    const status = getEmployeeStatus(employee);
+    const isRightColumn = position === 'right';
 
     return (
-        <div className={`emp-card-wrapper ${side}`}>
-            {/* Horizontal connector from vertical line to card */}
-            <div className={`h-connector ${side}`}></div>
-
-            <div
-                className={`emp-card ${colorClass} ${isContractor ? 'contractor' : 'permanent'}`}
-                onClick={() => onNodeClick(employee)}
-            >
-                <img src={employee.avatarUrl} alt={employee.name} className="emp-avatar" />
-                <div className={`emp-info ${side}`}>
-                    <p className="emp-name">{employee.name}</p>
-                    <p className="emp-role">{employee.role}</p>
-                </div>
-                <span className={`status-indicator ${isContractor ? 'contractor' : 'permanent'}`}></span>
+        <div className={`emp-card-wrapper ${position}`}>
+            <div className={`h-connector ${position}`}></div>
+            <div className="emp-card" onClick={() => onNodeClick(employee)}>
+                {isRightColumn ? (
+                    <>
+                        <div className="emp-info right">
+                            <p className="emp-name">{employee.name}</p>
+                            <p className="emp-role">{employee.role}</p>
+                        </div>
+                        <span className={`status-dot ${status}`}></span>
+                        <img src={employee.avatarUrl} alt={employee.name} className="emp-avatar" />
+                    </>
+                ) : (
+                    <>
+                        <img src={employee.avatarUrl} alt={employee.name} className="emp-avatar" />
+                        <div className="emp-info">
+                            <p className="emp-name">{employee.name}</p>
+                            <p className="emp-role">{employee.role}</p>
+                        </div>
+                        <span className={`status-dot ${status}`}></span>
+                    </>
+                )}
             </div>
         </div>
     );
 };
 
-// Column of employees
+// Employee Column with vertical connector
 const EmployeeColumn: React.FC<{
     employees: OrgEmployee[];
     onNodeClick: (emp: OrgEmployee) => void;
-    side: 'left' | 'right';
-}> = ({ employees, onNodeClick, side }) => {
-    if (employees.length === 0) return null;
+    position: 'left' | 'center' | 'right';
+}> = ({ employees, onNodeClick, position }) => {
+    if (employees.length === 0) return <div className="emp-column empty"></div>;
 
     return (
-        <div className={`emp-column ${side}`}>
-            {/* Vertical connector from horizontal bar */}
-            <div className={`v-connector-top ${side}`}></div>
-
-            {/* Vertical line through all cards */}
-            <div className={`v-line ${side}`}></div>
-
-            {/* Employee cards */}
+        <div className={`emp-column ${position}`}>
+            <div className={`v-connector-top ${position}`}></div>
+            <div className={`v-line ${position}`}></div>
             {employees.map((emp) => (
                 <EmployeeCard
                     key={emp.id}
                     employee={emp}
                     onNodeClick={onNodeClick}
-                    side={side}
+                    position={position}
                 />
             ))}
         </div>
@@ -200,12 +212,20 @@ const OrgChart: React.FC = () => {
         }
     };
 
-    // Split children into left and right columns
-    const splitColumns = (children: OrgEmployee[] = []) => {
-        const half = Math.ceil(children.length / 2);
+    // Split employees by type: contractors on left, permanent split between center and right
+    const splitByType = (children: OrgEmployee[] = []) => {
+        const contractors = children.filter(emp => (emp as any).employeeType === 'contractor');
+        const permanent = children.filter(emp => (emp as any).employeeType !== 'contractor');
+
+        // Split permanent employees between center and right columns
+        const half = Math.ceil(permanent.length / 2);
+        const centerPermanent = permanent.slice(0, half);
+        const rightPermanent = permanent.slice(half);
+
         return {
-            left: children.slice(0, half),
-            right: children.slice(half)
+            left: contractors,        // Contractors on left
+            center: centerPermanent,  // Half of permanent in center
+            right: rightPermanent     // Half of permanent on right
         };
     };
 
@@ -217,35 +237,59 @@ const OrgChart: React.FC = () => {
         );
     }
 
-    const columns = splitColumns(orgChartData?.children);
+    const columns = splitByType(orgChartData?.children);
     const hasChildren = (orgChartData?.children?.length || 0) > 0;
 
     return (
         <div className="org-chart-wrapper">
+            {/* Header */}
             <div className="org-chart-header">
-                <Input
-                    prefix={<SearchOutlined style={{ color: '#bfbfbf' }} />}
-                    placeholder="Search employees..."
-                    className="search-input"
-                    size="large"
-                />
-                <div className="employee-type-legend">
-                    <div className="legend-item">
-                        <div className="legend-dot permanent-dot"></div>
-                        <span>Permanent</span>
+                <div className="header-left">
+                    <div className="breadcrumb">
+                        <span className="breadcrumb-item">Leave Tracker</span>
+                        <span className="breadcrumb-separator">›</span>
+                        <span className="breadcrumb-item active">Org Chart</span>
                     </div>
-                    <div className="legend-item">
-                        <div className="legend-dot contractor-dot"></div>
-                        <span>Contractor</span>
+                    <h1 className="page-title">Organizational Structure</h1>
+                </div>
+
+                {/* Status Key */}
+                <div className="status-key">
+                    <span className="status-key-label">Status Key:</span>
+                    <div className="status-key-item">
+                        <span className="status-dot-key in-office"></span>
+                        <span>In Office</span>
+                    </div>
+                    <div className="status-key-item">
+                        <span className="status-dot-key remote"></span>
+                        <span>Remote</span>
+                    </div>
+                    <div className="status-key-item">
+                        <span className="status-dot-key on-leave"></span>
+                        <span>On Leave</span>
+                    </div>
+                    <div className="status-key-item">
+                        <span className="status-dot-key sick-leave"></span>
+                        <span>Sick Leave</span>
                     </div>
                 </div>
-                {isManager && (
-                    <button className="global-add-btn" onClick={handleAddClick}>
-                        <UserAddOutlined style={{ marginRight: 8 }} /> Add Member
+
+                <div className="header-right">
+                    <Input
+                        prefix={<SearchOutlined style={{ color: '#9ca3af' }} />}
+                        placeholder="Find employee..."
+                        className="search-input"
+                    />
+                    <button className="header-btn">
+                        <FilterOutlined /> Filter
                     </button>
-                )}
+                    <button className="header-btn primary">
+                        <DownloadOutlined /> Export
+                    </button>
+                </div>
             </div>
 
+            {/* Chart Viewport */}
             <div className="org-chart-viewport">
                 <div className="transform-container" style={{ transform: `scale(${scale})` }}>
                     <div className="org-tree">
@@ -255,24 +299,30 @@ const OrgChart: React.FC = () => {
                                 employee={orgChartData}
                                 onNodeClick={setSelectedEmployee}
                                 childrenCount={orgChartData.children?.length || 0}
+                                children={orgChartData.children}
                             />
                         )}
 
                         {/* Horizontal connector bar */}
                         {hasChildren && <div className="h-connector-bar"></div>}
 
-                        {/* Employee Columns */}
+                        {/* Three columns */}
                         {hasChildren && (
                             <div className="columns-wrapper">
                                 <EmployeeColumn
                                     employees={columns.left}
                                     onNodeClick={setSelectedEmployee}
-                                    side="left"
+                                    position="left"
+                                />
+                                <EmployeeColumn
+                                    employees={columns.center}
+                                    onNodeClick={setSelectedEmployee}
+                                    position="center"
                                 />
                                 <EmployeeColumn
                                     employees={columns.right}
                                     onNodeClick={setSelectedEmployee}
-                                    side="right"
+                                    position="right"
                                 />
                             </div>
                         )}
@@ -280,15 +330,14 @@ const OrgChart: React.FC = () => {
                 </div>
             </div>
 
+            {/* Zoom Controls */}
             <div className="zoom-controls">
-                <Tooltip title="Zoom Out">
-                    <div className="zoom-btn" onClick={handleZoomOut}><MinusOutlined /></div>
-                </Tooltip>
-                <div className="zoom-value">{Math.round(scale * 100)}%</div>
                 <Tooltip title="Zoom In">
                     <div className="zoom-btn" onClick={handleZoomIn}><PlusOutlined /></div>
                 </Tooltip>
-                <div className="zoom-divider" />
+                <Tooltip title="Zoom Out">
+                    <div className="zoom-btn" onClick={handleZoomOut}><MinusOutlined /></div>
+                </Tooltip>
                 <Tooltip title="Fit Screen">
                     <div className="zoom-btn" onClick={handleResetZoom}><CompressOutlined /></div>
                 </Tooltip>

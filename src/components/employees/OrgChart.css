@@ -7,9 +7,9 @@
     height: 100%;
     overflow: hidden;
     background:
-        radial-gradient(circle, #e5e7eb 1px, transparent 1px);
-    background-size: 20px 20px;
-    background-color: #f8f9fc;
+        radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-color: #f1f5f9;
     display: flex;
     flex-direction: column;
 }
@@ -20,116 +20,133 @@
 .org-chart-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 16px 24px;
-    position: relative;
-    z-index: 10;
-    align-items: center;
-    gap: 16px;
     background: #fff;
-    border-bottom: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e2e8f0;
+    gap: 24px;
+    flex-wrap: wrap;
 }
 
-.search-input {
-    width: 260px;
-    border-radius: 8px;
-}
-
-.employee-type-legend {
+.header-left {
     display: flex;
-    gap: 16px;
-    align-items: center;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.legend-item {
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.breadcrumb-item {
+    color: #64748b;
+}
+
+.breadcrumb-item.active {
+    color: #3b82f6;
+}
+
+.breadcrumb-separator {
+    color: #cbd5e1;
+}
+
+.page-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+/* Status Key */
+.status-key {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.status-key-label {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.status-key-item {
     display: flex;
     align-items: center;
     gap: 6px;
     font-size: 12px;
-    color: #666;
+    color: #374151;
 }
 
-.legend-dot {
-    width: 8px;
-    height: 8px;
+.status-dot-key {
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
 }
 
-.legend-dot.permanent-dot {
-    background: #64b5f6;
+.status-dot-key.in-office {
+    background: #22c55e;
 }
 
-.legend-dot.contractor-dot {
-    background: #ff9800;
+.status-dot-key.remote {
+    background: #3b82f6;
 }
 
-.global-add-btn {
-    background: #fff;
-    border: 1px solid #cfd7e7;
+.status-dot-key.on-leave {
+    background: #f97316;
+}
+
+.status-dot-key.sick-leave {
+    background: #ec4899;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-input {
+    width: 200px;
+    border-radius: 8px;
+}
+
+.search-input .ant-input {
+    background: #f8fafc;
+}
+
+.header-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     padding: 8px 16px;
     border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    color: #333;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-}
-
-.global-add-btn:hover {
-    color: #EE3524;
-    border-color: #EE3524;
-}
-
-/* =========================================
-   Zoom Controls
-   ========================================= */
-.zoom-controls {
-    position: absolute;
-    bottom: 24px;
-    right: 24px;
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    border: 1px solid #e2e8f0;
     background: #fff;
-    padding: 6px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border: 1px solid #cfd7e7;
-}
-
-.zoom-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    border: none;
-    background: transparent;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
     transition: all 0.2s;
 }
 
-.zoom-btn:hover {
-    background: #f0f0f0;
-    color: #EE3524;
+.header-btn:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
 }
 
-.zoom-value {
-    text-align: center;
-    font-size: 11px;
-    font-weight: 600;
-    color: #333;
-    padding: 4px 0;
+.header-btn.primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: #fff;
 }
 
-.zoom-divider {
-    width: 20px;
-    height: 1px;
-    background: #eee;
-    margin: 2px auto;
+.header-btn.primary:hover {
+    background: #2563eb;
 }
 
 /* =========================================
@@ -138,7 +155,7 @@
 .org-chart-viewport {
     flex: 1;
     overflow: auto;
-    padding: 32px;
+    padding: 40px 24px;
 }
 
 .transform-container {
@@ -158,34 +175,28 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
 }
 
 /* =========================================
-   Manager Section
+   Manager Card
    ========================================= */
 .manager-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    z-index: 20;
     margin-bottom: 0;
 }
 
 .manager-card {
-    width: 320px;
+    width: 280px;
     background: #fff;
     border-radius: 16px;
     padding: 20px;
-    box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(238, 53, 36, 0.2);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
     cursor: pointer;
     position: relative;
-    transition: all 0.3s;
-    /* Ring effect */
-    outline: 4px solid rgba(238, 53, 36, 0.05);
+    transition: all 0.2s;
 }
 
 .manager-card:hover {
@@ -195,52 +206,34 @@
 
 .manager-badge {
     position: absolute;
-    top: -12px;
+    top: -14px;
     left: 50%;
     transform: translateX(-50%);
-    background: #EE3524;
+    background: #10b981;
     color: white;
     font-size: 10px;
     font-weight: 700;
-    padding: 4px 12px;
+    padding: 6px 16px;
     border-radius: 20px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    box-shadow: 0 2px 8px rgba(238, 53, 36, 0.3);
 }
 
 .manager-content {
     display: flex;
     gap: 16px;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .manager-avatar-section {
-    position: relative;
     flex-shrink: 0;
 }
 
 .manager-avatar {
-    width: 64px;
-    height: 64px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-}
-
-.status-dot {
-    position: absolute;
-    bottom: 4px;
-    right: 0;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-}
-
-.status-dot.online {
-    background: #22c55e;
 }
 
 .manager-info {
@@ -250,16 +243,16 @@
 
 .manager-name {
     font-size: 18px;
-    font-weight: 800;
-    color: #0d121b;
+    font-weight: 700;
+    color: #0f172a;
     margin: 0 0 2px 0;
 }
 
 .manager-role {
-    font-size: 14px;
-    font-weight: 600;
-    color: #EE3524;
-    margin: 0 0 8px 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #10b981;
+    margin: 0 0 10px 0;
 }
 
 .manager-meta {
@@ -273,13 +266,14 @@
 }
 
 .mini-avatar {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background-size: cover;
     background-position: center;
     border: 2px solid #fff;
-    margin-left: -6px;
+    margin-left: -8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .mini-avatar:first-child {
@@ -287,37 +281,42 @@
 }
 
 .reports-count {
-    font-size: 10px;
-    font-weight: 700;
-    color: #666;
-    background: #f5f5f5;
-    padding: 2px 8px;
-    border-radius: 10px;
-    border: 1px solid #e8e8e8;
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 12px;
 }
 
 .team-status-bar {
     height: 6px;
-    background: #f0f0f0;
+    background: #f1f5f9;
     border-radius: 3px;
     overflow: hidden;
     display: flex;
     margin-top: 16px;
 }
 
+.status-segment {
+    height: 100%;
+}
+
 .status-segment.active {
     background: #22c55e;
+    width: 60%;
 }
 
 .status-segment.remote {
     background: #3b82f6;
+    width: 25%;
 }
 
 .status-segment.leave {
     background: #f97316;
+    width: 15%;
 }
 
-/* Connector from manager down */
 .connector-down {
     width: 2px;
     height: 40px;
@@ -330,10 +329,8 @@
 .h-connector-bar {
     height: 2px;
     background: #cbd5e1;
-    /* Width spans between the two columns' vertical lines */
-    width: calc(100% - 64px);
-    max-width: 560px;
-    border-radius: 1px;
+    width: 680px;
+    max-width: calc(100% - 48px);
 }
 
 /* =========================================
@@ -342,8 +339,7 @@
 .columns-wrapper {
     display: flex;
     justify-content: center;
-    gap: 40px;
-    width: 100%;
+    gap: 24px;
     padding-top: 40px;
     position: relative;
 }
@@ -354,9 +350,13 @@
 .emp-column {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    width: 280px;
+    gap: 16px;
+    width: 200px;
     position: relative;
+}
+
+.emp-column.empty {
+    visibility: hidden;
 }
 
 /* Vertical connector from horizontal bar */
@@ -368,7 +368,8 @@
     background: #cbd5e1;
 }
 
-.v-connector-top.left {
+.v-connector-top.left,
+.v-connector-top.center {
     left: 32px;
 }
 
@@ -376,18 +377,17 @@
     right: 32px;
 }
 
-/* Vertical line running through all cards */
+/* Vertical line through column */
 .v-line {
     position: absolute;
     top: 0;
-    bottom: 36px;
-    /* Stop before last card bottom */
+    bottom: 28px;
     width: 2px;
     background: #cbd5e1;
-    border-radius: 1px;
 }
 
-.v-line.left {
+.v-line.left,
+.v-line.center {
     left: 32px;
 }
 
@@ -404,9 +404,9 @@
     align-items: center;
 }
 
-.emp-card-wrapper.left {
+.emp-card-wrapper.left,
+.emp-card-wrapper.center {
     margin-left: 56px;
-    /* ml-14 = 56px */
 }
 
 .emp-card-wrapper.right {
@@ -414,7 +414,7 @@
     flex-direction: row-reverse;
 }
 
-/* Horizontal connector from vertical line to card */
+/* Horizontal connector */
 .h-connector {
     position: absolute;
     top: 50%;
@@ -424,7 +424,8 @@
     background: #cbd5e1;
 }
 
-.h-connector.left {
+.h-connector.left,
+.h-connector.center {
     left: -24px;
 }
 
@@ -433,52 +434,35 @@
 }
 
 /* =========================================
-   Employee Card
+   Employee Card - Uniform Design
    ========================================= */
 .emp-card {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s;
     flex: 1;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    min-width: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.emp-card.blue {
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-}
-
-.emp-card.blue:hover {
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-    border-color: #60a5fa;
-}
-
-.emp-card.purple {
-    background: #faf5ff;
-    border: 1px solid #e9d5ff;
-}
-
-.emp-card.purple:hover {
-    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15);
-    border-color: #c084fc;
-}
-
-/* Right side cards are reversed */
-.emp-card-wrapper.right .emp-card {
-    flex-direction: row-reverse;
+.emp-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-color: #3b82f6;
+    transform: translateY(-1px);
 }
 
 .emp-avatar {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
-    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .emp-info {
@@ -491,10 +475,10 @@
 }
 
 .emp-name {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
-    color: #0d121b;
-    margin: 0 0 2px 0;
+    color: #0f172a;
+    margin: 0 0 1px 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -509,22 +493,65 @@
     text-overflow: ellipsis;
 }
 
-/* Status indicator */
-.status-indicator {
-    width: 8px;
-    height: 8px;
+/* Status Dot */
+.status-dot {
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
 }
 
-.status-indicator.permanent {
+.status-dot.in-office {
     background: #22c55e;
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
 }
 
-.status-indicator.contractor {
+.status-dot.remote {
+    background: #3b82f6;
+}
+
+.status-dot.on-leave {
     background: #f97316;
-    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+}
+
+.status-dot.sick-leave {
+    background: #ec4899;
+}
+
+/* =========================================
+   Zoom Controls
+   ========================================= */
+.zoom-controls {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: #fff;
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.zoom-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.zoom-btn:hover {
+    background: #f1f5f9;
+    color: #3b82f6;
 }
 
 /* =========================================
@@ -533,60 +560,85 @@
 .dark-mode .org-chart-wrapper {
     background:
         radial-gradient(circle, #374151 1px, transparent 1px);
-    background-size: 20px 20px;
-    background-color: #101622;
+    background-size: 24px 24px;
+    background-color: #0f172a;
 }
 
 .dark-mode .org-chart-header {
-    background: #1a202c;
-    border-color: #374151;
+    background: #1e293b;
+    border-color: #334155;
 }
 
-.dark-mode .global-add-btn {
-    background: #1a202c;
-    border-color: #374151;
-    color: #fff;
+.dark-mode .breadcrumb-item {
+    color: #94a3b8;
 }
 
-.dark-mode .global-add-btn:hover {
-    border-color: #EE3524;
-    color: #EE3524;
+.dark-mode .breadcrumb-item.active {
+    color: #60a5fa;
 }
 
-.dark-mode .legend-item {
-    color: #9ca3af;
+.dark-mode .breadcrumb-separator {
+    color: #475569;
+}
+
+.dark-mode .page-title {
+    color: #f1f5f9;
+}
+
+.dark-mode .status-key-label {
+    color: #94a3b8;
+}
+
+.dark-mode .status-key-item {
+    color: #cbd5e1;
+}
+
+.dark-mode .search-input .ant-input {
+    background: #334155;
+    border-color: #475569;
+    color: #f1f5f9;
+}
+
+.dark-mode .search-input .ant-input-prefix {
+    color: #94a3b8;
+}
+
+.dark-mode .header-btn {
+    background: #334155;
+    border-color: #475569;
+    color: #f1f5f9;
+}
+
+.dark-mode .header-btn:hover {
+    border-color: #60a5fa;
+    color: #60a5fa;
+}
+
+.dark-mode .header-btn.primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
 }
 
 .dark-mode .manager-card {
-    background: #1a202c;
-    border-color: rgba(238, 53, 36, 0.3);
-    outline-color: rgba(238, 53, 36, 0.1);
+    background: #1e293b;
+    border-color: #334155;
 }
 
 .dark-mode .manager-name {
-    color: #fff;
-}
-
-.dark-mode .manager-avatar {
-    border-color: #374151;
-}
-
-.dark-mode .status-dot {
-    border-color: #1a202c;
-}
-
-.dark-mode .mini-avatar {
-    border-color: #1a202c;
+    color: #f1f5f9;
 }
 
 .dark-mode .reports-count {
-    background: #374151;
-    border-color: #4b5563;
-    color: #9ca3af;
+    background: #334155;
+    color: #94a3b8;
 }
 
 .dark-mode .team-status-bar {
-    background: #374151;
+    background: #334155;
+}
+
+.dark-mode .mini-avatar {
+    border-color: #1e293b;
 }
 
 .dark-mode .connector-down,
@@ -594,90 +646,81 @@
 .dark-mode .v-connector-top,
 .dark-mode .v-line,
 .dark-mode .h-connector {
-    background: #4b5563;
+    background: #475569;
 }
 
-.dark-mode .emp-card.blue {
-    background: rgba(59, 130, 246, 0.1);
-    border-color: rgba(59, 130, 246, 0.3);
+.dark-mode .emp-card {
+    background: #1e293b;
+    border-color: #334155;
 }
 
-.dark-mode .emp-card.blue:hover {
-    border-color: rgba(96, 165, 250, 0.5);
-}
-
-.dark-mode .emp-card.purple {
-    background: rgba(168, 85, 247, 0.1);
-    border-color: rgba(168, 85, 247, 0.3);
-}
-
-.dark-mode .emp-card.purple:hover {
-    border-color: rgba(192, 132, 252, 0.5);
+.dark-mode .emp-card:hover {
+    border-color: #60a5fa;
 }
 
 .dark-mode .emp-name {
-    color: #fff;
+    color: #f1f5f9;
 }
 
 .dark-mode .emp-role {
-    color: #9ca3af;
-}
-
-.dark-mode .emp-avatar {
-    border-color: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
 }
 
 .dark-mode .zoom-controls {
-    background: #1a202c;
-    border-color: #374151;
+    background: #1e293b;
+    border-color: #334155;
 }
 
 .dark-mode .zoom-btn {
-    color: #9ca3af;
+    color: #94a3b8;
 }
 
 .dark-mode .zoom-btn:hover {
-    background: #374151;
-    color: #EE3524;
-}
-
-.dark-mode .zoom-value {
-    color: #fff;
-}
-
-.dark-mode .zoom-divider {
-    background: #374151;
-}
-
-.dark-mode .search-input .ant-input {
-    background: #1a202c;
-    border-color: #374151;
-    color: #fff;
-}
-
-.dark-mode .search-input .ant-input-prefix {
-    color: #9ca3af;
+    background: #334155;
+    color: #60a5fa;
 }
 
 /* =========================================
    Responsive
    ========================================= */
+@media (max-width: 900px) {
+    .columns-wrapper {
+        gap: 16px;
+    }
+
+    .emp-column {
+        width: 180px;
+    }
+
+    .h-connector-bar {
+        width: 520px;
+    }
+}
+
 @media (max-width: 768px) {
     .org-chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .status-key {
+        order: 2;
+    }
+
+    .header-right {
+        order: 3;
+        width: 100%;
         flex-wrap: wrap;
-        padding: 12px 16px;
     }
 
     .search-input {
-        width: 100%;
-        order: 3;
-        margin-top: 8px;
+        flex: 1;
+        min-width: 150px;
     }
 
     .columns-wrapper {
         flex-direction: column;
         align-items: center;
-        gap: 40px;
     }
 
     .h-connector-bar {
@@ -690,7 +733,11 @@
 
     .emp-column {
         width: 100%;
-        max-width: 300px;
+        max-width: 280px;
+    }
+
+    .emp-column.right {
+        /* Reset right column to left-aligned on mobile */
     }
 
     .emp-column.right .emp-card-wrapper {
