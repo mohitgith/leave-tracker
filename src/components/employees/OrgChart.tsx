@@ -31,37 +31,19 @@ const ManagerCard: React.FC<{
     employee: OrgEmployee;
     onNodeClick: (emp: OrgEmployee) => void;
     childrenCount: number;
-    children?: OrgEmployee[];
-}> = ({ employee, onNodeClick, childrenCount, children = [] }) => {
+}> = ({ employee, onNodeClick, childrenCount }) => {
     return (
         <div className="manager-section">
             <div className="manager-card" onClick={() => onNodeClick(employee)}>
-                <div className="manager-badge">TEAM LEAD</div>
+                <div className="manager-badge">MANAGER</div>
                 <div className="manager-content">
                     <div className="manager-avatar-section">
                         <img src={employee.avatarUrl} alt={employee.name} className="manager-avatar" />
                     </div>
                     <div className="manager-info">
                         <h3 className="manager-name">{employee.name}</h3>
-                        <p className="manager-role">{employee.role}</p>
-                        <div className="manager-meta">
-                            <div className="reports-avatars">
-                                {children.slice(0, 3).map((child) => (
-                                    <div
-                                        key={child.id}
-                                        className="mini-avatar"
-                                        style={{ backgroundImage: `url(${child.avatarUrl})` }}
-                                    />
-                                ))}
-                            </div>
-                            <span className="reports-count">{childrenCount} Reports</span>
-                        </div>
+                        <span className="reports-count">{childrenCount} Reports</span>
                     </div>
-                </div>
-                <div className="team-status-bar">
-                    <div className="status-segment active"></div>
-                    <div className="status-segment remote"></div>
-                    <div className="status-segment leave"></div>
                 </div>
             </div>
             <div className="connector-down"></div>
@@ -291,7 +273,6 @@ const OrgChart: React.FC = () => {
                                 employee={orgChartData}
                                 onNodeClick={setSelectedEmployee}
                                 childrenCount={orgChartData.children?.length || 0}
-                                children={orgChartData.children}
                             />
                         )}
 
