@@ -15,15 +15,14 @@
 }
 
 /* =========================================
-   Header
+   Header - Same style as Dashboard
    ========================================= */
 .org-chart-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 24px;
-    background: #fff;
-    border-bottom: 1px solid #e2e8f0;
+    padding: 20px 24px;
+    background: transparent;
     gap: 24px;
     flex-wrap: wrap;
 }
@@ -34,29 +33,16 @@
     gap: 4px;
 }
 
-.breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-}
-
-.breadcrumb-item {
-    color: #64748b;
-}
-
-.breadcrumb-item.active {
-    color: #3b82f6;
-}
-
-.breadcrumb-separator {
-    color: #cbd5e1;
-}
-
 .page-title {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
     color: #0f172a;
+    margin: 0;
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: #64748b;
     margin: 0;
 }
 
@@ -88,15 +74,7 @@
     border-radius: 50%;
 }
 
-.status-dot-key.in-office {
-    background: #22c55e;
-}
-
-.status-dot-key.remote {
-    background: #3b82f6;
-}
-
-.status-dot-key.on-leave {
+.status-dot-key.annual-leave {
     background: #f97316;
 }
 
@@ -116,36 +94,26 @@
 }
 
 .search-input .ant-input {
-    background: #f8fafc;
+    background: #fff;
+    border: 1px solid #e2e8f0;
 }
 
-.header-btn {
+.add-member-btn {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
+    gap: 8px;
+    padding: 10px 20px;
     border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    background: #fff;
-    font-size: 13px;
-    font-weight: 500;
-    color: #374151;
+    border: none;
+    background: #3b82f6;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
     cursor: pointer;
     transition: all 0.2s;
 }
 
-.header-btn:hover {
-    border-color: #3b82f6;
-    color: #3b82f6;
-}
-
-.header-btn.primary {
-    background: #3b82f6;
-    border-color: #3b82f6;
-    color: #fff;
-}
-
-.header-btn.primary:hover {
+.add-member-btn:hover {
     background: #2563eb;
 }
 
@@ -501,15 +469,7 @@
     flex-shrink: 0;
 }
 
-.status-dot.in-office {
-    background: #22c55e;
-}
-
-.status-dot.remote {
-    background: #3b82f6;
-}
-
-.status-dot.on-leave {
+.status-dot.annual-leave {
     background: #f97316;
 }
 
@@ -565,24 +525,15 @@
 }
 
 .dark-mode .org-chart-header {
-    background: #1e293b;
-    border-color: #334155;
-}
-
-.dark-mode .breadcrumb-item {
-    color: #94a3b8;
-}
-
-.dark-mode .breadcrumb-item.active {
-    color: #60a5fa;
-}
-
-.dark-mode .breadcrumb-separator {
-    color: #475569;
+    background: transparent;
 }
 
 .dark-mode .page-title {
     color: #f1f5f9;
+}
+
+.dark-mode .page-subtitle {
+    color: #94a3b8;
 }
 
 .dark-mode .status-key-label {
@@ -603,20 +554,12 @@
     color: #94a3b8;
 }
 
-.dark-mode .header-btn {
-    background: #334155;
-    border-color: #475569;
-    color: #f1f5f9;
-}
-
-.dark-mode .header-btn:hover {
-    border-color: #60a5fa;
-    color: #60a5fa;
-}
-
-.dark-mode .header-btn.primary {
+.dark-mode .add-member-btn {
     background: #3b82f6;
-    border-color: #3b82f6;
+}
+
+.dark-mode .add-member-btn:hover {
+    background: #2563eb;
 }
 
 .dark-mode .manager-card {
@@ -736,9 +679,7 @@
         max-width: 280px;
     }
 
-    .emp-column.right {
-        /* Reset right column to left-aligned on mobile */
-    }
+    /* Right column resets to left-aligned on mobile via the rules below */
 
     .emp-column.right .emp-card-wrapper {
         flex-direction: row;

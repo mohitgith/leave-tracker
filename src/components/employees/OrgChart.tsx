@@ -5,9 +5,7 @@ import {
     CompressOutlined,
     PlusOutlined,
     MinusOutlined,
-    UserAddOutlined,
-    FilterOutlined,
-    DownloadOutlined
+    UserAddOutlined
 } from '@ant-design/icons';
 import { fetchOrgChart, createEmployee, updateEmployee, deleteEmployee, OrgEmployeeAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
@@ -18,13 +16,13 @@ import './OrgChart.css';
 type OrgEmployee = OrgEmployeeAPI;
 
 // Status types for employees
-type EmployeeStatus = 'in-office' | 'remote' | 'on-leave' | 'sick-leave';
+type EmployeeStatus = 'annual-leave' | 'sick-leave';
 
 // Get status based on employee (simulated - in real app this would come from backend)
 const getEmployeeStatus = (employee: OrgEmployee): EmployeeStatus => {
     // Simulate different statuses based on name hash
     const hash = employee.name.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
-    const statuses: EmployeeStatus[] = ['in-office', 'in-office', 'in-office', 'remote', 'on-leave', 'sick-leave'];
+    const statuses: EmployeeStatus[] = ['annual-leave', 'annual-leave', 'annual-leave', 'sick-leave'];
     return statuses[hash % statuses.length];
 };
 
@@ -240,33 +238,28 @@ const OrgChart: React.FC = () => {
     const columns = splitByType(orgChartData?.children);
     const hasChildren = (orgChartData?.children?.length || 0) > 0;
 
+    // Get today's date
+    const today = new Date().toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'short',
+        day: 'numeric'
+    });
+
     return (
         <div className="org-chart-wrapper">
-            {/* Header */}
+            {/* Header - Same style as Dashboard */}
             <div className="org-chart-header">
                 <div className="header-left">
-                    <div className="breadcrumb">
-                        <span className="breadcrumb-item">Leave Tracker</span>
-                        <span className="breadcrumb-separator">›</span>
-                        <span className="breadcrumb-item active">Org Chart</span>
-                    </div>
                     <h1 className="page-title">Organizational Structure</h1>
+                    <p className="page-subtitle">Team overview as of {today}</p>
                 </div>
 
                 {/* Status Key */}
                 <div className="status-key">
                     <span className="status-key-label">Status Key:</span>
                     <div className="status-key-item">
-                        <span className="status-dot-key in-office"></span>
-                        <span>In Office</span>
-                    </div>
-                    <div className="status-key-item">
-                        <span className="status-dot-key remote"></span>
-                        <span>Remote</span>
-                    </div>
-                    <div className="status-key-item">
-                        <span className="status-dot-key on-leave"></span>
-                        <span>On Leave</span>
+                        <span className="status-dot-key annual-leave"></span>
+                        <span>Annual Leave</span>
                     </div>
                     <div className="status-key-item">
                         <span className="status-dot-key sick-leave"></span>
@@ -280,12 +273,11 @@ const OrgChart: React.FC = () => {
                         placeholder="Find employee..."
                         className="search-input"
                     />
-                    <button className="header-btn">
-                        <FilterOutlined /> Filter
-                    </button>
-                    <button className="header-btn primary">
-                        <DownloadOutlined /> Export
-                    </button>
+                    {isManager && (
+                        <button className="add-member-btn" onClick={handleAddClick}>
+                            <UserAddOutlined /> Add Member
+                        </button>
+                    )}
                 </div>
             </div>
 
