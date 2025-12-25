@@ -120,3 +120,178 @@
 .view-mode-group .ant-radio-button-wrapper-checked .view-sublabel {
     color: #fff;
 }
+
+/* =========================================
+   Dark Mode
+   ========================================= */
+
+.dark-mode .filter-bar {
+    background: #2d2a2b;
+}
+
+.dark-mode .filter-button {
+    background: #3a3737;
+    border-color: #5a5a5a;
+    color: #FFFFFF;
+}
+
+.dark-mode .filter-button:hover {
+    color: #EE3524;
+    border-color: #EE3524;
+    background: #3a3737 !important;
+}
+
+/* Light mode filter button hover */
+.filter-button:hover {
+    color: #EE3524 !important;
+    border-color: #EE3524 !important;
+    background: #fff !important;
+}
+
+.dark-mode .filter-tag {
+    background: #3a3737;
+    border-color: #5a5a5a;
+    color: #FFFFFF;
+}
+
+.dark-mode .filter-tag:hover {
+    background: #4a4a4a;
+}
+
+.dark-mode .view-mode-group .ant-radio-button-wrapper {
+    background: #3a3737;
+    border-color: #5a5a5a;
+    color: #FFFFFF;
+}
+
+.dark-mode .view-mode-group .ant-radio-button-wrapper:hover {
+    color: #EE3524;
+}
+
+.dark-mode .view-mode-group .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    background: #EE3524 !important;
+    border-color: #EE3524 !important;
+}
+
+/* =========================================
+   Filter Dropdown
+   ========================================= */
+
+.filter-dropdown-overlay {
+    min-width: 280px;
+}
+
+.filter-dropdown-overlay .ant-dropdown-menu {
+    padding: 0;
+}
+
+.filter-dropdown-content {
+    padding: 16px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.filter-section {
+    margin-bottom: 0;
+}
+
+.filter-section-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.filter-active {
+    border-color: #EE3524 !important;
+    color: #EE3524 !important;
+}
+
+.clear-filters-btn {
+    color: #EE3524;
+    padding: 0;
+}
+
+.clear-filters-btn:hover {
+    color: #D42E1F;
+}
+
+/* Dark mode filter dropdown */
+.dark-mode .filter-dropdown-content {
+    background: #2d2a2b;
+    border: 1px solid #4a4a4a;
+}
+
+.dark-mode .filter-section-title {
+    color: #FFFFFF;
+}
+
+.dark-mode .filter-dropdown-content .ant-checkbox-wrapper {
+    color: #FFFFFF;
+}
+
+.dark-mode .filter-dropdown-content .ant-input-number {
+    background: #3a3737;
+    border-color: #5a5a5a;
+    color: #FFFFFF;
+}
+
+.dark-mode .filter-dropdown-content .ant-input-number-input {
+    color: #FFFFFF;
+}
+
+.dark-mode .filter-dropdown-content span {
+    color: #9FA1A4;
+}
+
+/* =========================================
+   Checkbox - HSBC Red
+   ========================================= */
+
+.filter-dropdown-content .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #EE3524 !important;
+    border-color: #EE3524 !important;
+}
+
+.filter-dropdown-content .ant-checkbox:hover .ant-checkbox-inner {
+    border-color: #EE3524 !important;
+}
+
+.filter-dropdown-content .ant-checkbox-checked::after {
+    border-color: #EE3524 !important;
+}
+
+/* =========================================
+   Slider - HSBC Red
+   ========================================= */
+
+.days-slider .ant-slider-track {
+    background-color: #EE3524 !important;
+}
+
+.days-slider .ant-slider-handle {
+    border-color: #EE3524 !important;
+}
+
+.days-slider .ant-slider-handle:hover,
+.days-slider .ant-slider-handle:focus {
+    border-color: #D42E1F !important;
+}
+
+.days-slider .ant-slider-handle::after {
+    box-shadow: 0 0 0 2px #EE3524 !important;
+}
+
+.days-slider:hover .ant-slider-track {
+    background-color: #D42E1F !important;
+}
+
+/* Dark mode slider */
+.dark-mode .days-slider .ant-slider-rail {
+    background-color: #4a4a4a;
+}
+
+.dark-mode .days-slider .ant-slider-mark-text {
+    color: #9FA1A4;
+}

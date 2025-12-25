@@ -1,0 +1,272 @@
+{
+  "employees" : [ {
+    "id" : "0",
+    "name" : "Lohit Ganta",
+    "role" : "MANAGER",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Lohit%20Ganta&background=64b5f6&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "lohit.ganta@company.com",
+    "phone" : "+1 (555) 000-0000",
+    "managerId" : null,
+    "employeeType" : "permanent"
+  }, {
+    "id" : "1",
+    "name" : "Aditya Pathak",
+    "role" : "SOFTWARE DEVELOPER",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Aditya%20Pathak&background=e91e63&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "aditya.pathak@company.com",
+    "phone" : "+1 (555) 100-0001",
+    "managerId" : "0",
+    "employeeType" : "contractor"
+  }, {
+    "id" : "2",
+    "name" : "Atul Tewathia",
+    "role" : "SOFTWARE DEVELOPER",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Atul%20Tewathia&background=e91e63&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "atul.tewathia@company.com",
+    "phone" : "+1 (555) 100-0002",
+    "managerId" : "0",
+    "employeeType" : "contractor"
+  }, {
+    "id" : "3",
+    "name" : "Bertrand Iwunna",
+    "role" : "SOFTWARE DEVELOPER",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Bertrand%20Iwunna&background=673ab7&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "bertrand.iwunna@company.com",
+    "phone" : "+1 (555) 100-0003",
+    "managerId" : "0",
+    "employeeType" : "contractor"
+  }, {
+    "id" : "4",
+    "name" : "Carrick Mak",
+    "role" : "DATA RISK AND CONTROLS MANAGEMENT",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Carrick%20Mak&background=64b5f6&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "carrick.mak@company.com",
+    "phone" : "+1 (555) 100-0004",
+    "managerId" : "0",
+    "employeeType" : "permanent"
+  }, {
+    "id" : "5",
+    "name" : "Chris C Lee",
+    "role" : "CONSULTANT SPECIALIST",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Chris%20C%20Lee&background=64b5f6&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "chris.lee@company.com",
+    "phone" : "+1 (555) 100-0005",
+    "managerId" : "0",
+    "employeeType" : "permanent"
+  }, {
+    "id" : "6",
+    "name" : "Dhanashree Vishwasrao",
+    "role" : "ASSOCIATE PROJECT MANAGER - IT SEC ANALYST",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Dhanashree%20Vishwasrao&background=e91e63&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "dhanashree.v@company.com",
+    "phone" : "+1 (555) 100-0006",
+    "managerId" : "0",
+    "employeeType" : "permanent"
+  }, {
+    "id" : "7",
+    "name" : "Eric Luo",
+    "role" : "DEVELOPMENT ENGINEERING",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Eric%20Luo&background=0066b3&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "eric.luo@company.com",
+    "phone" : "+1 (555) 100-0007",
+    "managerId" : "0",
+    "employeeType" : "contractor"
+  }, {
+    "id" : "8",
+    "name" : "Gavin Guan",
+    "role" : "SERVICE MANAGEMENT",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Gavin%20Guan&background=f5a623&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "gavin.guan@company.com",
+    "phone" : "+1 (555) 100-0008",
+    "managerId" : "0",
+    "employeeType" : "contractor"
+  }, {
+    "id" : "9",
+    "name" : "Jacky Hu",
+    "role" : "SERVICE MANAGEMENT",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Jacky%20Hu&background=0066b3&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "jacky.hu@company.com",
+    "phone" : "+1 (555) 100-0009",
+    "managerId" : "0",
+    "employeeType" : "contractor"
+  }, {
+    "id" : "10",
+    "name" : "Mohit Shrivastava",
+    "role" : "CONSULTANT SPECIALIST",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Mohit%20Shrivastava&background=4db6ac&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "mohit.shrivastava@company.com",
+    "phone" : "+1 (555) 100-0010",
+    "managerId" : "0",
+    "employeeType" : "permanent"
+  }, {
+    "id" : "11",
+    "name" : "Sameer Kumar Sahu",
+    "role" : "SENIOR CONSULTANT SPECIALIST",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Sameer%20Kumar%20Sahu&background=4db6ac&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "sameer.sahu@company.com",
+    "phone" : "+1 (555) 100-0011",
+    "managerId" : "0",
+    "employeeType" : "permanent"
+  }, {
+    "id" : "12",
+    "name" : "Sreelakshmi Vineetha Movva",
+    "role" : "TRAINEE SOFTWARE ENGINEER",
+    "department" : "ENABLEMENT R&C",
+    "avatarUrl" : "https://ui-avatars.com/api/?name=Sreelakshmi%20Vineetha%20Movva&background=f5a623&color=fff&size=64&bold=true",
+    "location" : "Office",
+    "email" : "sreelakshmi.movva@company.com",
+    "phone" : "+1 (555) 100-0012",
+    "managerId" : "0",
+    "employeeType" : "permanent"
+  } ],
+  "leaves" : [ {
+    "id" : "leave-1",
+    "employeeId" : "1",
+    "startDate" : "2025-12-16",
+    "endDate" : "2025-12-20",
+    "type" : "vacation",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-2",
+    "employeeId" : "3",
+    "startDate" : "2025-12-23",
+    "endDate" : "2025-12-31",
+    "type" : "vacation",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-3",
+    "employeeId" : "5",
+    "startDate" : "2025-12-09",
+    "endDate" : "2025-12-13",
+    "type" : "sick",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-4",
+    "employeeId" : "7",
+    "startDate" : "2025-12-02",
+    "endDate" : "2025-12-06",
+    "type" : "vacation",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-5",
+    "employeeId" : "2",
+    "startDate" : "2026-01-06",
+    "endDate" : "2026-01-10",
+    "type" : "vacation",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-6",
+    "employeeId" : "4",
+    "startDate" : "2026-01-13",
+    "endDate" : "2026-01-17",
+    "type" : "sick",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-7",
+    "employeeId" : "6",
+    "startDate" : "2026-01-20",
+    "endDate" : "2026-01-31",
+    "type" : "vacation",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-8",
+    "employeeId" : "8",
+    "startDate" : "2026-01-27",
+    "endDate" : "2026-01-31",
+    "type" : "vacation",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-9",
+    "employeeId" : "9",
+    "startDate" : "2026-02-02",
+    "endDate" : "2026-02-06",
+    "type" : "vacation",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-10",
+    "employeeId" : "10",
+    "startDate" : "2026-02-09",
+    "endDate" : "2026-02-13",
+    "type" : "sick",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-11",
+    "employeeId" : "11",
+    "startDate" : "2026-02-16",
+    "endDate" : "2026-02-20",
+    "type" : "vacation",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-12",
+    "employeeId" : "12",
+    "startDate" : "2026-02-23",
+    "endDate" : "2026-02-27",
+    "type" : "vacation",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-1766513318113",
+    "employeeId" : "10",
+    "startDate" : "2025-12-24",
+    "endDate" : "2025-12-25",
+    "type" : "sick",
+    "status" : "Applied"
+  }, {
+    "id" : "leave-1766513387471",
+    "employeeId" : "1",
+    "startDate" : "2025-12-24",
+    "endDate" : "2025-12-31",
+    "type" : "vacation",
+    "status" : "Applied"
+  } ],
+  "notificationSettings" : {
+    "id" : "default",
+    "recipients" : [ ],
+    "scheduledTime" : "09:00",
+    "enabled" : true
+  },
+  "appNotifications" : [ {
+    "id" : "notif-1766513318133",
+    "type" : "leave_applied",
+    "title" : "New Leave Request",
+    "message" : "Mohit Shrivastava has applied for Sick Leave from 2025-12-24 to 2025-12-25",
+    "forUserId" : "0",
+    "fromUserId" : "10",
+    "leaveId" : "leave-1766513318113",
+    "createdAt" : "2025-12-23T23:38:38.134684",
+    "read" : true
+  }, {
+    "id" : "notif-1766513387483",
+    "type" : "leave_applied",
+    "title" : "New Leave Request",
+    "message" : "Aditya Pathak has applied for Annual Leave from 2025-12-24 to 2025-12-31",
+    "forUserId" : "0",
+    "fromUserId" : "1",
+    "leaveId" : "leave-1766513387471",
+    "createdAt" : "2025-12-23T23:39:47.483707",
+    "read" : true
+  } ]
+}

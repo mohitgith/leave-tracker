@@ -34,10 +34,6 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed = true, onNavigate, selecte
             className="sidebar"
             theme="dark"
         >
-            <div className="sidebar-logo">
-                <AppstoreOutlined className="logo-icon" />
-            </div>
-
             <Menu
                 theme="dark"
                 mode="inline"

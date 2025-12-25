@@ -43,3 +43,35 @@
 .timeline-row:nth-child(even) {
     background: rgba(0, 0, 0, 0.01);
 }
+
+/* =========================================
+   Dark Mode
+   ========================================= */
+
+.dark-mode .timeline-grid {
+    background: #3a3737;
+}
+
+.dark-mode .grid-column {
+    border-color: #4a4a4a;
+}
+
+.dark-mode .grid-column-month {
+    border-left-color: #666;
+}
+
+.dark-mode .grid-column-weekend {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.dark-mode .grid-column-today {
+    background: rgba(238, 53, 36, 0.15);
+}
+
+.dark-mode .timeline-row {
+    border-color: #4a4a4a;
+}
+
+.dark-mode .timeline-row:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}

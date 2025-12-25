@@ -9,9 +9,19 @@ interface TimelineGridProps {
     employees: Employee[];
     leaves: LeaveRecord[];
     config: TimelineConfig;
+    onEditLeave?: (leave: LeaveRecord) => void;
+    onDeleteLeave?: (leaveId: string) => void;
+    currentUserId?: string;
 }
 
-const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }) => {
+const TimelineGrid: React.FC<TimelineGridProps> = ({ 
+    employees, 
+    leaves, 
+    config,
+    onEditLeave,
+    onDeleteLeave,
+    currentUserId
+}) => {
     const today = dayjs();
     const totalDays = config.totalDays;
 
@@ -75,6 +85,9 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }
                         // Convert pixel position to percentage
                         const leftPercent = (position.left / (totalDays * config.dayWidth)) * 100;
                         const widthPercent = (position.width / (totalDays * config.dayWidth)) * 100;
+                        
+                        // Check if current user owns this leave
+                        const isOwner = currentUserId === leave.employeeId;
 
                         return (
                             <EventBlock
@@ -82,6 +95,9 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({ employees, leaves, config }
                                 leave={leave}
                                 leftPercent={leftPercent}
                                 widthPercent={widthPercent}
+                                onEdit={isOwner ? onEditLeave : undefined}
+                                onDelete={isOwner ? onDeleteLeave : undefined}
+                                isOwner={isOwner}
                             />
                         );
                     })}

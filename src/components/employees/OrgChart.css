@@ -13,16 +13,45 @@
 .org-chart-header {
     display: flex;
     justify-content: space-between;
-    /* Space between Search and Add Button */
     padding: 24px 32px;
     position: relative;
     z-index: 10;
     align-items: center;
+    gap: 16px;
 }
 
 .search-input {
     width: 300px;
     border-radius: 20px;
+}
+
+/* Employee Type Legend */
+.employee-type-legend {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #666;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.legend-dot.permanent-dot {
+    background: #64b5f6;
+}
+
+.legend-dot.contractor-dot {
+    background: #ff9800;
 }
 
 .global-add-btn {
@@ -35,14 +64,13 @@
     color: #333;
     transition: all 0.2s;
     height: 40px;
-    /* Match Input height */
     display: flex;
     align-items: center;
 }
 
 .global-add-btn:hover {
-    color: #db0011;
-    border-color: #db0011;
+    color: #EE3524;
+    border-color: #EE3524;
     background: #fff;
 }
 
@@ -76,8 +104,26 @@
 
 .zoom-btn:hover {
     background: #f0f0f0;
-    color: #db0011;
-    border-color: #db0011;
+    color: #EE3524;
+    border-color: #EE3524;
+}
+
+.zoom-value {
+    min-width: 40px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+}
+
+.zoom-divider {
+    width: 1px;
+    height: 20px;
+    background: #eee;
+    margin: 0 4px;
 }
 
 /* Viewport for Drag/Scroll */
@@ -94,126 +140,164 @@
 .transform-container {
     transform-origin: top center;
     transition: transform 0.2s ease-out;
-    padding: 40px;
-    min-width: max-content;
+    padding: 20px;
+    min-width: 100%;
     display: flex;
     justify-content: center;
 }
 
 /* =========================================
-   Standard CSS Tree Implementation
+   Tree Layout
    ========================================= */
 
-/* The root UL equivalent */
 .tree {
     display: flex;
-    justify-content: center;
-    padding-top: 20px;
-    position: relative;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
 }
 
-/* The LI equivalent */
+/* Tree Node */
 .tree-node {
-    float: left;
-    text-align: center;
-    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: relative;
-    padding: 20px 10px 0 10px;
-    transition: all 0.5s;
 }
 
-/* We will use ::before and ::after to draw the connectors */
-
-/* Vertical line up */
-.tree-node::before,
-.tree-node::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 50%;
-    width: 50%;
-    height: 20px;
-    border-top: 2px solid #ccc;
-}
-
-.tree-node::after {
-    right: auto;
-    left: 50%;
-    border-left: 2px solid #ccc;
-}
-
-/* We need to remove left-right connectors from elements without any siblings */
-.tree-node:only-child::after,
-.tree-node:only-child::before {
-    display: none;
-}
-
-/* Remove space from the top of single children */
-.tree-node:only-child {
+.tree-node.root-node {
     padding-top: 0;
 }
 
-/* Remove left connector from first child and right connector from last child */
-.tree-node:first-child::before {
-    border: 0;
+/* =========================================
+   Connector Lines
+   ========================================= */
+
+/* Vertical line from parent card DOWN to horizontal connector */
+.connector-vertical-down {
+    width: 2px;
+    height: 30px;
+    background: #9FA1A4;
 }
 
-.tree-node:last-child::after {
-    border: 0;
-}
-
-/* Adding back the vertical connector to the last nodes */
-.tree-node:last-child::before {
-    border-right: 2px solid #ccc;
-    border-radius: 0 5px 0 0;
-}
-
-.tree-node:first-child::after {
-    border-radius: 5px 0 0 0;
-}
-
-/* Time to add downward connectors from parents */
-.tree ul::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    border-left: 2px solid #ccc;
-    width: 0;
-    height: 20px;
-}
-
-/* Container for children (nested UL equivalent) */
-.children-container {
+/* Children wrapper - contains horizontal line and children */
+.children-wrapper {
     display: flex;
-    justify-content: center;
-    padding-top: 20px;
+    flex-direction: column;
+    align-items: center;
     position: relative;
 }
 
-/* Connector line down from parent to children info */
+/* Horizontal connector - will span full width */
+.connector-horizontal {
+    height: 2px;
+    background: #9FA1A4;
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    right: 50%;
+}
+
+/* Children container - holds all child nodes */
+.children-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 0;
+    position: relative;
+}
+
+/* Child node wrapper - each child with its vertical connector */
+.child-node-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* Vertical line from horizontal connector UP to child card */
+.connector-vertical-up {
+    width: 2px;
+    height: 30px;
+    background: #9FA1A4;
+}
+
+/* Make horizontal line span from first to last child center */
 .children-container::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 50%;
-    border-left: 2px solid #ccc;
-    width: 0;
-    height: 20px;
+    height: 2px;
+    background: #9FA1A4;
+    left: calc(50% - 1px);
+    right: calc(50% - 1px);
 }
 
+.child-node-wrapper:first-child~.child-node-wrapper:last-child~.children-container::before,
+.children-container::before {
+    left: 0;
+    right: 0;
+}
+
+/* Adjust horizontal line to span from centers of first to last child */
+.children-container {
+    position: relative;
+}
+
+/* Override - use flexbox gap and ensure horizontal line connects all */
+.children-wrapper .connector-horizontal {
+    display: none;
+    /* We'll use the pseudo-element instead */
+}
+
+/* Horizontal line spanning from first child center to last child center */
+.children-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 2px;
+    width: 30px;
+    /* Half of horizontal gap approx */
+    background: #9FA1A4;
+    /* Will calculate dynamically */
+}
+
+/* For single child - just vertical line */
+.children-container:has(.child-node-wrapper:only-child)::before {
+    display: none;
+}
+
+/* For multiple children - span full width */
+.children-container:not(:has(.child-node-wrapper:only-child))::before {
+    left: 50%;
+    right: 50%;
+    width: auto;
+}
+
+/* Make the horizontal line actually work */
+.children-container {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* Proper horizontal line using direct calculation */
+.children-container::before {
+    left: calc(100px + 10px);
+    /* half of card width + padding */
+    right: calc(100px + 10px);
+}
 
 /* =========================================
-   Card Design (Premium - Simplified)
+   Employee Card Design
    ========================================= */
 
 .employee-card {
     background: #fff;
     border-radius: 8px;
-    width: 260px;
-    /* Slightly narrower */
+    width: 240px;
     padding: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     border: 1px solid #eaeaea;
     text-align: left;
     display: inline-block;
@@ -221,29 +305,80 @@
     z-index: 2;
     transition: all 0.2s;
     cursor: pointer;
+    overflow: hidden;
+}
+
+/* Permanent employee - blue accent */
+.employee-card.permanent-card {
+    border-left: 3px solid #64b5f6;
+}
+
+/* Contractor employee - orange accent */
+.employee-card.contractor-card {
+    border-left: 3px solid #ff9800;
+}
+
+/* Root node (Manager) - larger card */
+.root-node>.employee-card {
+    width: 260px;
+}
+
+.root-node>.employee-card .card-avatar {
+    width: 42px;
+    height: 42px;
+}
+
+.root-node>.employee-card .emp-name {
+    font-size: 14px;
 }
 
 .employee-card:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
-    border-color: #db0011;
+    border-color: #EE3524;
+}
+
+/* Employee Type Badge */
+.employee-type-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.employee-type-badge.permanent-badge {
+    background: rgba(100, 181, 246, 0.15);
+    color: #1976d2;
+}
+
+.employee-type-badge.contractor-badge {
+    background: rgba(255, 152, 0, 0.15);
+    color: #e65100;
 }
 
 .card-header {
-    padding: 16px;
+    padding: 12px;
+    padding-top: 28px;
+    /* Space for badge */
     border-bottom: 1px solid #f0f0f0;
     display: flex;
-    gap: 12px;
-    align-items: flex-start;
+    gap: 10px;
+    align-items: center;
 }
 
 .card-avatar {
-    width: 42px;
-    height: 42px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
 }
 
 .card-info {
@@ -252,9 +387,9 @@
 }
 
 .emp-name {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: #231F20;
     margin-bottom: 2px;
     white-space: nowrap;
     overflow: hidden;
@@ -263,23 +398,23 @@
 
 .emp-role {
     font-size: 11px;
-    color: #666;
-    margin-bottom: 2px;
+    color: #9FA1A4;
+    margin-bottom: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .emp-dept {
-    font-size: 10px;
-    color: #999;
+    font-size: 9px;
+    color: #9FA1A4;
     text-transform: uppercase;
     font-weight: 500;
     letter-spacing: 0.5px;
 }
 
 .card-body {
-    padding: 12px 16px;
+    padding: 8px 12px;
     display: flex;
     align-items: center;
 }
@@ -287,8 +422,8 @@
 .email-row {
     display: flex;
     align-items: center;
-    color: #666;
-    font-size: 12px;
+    color: #9FA1A4;
+    font-size: 10px;
     overflow: hidden;
 }
 
@@ -300,24 +435,25 @@
 }
 
 .card-footer {
-    padding: 8px 16px;
+    padding: 6px 12px;
     background: #fafafa;
     border-top: 1px solid #f0f0f0;
     display: flex;
     justify-content: flex-end;
-    /* Align Edit button to right */
+    gap: 6px;
     align-items: center;
     border-radius: 0 0 8px 8px;
 }
 
-.edit-btn {
-    font-size: 12px;
+.edit-btn,
+.delete-btn {
+    font-size: 10px;
     color: #666;
     background: none;
     border: 1px solid #e0e0e0;
     background-color: #fff;
     cursor: pointer;
-    padding: 4px 12px;
+    padding: 3px 8px;
     border-radius: 4px;
     font-weight: 500;
     display: flex;
@@ -328,4 +464,127 @@
 .edit-btn:hover {
     color: #0066b3;
     border-color: #0066b3;
+}
+
+.delete-btn:hover {
+    color: #EE3524;
+    border-color: #EE3524;
+}
+
+/* =========================================
+   Dark Mode Styles
+   ========================================= */
+
+.dark-mode .org-chart-wrapper {
+    background: #231F20;
+}
+
+.dark-mode .employee-card {
+    background: #2d2a2b;
+    border-color: #3a3a3a;
+}
+
+.dark-mode .employee-card.permanent-card {
+    border-left-color: #64b5f6;
+}
+
+.dark-mode .employee-card.contractor-card {
+    border-left-color: #ff9800;
+}
+
+.dark-mode .employee-card:hover {
+    border-color: #EE3524;
+}
+
+.dark-mode .employee-type-badge.permanent-badge {
+    background: rgba(100, 181, 246, 0.2);
+    color: #90caf9;
+}
+
+.dark-mode .employee-type-badge.contractor-badge {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ffb74d;
+}
+
+.dark-mode .emp-name {
+    color: #FFFFFF;
+}
+
+.dark-mode .emp-role,
+.dark-mode .emp-dept,
+.dark-mode .email-text,
+.dark-mode .email-row {
+    color: #9FA1A4;
+}
+
+.dark-mode .card-header,
+.dark-mode .card-body {
+    border-color: #3a3a3a;
+}
+
+.dark-mode .card-footer {
+    background: #1a1818;
+    border-color: #3a3a3a;
+}
+
+.dark-mode .edit-btn,
+.dark-mode .delete-btn {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #FFFFFF;
+}
+
+.dark-mode .global-add-btn {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #FFFFFF;
+}
+
+.dark-mode .global-add-btn:hover {
+    border-color: #EE3524;
+    color: #EE3524;
+}
+
+.dark-mode .zoom-controls {
+    background: #2d2a2b;
+}
+
+.dark-mode .zoom-btn {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #FFFFFF;
+}
+
+.dark-mode .zoom-btn:hover {
+    border-color: #EE3524;
+    color: #EE3524;
+}
+
+.dark-mode .connector-vertical-down,
+.dark-mode .connector-vertical-up,
+.dark-mode .connector-horizontal,
+.dark-mode .children-container::before {
+    background: #4a4a4a;
+}
+
+.dark-mode .search-input .ant-input {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #FFFFFF;
+}
+
+.dark-mode .search-input .ant-input-prefix {
+    color: #9FA1A4;
+}
+
+.dark-mode .zoom-value {
+    color: #FFFFFF;
+}
+
+.dark-mode .zoom-divider {
+    background: #4a4a4a;
+}
+
+.dark-mode .legend-item {
+    color: #9FA1A4;
 }

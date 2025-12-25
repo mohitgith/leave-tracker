@@ -1,0 +1,41 @@
+server:
+  port: 3001
+
+spring:
+  application:
+    name: leave-tracker-backend
+  
+  # H2 In-Memory Database Configuration
+  datasource:
+    url: jdbc:h2:mem:leavetracker;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  # H2 Console (for debugging)
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: false
+  
+  # JPA Configuration
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+# Custom Configuration for Data Persistence
+data:
+  persistence:
+    # Directory for flat file storage
+    directory: data/persistence
+    # Sync interval in seconds
+    sync-interval: 30
+    # Enable automatic sync
+    auto-sync: true

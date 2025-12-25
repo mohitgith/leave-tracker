@@ -39,13 +39,33 @@ const MainLayout: React.FC = () => {
         return 'dashboard';
     };
 
+    // Check if current route should hide sidebar
+    const shouldHideSidebar = () => {
+        const path = location.pathname;
+        return path.includes('/settings') || path.includes('/profile');
+    };
+
+    const hideSidebar = shouldHideSidebar();
+
     return (
-        <Layout style={{ minHeight: '100vh', flexDirection: 'row' }}>
-            <Sidebar onNavigate={handleNavigate} selectedKey={getSelectedKey()} />
-            <Layout style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <TopBar />
-                {/* Add marginTop for TopBar (56px) and marginLeft for Sidebar (60px) */}
-                <Content style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#f5f7fa', overflow: 'hidden', marginTop: 56, marginLeft: 60 }}>
+        <Layout style={{ minHeight: '100vh', flexDirection: 'column' }}>
+            {/* TopBar at the very top, full width */}
+            <TopBar />
+
+            {/* Below TopBar: Sidebar and Content side by side */}
+            <Layout style={{ flex: 1, flexDirection: 'row', marginTop: 56 }}>
+                {!hideSidebar && <Sidebar onNavigate={handleNavigate} selectedKey={getSelectedKey()} />}
+
+                <Content
+                    className="main-content"
+                    style={{
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        overflow: 'hidden',
+                        marginLeft: hideSidebar ? 0 : 60 // Account for sidebar width
+                    }}
+                >
                     <Outlet />
                 </Content>
             </Layout>

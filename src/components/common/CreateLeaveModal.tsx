@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Modal, Form, DatePicker, Select, Input, Typography } from 'antd';
 import type { Dayjs } from 'dayjs';
-import { LeaveType, LEAVE_TYPE_LABELS } from '../../types';
+import dayjs from 'dayjs';
+import { LeaveType, LeaveRecord, Employee, LEAVE_TYPE_LABELS } from '../../types';
 import './CreateLeaveModal.css';
 
 const { TextArea } = Input;
@@ -15,7 +16,10 @@ interface CreateLeaveModalProps {
         endDate: string;
         type: LeaveType;
         description: string;
+        employeeId?: string;
     }) => void;
+    initialValues?: LeaveRecord | null;
+    employees?: Employee[];
 }
 
 const leaveTypeOptions = Object.entries(LEAVE_TYPE_LABELS).map(([value, label]) => ({
@@ -27,10 +31,15 @@ const CreateLeaveModal: React.FC<CreateLeaveModalProps> = ({
     open,
     onClose,
     onSubmit,
+    initialValues,
+    // employees prop kept for backwards compatibility but not used
+    // since users can only create leaves for themselves
 }) => {
     const [form] = Form.useForm();
     const [startDate, setStartDate] = useState<Dayjs | null>(null);
     const [endDate, setEndDate] = useState<Dayjs | null>(null);
+
+    const isEditMode = !!initialValues;
 
     // Calculate working days (excluding Saturday and Sunday)
     const workingDays = useMemo(() => {
@@ -52,14 +61,30 @@ const CreateLeaveModal: React.FC<CreateLeaveModalProps> = ({
         return count;
     }, [startDate, endDate]);
 
-    // Reset form when modal opens
+    // Reset/prefill form when modal opens
     useEffect(() => {
         if (open) {
-            form.resetFields();
-            setStartDate(null);
-            setEndDate(null);
+            if (initialValues) {
+                // Edit mode - prefill form
+                const start = dayjs(initialValues.startDate);
+                const end = dayjs(initialValues.endDate);
+                form.setFieldsValue({
+                    startDate: start,
+                    endDate: end,
+                    leaveType: initialValues.type,
+                    employeeId: initialValues.employeeId,
+                    description: '',
+                });
+                setStartDate(start);
+                setEndDate(end);
+            } else {
+                // Create mode - reset form
+                form.resetFields();
+                setStartDate(null);
+                setEndDate(null);
+            }
         }
-    }, [open, form]);
+    }, [open, form, initialValues]);
 
     const handleOk = () => {
         form.validateFields().then(values => {
@@ -68,6 +93,7 @@ const CreateLeaveModal: React.FC<CreateLeaveModalProps> = ({
                 endDate: values.endDate.format('YYYY-MM-DD'),
                 type: values.leaveType,
                 description: values.description || '',
+                employeeId: values.employeeId,
             });
             onClose();
         });
@@ -94,11 +120,11 @@ const CreateLeaveModal: React.FC<CreateLeaveModalProps> = ({
 
     return (
         <Modal
-            title="Create Leave Request"
+            title={isEditMode ? "Edit Leave Request" : "Create Leave Request"}
             open={open}
             onOk={handleOk}
             onCancel={onClose}
-            okText="Submit Request"
+            okText={isEditMode ? "Update" : "Submit Request"}
             cancelText="Cancel"
             width={480}
             className="create-leave-modal"
