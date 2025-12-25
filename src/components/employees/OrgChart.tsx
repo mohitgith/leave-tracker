@@ -15,31 +15,20 @@ import EmployeeDetailModal from './EmployeeDetailModal';
 import AddEmployeeModal from './AddEmployeeModal';
 import './OrgChart.css';
 
-// Use API type for OrgEmployee
 type OrgEmployee = OrgEmployeeAPI;
 
 // Manager/Root Card Component
-interface ManagerCardProps {
+const ManagerCard: React.FC<{
     employee: OrgEmployee;
     onNodeClick: (emp: OrgEmployee) => void;
-    onEditClick: (emp: OrgEmployee) => void;
     childrenCount: number;
-}
-
-const ManagerCard: React.FC<ManagerCardProps> = ({ employee, onNodeClick, onEditClick, childrenCount }) => {
-    const employeeType = (employee as any).employeeType || 'permanent';
-
+}> = ({ employee, onNodeClick, childrenCount }) => {
     return (
-        <div className="manager-card-wrapper">
-            <div
-                className="manager-card"
-                onClick={() => onNodeClick(employee)}
-            >
-                {/* Team Lead Badge */}
+        <div className="manager-section">
+            <div className="manager-card" onClick={() => onNodeClick(employee)}>
                 <div className="manager-badge">Team Lead</div>
-
                 <div className="manager-content">
-                    <div className="manager-avatar-wrapper">
+                    <div className="manager-avatar-section">
                         <img src={employee.avatarUrl} alt={employee.name} className="manager-avatar" />
                         <span className="status-dot online"></span>
                     </div>
@@ -48,7 +37,7 @@ const ManagerCard: React.FC<ManagerCardProps> = ({ employee, onNodeClick, onEdit
                         <p className="manager-role">{employee.role}</p>
                         <div className="manager-meta">
                             <div className="reports-avatars">
-                                {employee.children?.slice(0, 3).map((child, idx) => (
+                                {employee.children?.slice(0, 3).map((child) => (
                                     <div
                                         key={child.id}
                                         className="mini-avatar"
@@ -60,55 +49,41 @@ const ManagerCard: React.FC<ManagerCardProps> = ({ employee, onNodeClick, onEdit
                         </div>
                     </div>
                 </div>
-
-                {/* Team Status Bar */}
                 <div className="team-status-bar">
-                    <div className="status-segment active" style={{ width: '75%' }} title="Active"></div>
-                    <div className="status-segment remote" style={{ width: '15%' }} title="Remote"></div>
-                    <div className="status-segment leave" style={{ width: '10%' }} title="On Leave"></div>
+                    <div className="status-segment active" style={{ width: '75%' }}></div>
+                    <div className="status-segment remote" style={{ width: '15%' }}></div>
+                    <div className="status-segment leave" style={{ width: '10%' }}></div>
                 </div>
             </div>
-
-            {/* Vertical connector down */}
-            <div className="connector-from-manager"></div>
+            {/* Vertical connector down from manager */}
+            <div className="connector-down"></div>
         </div>
     );
 };
 
-// Individual Employee Card (Compact version for team members)
-interface EmployeeNodeProps {
+// Employee Card for column
+const EmployeeCard: React.FC<{
     employee: OrgEmployee;
     onNodeClick: (emp: OrgEmployee) => void;
-    onEditClick: (emp: OrgEmployee) => void;
-    onDeleteClick: (emp: OrgEmployee) => void;
-    position: 'left' | 'center' | 'right';
-}
-
-const EmployeeNode: React.FC<EmployeeNodeProps> = ({
-    employee,
-    onNodeClick,
-    onEditClick,
-    onDeleteClick,
-    position
-}) => {
+    side: 'left' | 'right';
+}> = ({ employee, onNodeClick, side }) => {
     const employeeType = (employee as any).employeeType || 'permanent';
     const isContractor = employeeType === 'contractor';
+    const colorClass = side === 'left' ? 'blue' : 'purple';
 
     return (
-        <div className={`employee-node ${position}`}>
-            {/* Horizontal connector line */}
-            <div className={`horizontal-connector ${position}`}></div>
+        <div className={`emp-card-wrapper ${side}`}>
+            {/* Horizontal connector from vertical line to card */}
+            <div className={`h-connector ${side}`}></div>
 
             <div
-                className={`compact-card ${isContractor ? 'contractor' : 'permanent'}`}
+                className={`emp-card ${colorClass} ${isContractor ? 'contractor' : 'permanent'}`}
                 onClick={() => onNodeClick(employee)}
             >
-                <div className="compact-avatar-wrapper">
-                    <img src={employee.avatarUrl} alt={employee.name} className="compact-avatar" />
-                </div>
-                <div className="compact-info">
-                    <p className="compact-name">{employee.name}</p>
-                    <p className="compact-role">{employee.role}</p>
+                <img src={employee.avatarUrl} alt={employee.name} className="emp-avatar" />
+                <div className={`emp-info ${side}`}>
+                    <p className="emp-name">{employee.name}</p>
+                    <p className="emp-role">{employee.role}</p>
                 </div>
                 <span className={`status-indicator ${isContractor ? 'contractor' : 'permanent'}`}></span>
             </div>
@@ -116,41 +91,29 @@ const EmployeeNode: React.FC<EmployeeNodeProps> = ({
     );
 };
 
-// Column of employees with vertical line
-interface EmployeeColumnProps {
+// Column of employees
+const EmployeeColumn: React.FC<{
     employees: OrgEmployee[];
     onNodeClick: (emp: OrgEmployee) => void;
-    onEditClick: (emp: OrgEmployee) => void;
-    onDeleteClick: (emp: OrgEmployee) => void;
-    position: 'left' | 'center' | 'right';
-}
-
-const EmployeeColumn: React.FC<EmployeeColumnProps> = ({
-    employees,
-    onNodeClick,
-    onEditClick,
-    onDeleteClick,
-    position
-}) => {
+    side: 'left' | 'right';
+}> = ({ employees, onNodeClick, side }) => {
     if (employees.length === 0) return null;
 
     return (
-        <div className={`employee-column ${position}`}>
-            {/* Vertical connector from top horizontal line */}
-            <div className={`vertical-connector-top ${position}`}></div>
+        <div className={`emp-column ${side}`}>
+            {/* Vertical connector from horizontal bar */}
+            <div className={`v-connector-top ${side}`}></div>
 
-            {/* Vertical line running through column */}
-            <div className={`vertical-line ${position}`}></div>
+            {/* Vertical line through all cards */}
+            <div className={`v-line ${side}`}></div>
 
-            {/* Employee nodes */}
-            {employees.map((emp, idx) => (
-                <EmployeeNode
+            {/* Employee cards */}
+            {employees.map((emp) => (
+                <EmployeeCard
                     key={emp.id}
                     employee={emp}
                     onNodeClick={onNodeClick}
-                    onEditClick={onEditClick}
-                    onDeleteClick={onDeleteClick}
-                    position={position}
+                    side={side}
                 />
             ))}
         </div>
@@ -168,7 +131,6 @@ const OrgChart: React.FC = () => {
 
     const isManager = user?.isManager ?? false;
 
-    // Fetch org chart data from API
     const loadOrgChart = async () => {
         try {
             setLoading(true);
@@ -186,7 +148,6 @@ const OrgChart: React.FC = () => {
         loadOrgChart();
     }, []);
 
-    // Zoom Logic
     const handleZoomIn = () => setScale(prev => Math.min(prev + 0.1, 1.5));
     const handleZoomOut = () => setScale(prev => Math.max(prev - 0.1, 0.3));
     const handleResetZoom = () => setScale(1);
@@ -239,28 +200,13 @@ const OrgChart: React.FC = () => {
         }
     };
 
-    // Split children into 2-3 columns
-    const splitIntoColumns = (children: OrgEmployee[] = []) => {
-        const total = children.length;
-        if (total === 0) return { left: [], center: [], right: [] };
-
-        // Always try to split into 2 columns (left and right)
-        // If more than 8 employees, use 3 columns
-        if (total <= 8) {
-            const half = Math.ceil(total / 2);
-            return {
-                left: children.slice(0, half),
-                center: [],
-                right: children.slice(half)
-            };
-        } else {
-            const third = Math.ceil(total / 3);
-            return {
-                left: children.slice(0, third),
-                center: children.slice(third, third * 2),
-                right: children.slice(third * 2)
-            };
-        }
+    // Split children into left and right columns
+    const splitColumns = (children: OrgEmployee[] = []) => {
+        const half = Math.ceil(children.length / 2);
+        return {
+            left: children.slice(0, half),
+            right: children.slice(half)
+        };
     };
 
     if (loading) {
@@ -271,8 +217,8 @@ const OrgChart: React.FC = () => {
         );
     }
 
-    const columns = splitIntoColumns(orgChartData?.children);
-    const hasMultipleColumns = columns.left.length > 0 && columns.right.length > 0;
+    const columns = splitColumns(orgChartData?.children);
+    const hasChildren = (orgChartData?.children?.length || 0) > 0;
 
     return (
         <div className="org-chart-wrapper">
@@ -283,8 +229,6 @@ const OrgChart: React.FC = () => {
                     className="search-input"
                     size="large"
                 />
-
-                {/* Legend for employee types */}
                 <div className="employee-type-legend">
                     <div className="legend-item">
                         <div className="legend-dot permanent-dot"></div>
@@ -295,7 +239,6 @@ const OrgChart: React.FC = () => {
                         <span>Contractor</span>
                     </div>
                 </div>
-
                 {isManager && (
                     <button className="global-add-btn" onClick={handleAddClick}>
                         <UserAddOutlined style={{ marginRight: 8 }} /> Add Member
@@ -311,42 +254,28 @@ const OrgChart: React.FC = () => {
                             <ManagerCard
                                 employee={orgChartData}
                                 onNodeClick={setSelectedEmployee}
-                                onEditClick={handleEditClick}
                                 childrenCount={orgChartData.children?.length || 0}
                             />
                         )}
 
-                        {/* Horizontal line connecting columns */}
-                        {hasMultipleColumns && (
-                            <div className="horizontal-connector-bar"></div>
-                        )}
+                        {/* Horizontal connector bar */}
+                        {hasChildren && <div className="h-connector-bar"></div>}
 
                         {/* Employee Columns */}
-                        <div className="columns-container">
-                            <EmployeeColumn
-                                employees={columns.left}
-                                onNodeClick={setSelectedEmployee}
-                                onEditClick={handleEditClick}
-                                onDeleteClick={handleDeleteClick}
-                                position="left"
-                            />
-                            {columns.center.length > 0 && (
+                        {hasChildren && (
+                            <div className="columns-wrapper">
                                 <EmployeeColumn
-                                    employees={columns.center}
+                                    employees={columns.left}
                                     onNodeClick={setSelectedEmployee}
-                                    onEditClick={handleEditClick}
-                                    onDeleteClick={handleDeleteClick}
-                                    position="center"
+                                    side="left"
                                 />
-                            )}
-                            <EmployeeColumn
-                                employees={columns.right}
-                                onNodeClick={setSelectedEmployee}
-                                onEditClick={handleEditClick}
-                                onDeleteClick={handleDeleteClick}
-                                position="right"
-                            />
-                        </div>
+                                <EmployeeColumn
+                                    employees={columns.right}
+                                    onNodeClick={setSelectedEmployee}
+                                    side="right"
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -355,9 +284,7 @@ const OrgChart: React.FC = () => {
                 <Tooltip title="Zoom Out">
                     <div className="zoom-btn" onClick={handleZoomOut}><MinusOutlined /></div>
                 </Tooltip>
-                <div className="zoom-value">
-                    {Math.round(scale * 100)}%
-                </div>
+                <div className="zoom-value">{Math.round(scale * 100)}%</div>
                 <Tooltip title="Zoom In">
                     <div className="zoom-btn" onClick={handleZoomIn}><PlusOutlined /></div>
                 </Tooltip>

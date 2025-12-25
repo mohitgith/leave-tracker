@@ -1,4 +1,6 @@
-/* Main Container */
+/* =========================================
+   Main Container
+   ========================================= */
 .org-chart-wrapper {
     position: relative;
     width: 100%;
@@ -7,16 +9,18 @@
     background:
         radial-gradient(circle, #e5e7eb 1px, transparent 1px);
     background-size: 20px 20px;
-    background-color: #f6f6f8;
+    background-color: #f8f9fc;
     display: flex;
     flex-direction: column;
 }
 
-/* Header */
+/* =========================================
+   Header
+   ========================================= */
 .org-chart-header {
     display: flex;
     justify-content: space-between;
-    padding: 20px 32px;
+    padding: 16px 24px;
     position: relative;
     z-index: 10;
     align-items: center;
@@ -26,14 +30,13 @@
 }
 
 .search-input {
-    width: 280px;
+    width: 260px;
     border-radius: 8px;
 }
 
-/* Employee Type Legend */
 .employee-type-legend {
     display: flex;
-    gap: 20px;
+    gap: 16px;
     align-items: center;
 }
 
@@ -46,8 +49,8 @@
 }
 
 .legend-dot {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
 }
 
@@ -61,14 +64,13 @@
 
 .global-add-btn {
     background: #fff;
-    border: 1px solid #d9d9d9;
+    border: 1px solid #cfd7e7;
     padding: 8px 16px;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
     color: #333;
     transition: all 0.2s;
-    height: 40px;
     display: flex;
     align-items: center;
 }
@@ -78,19 +80,22 @@
     border-color: #EE3524;
 }
 
-/* Zoom Controls */
+/* =========================================
+   Zoom Controls
+   ========================================= */
 .zoom-controls {
     position: absolute;
     bottom: 24px;
     right: 24px;
     z-index: 100;
     display: flex;
-    gap: 6px;
+    flex-direction: column;
+    gap: 4px;
     background: #fff;
     padding: 6px;
     border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e8e8e8;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #cfd7e7;
 }
 
 .zoom-btn {
@@ -108,65 +113,58 @@
 }
 
 .zoom-btn:hover {
-    background: #f5f5f5;
+    background: #f0f0f0;
     color: #EE3524;
 }
 
 .zoom-value {
-    min-width: 44px;
     text-align: center;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     color: #333;
+    padding: 4px 0;
 }
 
 .zoom-divider {
-    width: 1px;
-    height: 20px;
+    width: 20px;
+    height: 1px;
     background: #eee;
-    margin: 6px 2px;
+    margin: 2px auto;
 }
 
-/* Viewport */
+/* =========================================
+   Viewport
+   ========================================= */
 .org-chart-viewport {
     flex: 1;
     overflow: auto;
-    cursor: grab;
-}
-
-.org-chart-viewport:active {
-    cursor: grabbing;
+    padding: 32px;
 }
 
 .transform-container {
     transform-origin: top center;
     transition: transform 0.2s ease-out;
-    padding: 40px 20px 120px;
-    min-width: 100%;
     display: flex;
     justify-content: center;
+    min-height: 100%;
+    padding-bottom: 80px;
 }
 
 /* =========================================
-   New Org Tree Structure
+   Org Tree Structure
    ========================================= */
-
 .org-tree {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 1200px;
     width: 100%;
+    max-width: 1200px;
 }
 
 /* =========================================
-   Manager Card (Root)
+   Manager Section
    ========================================= */
-
-.manager-card-wrapper {
+.manager-section {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -181,18 +179,17 @@
     border-radius: 16px;
     padding: 20px;
     box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.1),
-        0 0 0 4px rgba(238, 53, 36, 0.08);
+        0 4px 20px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(238, 53, 36, 0.2);
     cursor: pointer;
     position: relative;
     transition: all 0.3s;
+    /* Ring effect */
+    outline: 4px solid rgba(238, 53, 36, 0.05);
 }
 
 .manager-card:hover {
-    box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.15),
-        0 0 0 4px rgba(238, 53, 36, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
 }
 
@@ -205,7 +202,7 @@
     color: white;
     font-size: 10px;
     font-weight: 700;
-    padding: 4px 14px;
+    padding: 4px 12px;
     border-radius: 20px;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -218,7 +215,7 @@
     align-items: center;
 }
 
-.manager-avatar-wrapper {
+.manager-avatar-section {
     position: relative;
     flex-shrink: 0;
 }
@@ -229,22 +226,21 @@
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .status-dot {
     position: absolute;
-    bottom: 2px;
-    right: 2px;
+    bottom: 4px;
+    right: 0;
     width: 16px;
     height: 16px;
     border-radius: 50%;
     border: 2px solid #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .status-dot.online {
-    background: #4caf50;
+    background: #22c55e;
 }
 
 .manager-info {
@@ -255,18 +251,15 @@
 .manager-name {
     font-size: 18px;
     font-weight: 800;
-    color: #231F20;
-    margin: 0 0 4px 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: #0d121b;
+    margin: 0 0 2px 0;
 }
 
 .manager-role {
     font-size: 14px;
     font-weight: 600;
     color: #EE3524;
-    margin: 0 0 10px 0;
+    margin: 0 0 8px 0;
 }
 
 .manager-meta {
@@ -277,7 +270,6 @@
 
 .reports-avatars {
     display: flex;
-    margin-left: -6px;
 }
 
 .mini-avatar {
@@ -288,7 +280,6 @@
     background-position: center;
     border: 2px solid #fff;
     margin-left: -6px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .mini-avatar:first-child {
@@ -300,8 +291,8 @@
     font-weight: 700;
     color: #666;
     background: #f5f5f5;
-    padding: 3px 10px;
-    border-radius: 12px;
+    padding: 2px 8px;
+    border-radius: 10px;
     border: 1px solid #e8e8e8;
 }
 
@@ -314,24 +305,20 @@
     margin-top: 16px;
 }
 
-.status-segment {
-    height: 100%;
-}
-
 .status-segment.active {
-    background: #4caf50;
+    background: #22c55e;
 }
 
 .status-segment.remote {
-    background: #2196f3;
+    background: #3b82f6;
 }
 
 .status-segment.leave {
-    background: #ff9800;
+    background: #f97316;
 }
 
-/* Connector from manager to horizontal bar */
-.connector-from-manager {
+/* Connector from manager down */
+.connector-down {
     width: 2px;
     height: 40px;
     background: #cbd5e1;
@@ -340,213 +327,189 @@
 /* =========================================
    Horizontal Connector Bar
    ========================================= */
-
-.horizontal-connector-bar {
+.h-connector-bar {
     height: 2px;
     background: #cbd5e1;
+    /* Width spans between the two columns' vertical lines */
     width: calc(100% - 64px);
-    max-width: 900px;
+    max-width: 560px;
     border-radius: 1px;
 }
 
 /* =========================================
-   Employee Columns Container
+   Columns Wrapper
    ========================================= */
-
-.columns-container {
+.columns-wrapper {
     display: flex;
     justify-content: center;
     gap: 40px;
     width: 100%;
-    padding-top: 0;
+    padding-top: 40px;
+    position: relative;
 }
 
 /* =========================================
    Employee Column
    ========================================= */
-
-.employee-column {
+.emp-column {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 24px;
     width: 280px;
     position: relative;
-    padding-top: 40px;
 }
 
-/* Vertical connector from horizontal bar to column */
-.vertical-connector-top {
+/* Vertical connector from horizontal bar */
+.v-connector-top {
     position: absolute;
-    top: 0;
+    top: -40px;
     width: 2px;
     height: 40px;
     background: #cbd5e1;
 }
 
-.vertical-connector-top.left {
+.v-connector-top.left {
     left: 32px;
 }
 
-.vertical-connector-top.center {
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.vertical-connector-top.right {
+.v-connector-top.right {
     right: 32px;
 }
 
-/* Vertical line running through column */
-.vertical-line {
+/* Vertical line running through all cards */
+.v-line {
     position: absolute;
-    top: 40px;
-    bottom: 40px;
+    top: 0;
+    bottom: 36px;
+    /* Stop before last card bottom */
     width: 2px;
     background: #cbd5e1;
     border-radius: 1px;
 }
 
-.vertical-line.left {
+.v-line.left {
     left: 32px;
 }
 
-.vertical-line.center {
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.vertical-line.right {
+.v-line.right {
     right: 32px;
 }
 
 /* =========================================
-   Employee Node (Individual Card)
+   Employee Card Wrapper
    ========================================= */
-
-.employee-node {
+.emp-card-wrapper {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.employee-node.left {
-    padding-left: 56px;
+.emp-card-wrapper.left {
+    margin-left: 56px;
+    /* ml-14 = 56px */
 }
 
-.employee-node.center {
-    justify-content: center;
-}
-
-.employee-node.right {
-    padding-right: 56px;
+.emp-card-wrapper.right {
+    margin-right: 56px;
     flex-direction: row-reverse;
 }
 
-/* Horizontal connector to card */
-.horizontal-connector {
+/* Horizontal connector from vertical line to card */
+.h-connector {
     position: absolute;
-    height: 2px;
-    width: 24px;
-    background: #cbd5e1;
     top: 50%;
     transform: translateY(-50%);
+    width: 24px;
+    height: 2px;
+    background: #cbd5e1;
 }
 
-.horizontal-connector.left {
-    left: 32px;
+.h-connector.left {
+    left: -24px;
 }
 
-.horizontal-connector.center {
-    display: none;
-}
-
-.horizontal-connector.right {
-    right: 32px;
+.h-connector.right {
+    right: -24px;
 }
 
 /* =========================================
-   Compact Employee Card
+   Employee Card
    ========================================= */
-
-.compact-card {
+.emp-card {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
-    background: #f0f7ff;
-    border: 1px solid #bfdbfe;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s;
     flex: 1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.compact-card.permanent {
-    background: linear-gradient(135deg, #f0f7ff 0%, #e3f2ff 100%);
-    border-color: #90caf9;
+.emp-card.blue {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
 }
 
-.compact-card.contractor {
-    background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
-    border-color: #ffcc80;
+.emp-card.blue:hover {
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    border-color: #60a5fa;
 }
 
-.compact-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+.emp-card.purple {
+    background: #faf5ff;
+    border: 1px solid #e9d5ff;
 }
 
-.compact-card.permanent:hover {
-    border-color: #42a5f5;
+.emp-card.purple:hover {
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15);
+    border-color: #c084fc;
 }
 
-.compact-card.contractor:hover {
-    border-color: #ffa726;
+/* Right side cards are reversed */
+.emp-card-wrapper.right .emp-card {
+    flex-direction: row-reverse;
 }
 
-.compact-avatar-wrapper {
-    position: relative;
-    flex-shrink: 0;
-}
-
-.compact-avatar {
+.emp-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #fff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.compact-info {
+.emp-info {
     flex: 1;
     min-width: 0;
 }
 
-.compact-name {
+.emp-info.right {
+    text-align: right;
+}
+
+.emp-name {
     font-size: 14px;
     font-weight: 700;
-    color: #231F20;
+    color: #0d121b;
     margin: 0 0 2px 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.compact-role {
+.emp-role {
     font-size: 11px;
-    color: #666;
+    color: #64748b;
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.employee-node.right .compact-info {
-    text-align: right;
-}
-
-/* Status indicator dot */
+/* Status indicator */
 .status-indicator {
     width: 8px;
     height: 8px;
@@ -555,130 +518,33 @@
 }
 
 .status-indicator.permanent {
-    background: #4caf50;
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    background: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
 }
 
 .status-indicator.contractor {
-    background: #ff9800;
-    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2);
+    background: #f97316;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
 }
 
 /* =========================================
-   Dark Mode Styles
+   Dark Mode
    ========================================= */
-
 .dark-mode .org-chart-wrapper {
     background:
-        radial-gradient(circle, #4a4a4a 1px, transparent 1px);
+        radial-gradient(circle, #374151 1px, transparent 1px);
     background-size: 20px 20px;
-    background-color: #231F20;
+    background-color: #101622;
 }
 
 .dark-mode .org-chart-header {
-    background: #2d2a2b;
-    border-color: #3a3a3a;
-}
-
-.dark-mode .manager-card {
-    background: #2d2a2b;
-    border-color: rgba(238, 53, 36, 0.3);
-    box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.3),
-        0 0 0 4px rgba(238, 53, 36, 0.15);
-}
-
-.dark-mode .manager-card:hover {
-    box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.4),
-        0 0 0 4px rgba(238, 53, 36, 0.25);
-}
-
-.dark-mode .manager-name {
-    color: #fff;
-}
-
-.dark-mode .manager-avatar {
-    border-color: #3a3a3a;
-}
-
-.dark-mode .status-dot {
-    border-color: #2d2a2b;
-}
-
-.dark-mode .reports-count {
-    background: #3a3a3a;
-    border-color: #4a4a4a;
-    color: #ccc;
-}
-
-.dark-mode .team-status-bar {
-    background: #3a3a3a;
-}
-
-.dark-mode .mini-avatar {
-    border-color: #2d2a2b;
-}
-
-.dark-mode .connector-from-manager,
-.dark-mode .horizontal-connector-bar,
-.dark-mode .vertical-connector-top,
-.dark-mode .vertical-line,
-.dark-mode .horizontal-connector {
-    background: #4a4a4a;
-}
-
-.dark-mode .compact-card.permanent {
-    background: linear-gradient(135deg, rgba(33, 150, 243, 0.15) 0%, rgba(33, 150, 243, 0.08) 100%);
-    border-color: rgba(100, 181, 246, 0.4);
-}
-
-.dark-mode .compact-card.contractor {
-    background: linear-gradient(135deg, rgba(255, 152, 0, 0.15) 0%, rgba(255, 152, 0, 0.08) 100%);
-    border-color: rgba(255, 183, 77, 0.4);
-}
-
-.dark-mode .compact-card:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-}
-
-.dark-mode .compact-name {
-    color: #fff;
-}
-
-.dark-mode .compact-role {
-    color: #9FA1A4;
-}
-
-.dark-mode .compact-avatar {
-    border-color: #3a3a3a;
-}
-
-.dark-mode .zoom-controls {
-    background: #2d2a2b;
-    border-color: #3a3a3a;
-}
-
-.dark-mode .zoom-btn {
-    color: #fff;
-}
-
-.dark-mode .zoom-btn:hover {
-    background: #3a3a3a;
-    color: #EE3524;
-}
-
-.dark-mode .zoom-value {
-    color: #fff;
-}
-
-.dark-mode .zoom-divider {
-    background: #4a4a4a;
+    background: #1a202c;
+    border-color: #374151;
 }
 
 .dark-mode .global-add-btn {
-    background: #2d2a2b;
-    border-color: #4a4a4a;
+    background: #1a202c;
+    border-color: #374151;
     color: #fff;
 }
 
@@ -688,56 +554,166 @@
 }
 
 .dark-mode .legend-item {
-    color: #9FA1A4;
+    color: #9ca3af;
+}
+
+.dark-mode .manager-card {
+    background: #1a202c;
+    border-color: rgba(238, 53, 36, 0.3);
+    outline-color: rgba(238, 53, 36, 0.1);
+}
+
+.dark-mode .manager-name {
+    color: #fff;
+}
+
+.dark-mode .manager-avatar {
+    border-color: #374151;
+}
+
+.dark-mode .status-dot {
+    border-color: #1a202c;
+}
+
+.dark-mode .mini-avatar {
+    border-color: #1a202c;
+}
+
+.dark-mode .reports-count {
+    background: #374151;
+    border-color: #4b5563;
+    color: #9ca3af;
+}
+
+.dark-mode .team-status-bar {
+    background: #374151;
+}
+
+.dark-mode .connector-down,
+.dark-mode .h-connector-bar,
+.dark-mode .v-connector-top,
+.dark-mode .v-line,
+.dark-mode .h-connector {
+    background: #4b5563;
+}
+
+.dark-mode .emp-card.blue {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.dark-mode .emp-card.blue:hover {
+    border-color: rgba(96, 165, 250, 0.5);
+}
+
+.dark-mode .emp-card.purple {
+    background: rgba(168, 85, 247, 0.1);
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+.dark-mode .emp-card.purple:hover {
+    border-color: rgba(192, 132, 252, 0.5);
+}
+
+.dark-mode .emp-name {
+    color: #fff;
+}
+
+.dark-mode .emp-role {
+    color: #9ca3af;
+}
+
+.dark-mode .emp-avatar {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .zoom-controls {
+    background: #1a202c;
+    border-color: #374151;
+}
+
+.dark-mode .zoom-btn {
+    color: #9ca3af;
+}
+
+.dark-mode .zoom-btn:hover {
+    background: #374151;
+    color: #EE3524;
+}
+
+.dark-mode .zoom-value {
+    color: #fff;
+}
+
+.dark-mode .zoom-divider {
+    background: #374151;
 }
 
 .dark-mode .search-input .ant-input {
-    background: #2d2a2b;
-    border-color: #4a4a4a;
+    background: #1a202c;
+    border-color: #374151;
     color: #fff;
 }
 
 .dark-mode .search-input .ant-input-prefix {
-    color: #9FA1A4;
+    color: #9ca3af;
 }
 
 /* =========================================
    Responsive
    ========================================= */
-
-@media (max-width: 1024px) {
-    .columns-container {
-        gap: 24px;
-    }
-
-    .employee-column {
-        width: 240px;
-    }
-}
-
 @media (max-width: 768px) {
     .org-chart-header {
         flex-wrap: wrap;
-        padding: 16px;
+        padding: 12px 16px;
     }
 
     .search-input {
         width: 100%;
         order: 3;
+        margin-top: 8px;
     }
 
-    .columns-container {
+    .columns-wrapper {
         flex-direction: column;
         align-items: center;
-        gap: 32px;
+        gap: 40px;
     }
 
-    .employee-column {
+    .h-connector-bar {
+        display: none;
+    }
+
+    .v-connector-top {
+        display: none;
+    }
+
+    .emp-column {
         width: 100%;
         max-width: 300px;
     }
 
-    .horizontal-connector-bar {
-        display: none;
+    .emp-column.right .emp-card-wrapper {
+        flex-direction: row;
+        margin-right: 0;
+        margin-left: 56px;
+    }
+
+    .emp-column.right .emp-card {
+        flex-direction: row;
+    }
+
+    .emp-column.right .emp-info {
+        text-align: left;
+    }
+
+    .emp-column.right .h-connector {
+        left: -24px;
+        right: auto;
+    }
+
+    .emp-column.right .v-line {
+        left: 32px;
+        right: auto;
     }
 }
