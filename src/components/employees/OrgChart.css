@@ -16,7 +16,7 @@
 .org-chart-header {
     display: flex;
     justify-content: space-between;
-    padding: 24px 32px;
+    padding: 20px 32px;
     position: relative;
     z-index: 10;
     align-items: center;
@@ -26,8 +26,8 @@
 }
 
 .search-input {
-    width: 300px;
-    border-radius: 20px;
+    width: 280px;
+    border-radius: 8px;
 }
 
 /* Employee Type Legend */
@@ -46,8 +46,8 @@
 }
 
 .legend-dot {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
 }
 
@@ -63,7 +63,7 @@
     background: #fff;
     border: 1px solid #d9d9d9;
     padding: 8px 16px;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
     color: #333;
@@ -76,30 +76,29 @@
 .global-add-btn:hover {
     color: #EE3524;
     border-color: #EE3524;
-    background: #fff;
 }
 
-/* Zoom Controls - Bottom Right */
+/* Zoom Controls */
 .zoom-controls {
     position: absolute;
     bottom: 24px;
     right: 24px;
     z-index: 100;
     display: flex;
-    gap: 8px;
+    gap: 6px;
     background: #fff;
-    padding: 8px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 6px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     border: 1px solid #e8e8e8;
 }
 
 .zoom-btn {
     width: 32px;
     height: 32px;
-    border-radius: 4px;
-    border: 1px solid #e0e0e0;
-    background: #fff;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -109,15 +108,14 @@
 }
 
 .zoom-btn:hover {
-    background: #f0f0f0;
+    background: #f5f5f5;
     color: #EE3524;
-    border-color: #EE3524;
 }
 
 .zoom-value {
-    min-width: 40px;
+    min-width: 44px;
     text-align: center;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -129,10 +127,10 @@
     width: 1px;
     height: 20px;
     background: #eee;
-    margin: 0 4px;
+    margin: 6px 2px;
 }
 
-/* Viewport for Drag/Scroll */
+/* Viewport */
 .org-chart-viewport {
     flex: 1;
     overflow: auto;
@@ -146,314 +144,424 @@
 .transform-container {
     transform-origin: top center;
     transition: transform 0.2s ease-out;
-    padding: 40px 20px 100px;
+    padding: 40px 20px 120px;
     min-width: 100%;
     display: flex;
     justify-content: center;
 }
 
 /* =========================================
-   Tree Layout - New Structure
+   New Org Tree Structure
    ========================================= */
 
-.tree {
+.org-tree {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 10px;
-}
-
-/* Tree Node - Base */
-.tree-node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-}
-
-.tree-node.root-node {
-    padding-top: 0;
+    max-width: 1200px;
+    width: 100%;
 }
 
 /* =========================================
-   Connector Lines - Improved Structure
+   Manager Card (Root)
    ========================================= */
 
-/* Tree line base color */
-.tree-line {
-    background-color: #cbd5e1;
-}
-
-/* Vertical line from parent card DOWN to horizontal connector */
-.connector-vertical-down {
-    width: 2px;
-    height: 40px;
-    background: #cbd5e1;
-    border-radius: 1px;
-}
-
-/* Children wrapper - contains the children grid */
-.children-wrapper {
+.manager-card-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
-    padding-top: 0;
+    z-index: 20;
+    margin-bottom: 0;
 }
 
-/* Children container - holds all child branches */
-.children-container {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    gap: 24px;
-    position: relative;
-    padding-top: 0;
-}
-
-/* Horizontal connector line at top spanning all children */
-.children-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    height: 2px;
-    background: #cbd5e1;
-    left: calc(140px);
-    right: calc(140px);
-    border-radius: 1px;
-}
-
-/* Hide horizontal line for single child */
-.children-container:has(.child-node-wrapper:only-child)::before {
-    display: none;
-}
-
-/* Child node wrapper - each child column with vertical connector */
-.child-node-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-}
-
-/* Vertical line from horizontal connector DOWN to child card */
-.connector-vertical-up {
-    width: 2px;
-    height: 40px;
-    background: #cbd5e1;
-    border-radius: 1px;
-}
-
-/* Hide the old horizontal connector (using ::before instead) */
-.children-wrapper .connector-horizontal {
-    display: none;
-}
-
-/* =========================================
-   Employee Card Design - Improved
-   ========================================= */
-
-.employee-card {
+.manager-card {
+    width: 320px;
     background: #fff;
-    border-radius: 12px;
-    width: 240px;
-    padding: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e8e8e8;
-    text-align: left;
-    display: inline-block;
-    position: relative;
-    z-index: 2;
-    transition: all 0.2s;
-    cursor: pointer;
-    overflow: hidden;
-}
-
-/* Permanent employee - blue accent */
-.employee-card.permanent-card {
-    border-left: 4px solid #64b5f6;
-}
-
-/* Contractor employee - orange accent */
-.employee-card.contractor-card {
-    border-left: 4px solid #ff9800;
-}
-
-/* Root node (Manager) - larger card with ring effect */
-.root-node>.employee-card {
-    width: 280px;
     border-radius: 16px;
+    padding: 20px;
     box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.12),
+        0 4px 20px rgba(0, 0, 0, 0.1),
         0 0 0 4px rgba(238, 53, 36, 0.08);
-    border-left-width: 5px;
+    border: 1px solid rgba(238, 53, 36, 0.2);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s;
 }
 
-.root-node>.employee-card .card-avatar {
-    width: 52px;
-    height: 52px;
-    border-width: 3px;
+.manager-card:hover {
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.15),
+        0 0 0 4px rgba(238, 53, 36, 0.15);
+    transform: translateY(-2px);
 }
 
-.root-node>.employee-card .emp-name {
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.root-node>.employee-card .emp-role {
-    font-size: 12px;
-    color: #EE3524;
-    font-weight: 600;
-}
-
-.employee-card:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    transform: translateY(-3px);
-    border-color: #EE3524;
-}
-
-.employee-card.permanent-card:hover {
-    border-left-color: #64b5f6;
-}
-
-.employee-card.contractor-card:hover {
-    border-left-color: #ff9800;
-}
-
-/* Employee Type Badge */
-.employee-type-badge {
+.manager-badge {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 9px;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #EE3524;
+    color: white;
+    font-size: 10px;
     font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 10px;
+    padding: 4px 14px;
+    border-radius: 20px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 8px rgba(238, 53, 36, 0.3);
 }
 
-.employee-type-badge.permanent-badge {
-    background: rgba(100, 181, 246, 0.15);
-    color: #1976d2;
-}
-
-.employee-type-badge.contractor-badge {
-    background: rgba(255, 152, 0, 0.15);
-    color: #e65100;
-}
-
-/* Card Header */
-.card-header {
-    padding: 14px;
-    padding-top: 32px;
-    border-bottom: 1px solid #f0f0f0;
+.manager-content {
     display: flex;
-    gap: 12px;
+    gap: 16px;
     align-items: center;
 }
 
-.card-avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+.manager-avatar-wrapper {
+    position: relative;
     flex-shrink: 0;
 }
 
-.card-info {
+.manager-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.status-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.status-dot.online {
+    background: #4caf50;
+}
+
+.manager-info {
     flex: 1;
     min-width: 0;
 }
 
-.emp-name {
+.manager-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: #231F20;
+    margin: 0 0 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.manager-role {
     font-size: 14px;
     font-weight: 600;
-    color: #231F20;
-    margin-bottom: 3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.emp-role {
-    font-size: 11px;
-    color: #666;
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.emp-dept {
-    font-size: 9px;
-    color: #9FA1A4;
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-
-/* Card Body */
-.card-body {
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-}
-
-.email-row {
-    display: flex;
-    align-items: center;
-    color: #9FA1A4;
-    font-size: 11px;
-    overflow: hidden;
-}
-
-.email-text {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-}
-
-/* Card Footer */
-.card-footer {
-    padding: 8px 14px;
-    background: #fafafa;
-    border-top: 1px solid #f0f0f0;
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    align-items: center;
-    border-radius: 0 0 12px 12px;
-}
-
-.edit-btn,
-.delete-btn {
-    font-size: 11px;
-    color: #666;
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    cursor: pointer;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    transition: all 0.2s;
-}
-
-.edit-btn:hover {
-    color: #0066b3;
-    border-color: #0066b3;
-    background: rgba(0, 102, 179, 0.05);
-}
-
-.delete-btn:hover {
     color: #EE3524;
-    border-color: #EE3524;
-    background: rgba(238, 53, 36, 0.05);
+    margin: 0 0 10px 0;
+}
+
+.manager-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reports-avatars {
+    display: flex;
+    margin-left: -6px;
+}
+
+.mini-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #fff;
+    margin-left: -6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.mini-avatar:first-child {
+    margin-left: 0;
+}
+
+.reports-count {
+    font-size: 10px;
+    font-weight: 700;
+    color: #666;
+    background: #f5f5f5;
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid #e8e8e8;
+}
+
+.team-status-bar {
+    height: 6px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+    margin-top: 16px;
+}
+
+.status-segment {
+    height: 100%;
+}
+
+.status-segment.active {
+    background: #4caf50;
+}
+
+.status-segment.remote {
+    background: #2196f3;
+}
+
+.status-segment.leave {
+    background: #ff9800;
+}
+
+/* Connector from manager to horizontal bar */
+.connector-from-manager {
+    width: 2px;
+    height: 40px;
+    background: #cbd5e1;
+}
+
+/* =========================================
+   Horizontal Connector Bar
+   ========================================= */
+
+.horizontal-connector-bar {
+    height: 2px;
+    background: #cbd5e1;
+    width: calc(100% - 64px);
+    max-width: 900px;
+    border-radius: 1px;
+}
+
+/* =========================================
+   Employee Columns Container
+   ========================================= */
+
+.columns-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+    padding-top: 0;
+}
+
+/* =========================================
+   Employee Column
+   ========================================= */
+
+.employee-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 280px;
+    position: relative;
+    padding-top: 40px;
+}
+
+/* Vertical connector from horizontal bar to column */
+.vertical-connector-top {
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 40px;
+    background: #cbd5e1;
+}
+
+.vertical-connector-top.left {
+    left: 32px;
+}
+
+.vertical-connector-top.center {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.vertical-connector-top.right {
+    right: 32px;
+}
+
+/* Vertical line running through column */
+.vertical-line {
+    position: absolute;
+    top: 40px;
+    bottom: 40px;
+    width: 2px;
+    background: #cbd5e1;
+    border-radius: 1px;
+}
+
+.vertical-line.left {
+    left: 32px;
+}
+
+.vertical-line.center {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.vertical-line.right {
+    right: 32px;
+}
+
+/* =========================================
+   Employee Node (Individual Card)
+   ========================================= */
+
+.employee-node {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.employee-node.left {
+    padding-left: 56px;
+}
+
+.employee-node.center {
+    justify-content: center;
+}
+
+.employee-node.right {
+    padding-right: 56px;
+    flex-direction: row-reverse;
+}
+
+/* Horizontal connector to card */
+.horizontal-connector {
+    position: absolute;
+    height: 2px;
+    width: 24px;
+    background: #cbd5e1;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.horizontal-connector.left {
+    left: 32px;
+}
+
+.horizontal-connector.center {
+    display: none;
+}
+
+.horizontal-connector.right {
+    right: 32px;
+}
+
+/* =========================================
+   Compact Employee Card
+   ========================================= */
+
+.compact-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f0f7ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+}
+
+.compact-card.permanent {
+    background: linear-gradient(135deg, #f0f7ff 0%, #e3f2ff 100%);
+    border-color: #90caf9;
+}
+
+.compact-card.contractor {
+    background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+    border-color: #ffcc80;
+}
+
+.compact-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.compact-card.permanent:hover {
+    border-color: #42a5f5;
+}
+
+.compact-card.contractor:hover {
+    border-color: #ffa726;
+}
+
+.compact-avatar-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.compact-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.compact-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.compact-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #231F20;
+    margin: 0 0 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.compact-role {
+    font-size: 11px;
+    color: #666;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.employee-node.right .compact-info {
+    text-align: right;
+}
+
+/* Status indicator dot */
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-indicator.permanent {
+    background: #4caf50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.status-indicator.contractor {
+    background: #ff9800;
+    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2);
 }
 
 /* =========================================
@@ -472,95 +580,78 @@
     border-color: #3a3a3a;
 }
 
-.dark-mode .employee-card {
+.dark-mode .manager-card {
     background: #2d2a2b;
-    border-color: #3a3a3a;
-}
-
-.dark-mode .employee-card.permanent-card {
-    border-left-color: #64b5f6;
-}
-
-.dark-mode .employee-card.contractor-card {
-    border-left-color: #ff9800;
-}
-
-.dark-mode .root-node>.employee-card {
+    border-color: rgba(238, 53, 36, 0.3);
     box-shadow:
         0 4px 20px rgba(0, 0, 0, 0.3),
         0 0 0 4px rgba(238, 53, 36, 0.15);
 }
 
-.dark-mode .employee-card:hover {
-    border-color: #EE3524;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+.dark-mode .manager-card:hover {
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.4),
+        0 0 0 4px rgba(238, 53, 36, 0.25);
 }
 
-.dark-mode .employee-type-badge.permanent-badge {
-    background: rgba(100, 181, 246, 0.2);
-    color: #90caf9;
+.dark-mode .manager-name {
+    color: #fff;
 }
 
-.dark-mode .employee-type-badge.contractor-badge {
-    background: rgba(255, 152, 0, 0.2);
-    color: #ffb74d;
+.dark-mode .manager-avatar {
+    border-color: #3a3a3a;
 }
 
-.dark-mode .emp-name {
-    color: #FFFFFF;
+.dark-mode .status-dot {
+    border-color: #2d2a2b;
 }
 
-.dark-mode .emp-role {
+.dark-mode .reports-count {
+    background: #3a3a3a;
+    border-color: #4a4a4a;
+    color: #ccc;
+}
+
+.dark-mode .team-status-bar {
+    background: #3a3a3a;
+}
+
+.dark-mode .mini-avatar {
+    border-color: #2d2a2b;
+}
+
+.dark-mode .connector-from-manager,
+.dark-mode .horizontal-connector-bar,
+.dark-mode .vertical-connector-top,
+.dark-mode .vertical-line,
+.dark-mode .horizontal-connector {
+    background: #4a4a4a;
+}
+
+.dark-mode .compact-card.permanent {
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.15) 0%, rgba(33, 150, 243, 0.08) 100%);
+    border-color: rgba(100, 181, 246, 0.4);
+}
+
+.dark-mode .compact-card.contractor {
+    background: linear-gradient(135deg, rgba(255, 152, 0, 0.15) 0%, rgba(255, 152, 0, 0.08) 100%);
+    border-color: rgba(255, 183, 77, 0.4);
+}
+
+.dark-mode .compact-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .compact-name {
+    color: #fff;
+}
+
+.dark-mode .compact-role {
     color: #9FA1A4;
 }
 
-.dark-mode .root-node>.employee-card .emp-role {
-    color: #EE3524;
-}
-
-.dark-mode .emp-dept,
-.dark-mode .email-text,
-.dark-mode .email-row {
-    color: #9FA1A4;
-}
-
-.dark-mode .card-header {
+.dark-mode .compact-avatar {
     border-color: #3a3a3a;
-}
-
-.dark-mode .card-body {
-    border-color: #3a3a3a;
-}
-
-.dark-mode .card-footer {
-    background: #1a1818;
-    border-color: #3a3a3a;
-}
-
-.dark-mode .edit-btn,
-.dark-mode .delete-btn {
-    background: #2d2a2b;
-    border-color: #4a4a4a;
-    color: #FFFFFF;
-}
-
-.dark-mode .edit-btn:hover {
-    background: rgba(0, 102, 179, 0.1);
-}
-
-.dark-mode .delete-btn:hover {
-    background: rgba(238, 53, 36, 0.1);
-}
-
-.dark-mode .global-add-btn {
-    background: #2d2a2b;
-    border-color: #4a4a4a;
-    color: #FFFFFF;
-}
-
-.dark-mode .global-add-btn:hover {
-    border-color: #EE3524;
-    color: #EE3524;
 }
 
 .dark-mode .zoom-controls {
@@ -569,58 +660,58 @@
 }
 
 .dark-mode .zoom-btn {
-    background: #2d2a2b;
-    border-color: #4a4a4a;
-    color: #FFFFFF;
+    color: #fff;
 }
 
 .dark-mode .zoom-btn:hover {
-    border-color: #EE3524;
+    background: #3a3a3a;
     color: #EE3524;
 }
 
-.dark-mode .connector-vertical-down,
-.dark-mode .connector-vertical-up,
-.dark-mode .connector-horizontal,
-.dark-mode .children-container::before,
-.dark-mode .tree-line {
-    background: #4a4a4a;
-}
-
-.dark-mode .search-input .ant-input {
-    background: #2d2a2b;
-    border-color: #4a4a4a;
-    color: #FFFFFF;
-}
-
-.dark-mode .search-input .ant-input-prefix {
-    color: #9FA1A4;
-}
-
 .dark-mode .zoom-value {
-    color: #FFFFFF;
+    color: #fff;
 }
 
 .dark-mode .zoom-divider {
     background: #4a4a4a;
 }
 
+.dark-mode .global-add-btn {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #fff;
+}
+
+.dark-mode .global-add-btn:hover {
+    border-color: #EE3524;
+    color: #EE3524;
+}
+
 .dark-mode .legend-item {
     color: #9FA1A4;
 }
 
+.dark-mode .search-input .ant-input {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #fff;
+}
+
+.dark-mode .search-input .ant-input-prefix {
+    color: #9FA1A4;
+}
+
 /* =========================================
-   Responsive Adjustments
+   Responsive
    ========================================= */
 
-@media (max-width: 1200px) {
-    .children-container {
-        gap: 16px;
+@media (max-width: 1024px) {
+    .columns-container {
+        gap: 24px;
     }
 
-    .children-container::before {
-        left: calc(120px);
-        right: calc(120px);
+    .employee-column {
+        width: 240px;
     }
 }
 
@@ -635,11 +726,18 @@
         order: 3;
     }
 
-    .employee-type-legend {
-        order: 2;
+    .columns-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
     }
 
-    .global-add-btn {
-        order: 1;
+    .employee-column {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .horizontal-connector-bar {
+        display: none;
     }
 }

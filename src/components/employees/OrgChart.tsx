@@ -6,7 +6,6 @@ import {
     PlusOutlined,
     MinusOutlined,
     EditOutlined,
-    MailOutlined,
     UserAddOutlined,
     DeleteOutlined
 } from '@ant-design/icons';
@@ -19,101 +18,141 @@ import './OrgChart.css';
 // Use API type for OrgEmployee
 type OrgEmployee = OrgEmployeeAPI;
 
-interface RecursiveNodeProps {
+// Manager/Root Card Component
+interface ManagerCardProps {
+    employee: OrgEmployee;
+    onNodeClick: (emp: OrgEmployee) => void;
+    onEditClick: (emp: OrgEmployee) => void;
+    childrenCount: number;
+}
+
+const ManagerCard: React.FC<ManagerCardProps> = ({ employee, onNodeClick, onEditClick, childrenCount }) => {
+    const employeeType = (employee as any).employeeType || 'permanent';
+
+    return (
+        <div className="manager-card-wrapper">
+            <div
+                className="manager-card"
+                onClick={() => onNodeClick(employee)}
+            >
+                {/* Team Lead Badge */}
+                <div className="manager-badge">Team Lead</div>
+
+                <div className="manager-content">
+                    <div className="manager-avatar-wrapper">
+                        <img src={employee.avatarUrl} alt={employee.name} className="manager-avatar" />
+                        <span className="status-dot online"></span>
+                    </div>
+                    <div className="manager-info">
+                        <h3 className="manager-name">{employee.name}</h3>
+                        <p className="manager-role">{employee.role}</p>
+                        <div className="manager-meta">
+                            <div className="reports-avatars">
+                                {employee.children?.slice(0, 3).map((child, idx) => (
+                                    <div
+                                        key={child.id}
+                                        className="mini-avatar"
+                                        style={{ backgroundImage: `url(${child.avatarUrl})` }}
+                                    />
+                                ))}
+                            </div>
+                            <span className="reports-count">{childrenCount} Reports</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Team Status Bar */}
+                <div className="team-status-bar">
+                    <div className="status-segment active" style={{ width: '75%' }} title="Active"></div>
+                    <div className="status-segment remote" style={{ width: '15%' }} title="Remote"></div>
+                    <div className="status-segment leave" style={{ width: '10%' }} title="On Leave"></div>
+                </div>
+            </div>
+
+            {/* Vertical connector down */}
+            <div className="connector-from-manager"></div>
+        </div>
+    );
+};
+
+// Individual Employee Card (Compact version for team members)
+interface EmployeeNodeProps {
     employee: OrgEmployee;
     onNodeClick: (emp: OrgEmployee) => void;
     onEditClick: (emp: OrgEmployee) => void;
     onDeleteClick: (emp: OrgEmployee) => void;
-    isRoot?: boolean;
+    position: 'left' | 'center' | 'right';
 }
 
-const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, onEditClick, onDeleteClick, isRoot = false }) => {
-    const hasChildren = employee.children && employee.children.length > 0;
+const EmployeeNode: React.FC<EmployeeNodeProps> = ({
+    employee,
+    onNodeClick,
+    onEditClick,
+    onDeleteClick,
+    position
+}) => {
     const employeeType = (employee as any).employeeType || 'permanent';
     const isContractor = employeeType === 'contractor';
 
     return (
-        <div className={`tree-node ${isRoot ? 'root-node' : ''}`}>
+        <div className={`employee-node ${position}`}>
+            {/* Horizontal connector line */}
+            <div className={`horizontal-connector ${position}`}></div>
+
             <div
-                className={`employee-card ${isContractor ? 'contractor-card' : 'permanent-card'}`}
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onNodeClick(employee);
-                }}
+                className={`compact-card ${isContractor ? 'contractor' : 'permanent'}`}
+                onClick={() => onNodeClick(employee)}
             >
-                {/* Employee Type Badge */}
-                <div className={`employee-type-badge ${isContractor ? 'contractor-badge' : 'permanent-badge'}`}>
-                    {isContractor ? 'Contractor' : 'Permanent'}
+                <div className="compact-avatar-wrapper">
+                    <img src={employee.avatarUrl} alt={employee.name} className="compact-avatar" />
                 </div>
-
-                <div className="card-header">
-                    <img src={employee.avatarUrl} alt={employee.name} className="card-avatar" />
-                    <div className="card-info">
-                        <div className="emp-name">{employee.name}</div>
-                        <div className="emp-role">{employee.role}</div>
-                        <div className="emp-dept">{employee.location.split(' ')[0]}</div>
-                    </div>
+                <div className="compact-info">
+                    <p className="compact-name">{employee.name}</p>
+                    <p className="compact-role">{employee.role}</p>
                 </div>
-
-                <div className="card-body">
-                    <div className="email-row">
-                        <MailOutlined style={{ marginRight: 6, color: '#999' }} />
-                        <span className="email-text">{employee.email}</span>
-                    </div>
-                </div>
-
-                <div className="card-footer">
-                    <div className="edit-btn" onClick={(e) => {
-                        e.stopPropagation();
-                        onEditClick(employee);
-                    }}>
-                        <EditOutlined style={{ marginRight: 4 }} /> Edit
-                    </div>
-                    {!hasChildren && (
-                        <Popconfirm
-                            title="Delete Employee"
-                            description="Are you sure you want to delete this employee?"
-                            onConfirm={(e) => {
-                                e?.stopPropagation();
-                                onDeleteClick(employee);
-                            }}
-                            onCancel={(e) => e?.stopPropagation()}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <div className="delete-btn" onClick={(e) => e.stopPropagation()}>
-                                <DeleteOutlined style={{ marginRight: 4 }} /> Delete
-                            </div>
-                        </Popconfirm>
-                    )}
-                </div>
+                <span className={`status-indicator ${isContractor ? 'contractor' : 'permanent'}`}></span>
             </div>
+        </div>
+    );
+};
 
-            {hasChildren && (
-                <>
-                    {/* Vertical line from parent to horizontal connector */}
-                    <div className="connector-vertical-down"></div>
+// Column of employees with vertical line
+interface EmployeeColumnProps {
+    employees: OrgEmployee[];
+    onNodeClick: (emp: OrgEmployee) => void;
+    onEditClick: (emp: OrgEmployee) => void;
+    onDeleteClick: (emp: OrgEmployee) => void;
+    position: 'left' | 'center' | 'right';
+}
 
-                    {/* Horizontal connector spanning all children */}
-                    <div className="children-wrapper">
-                        <div className="connector-horizontal"></div>
-                        <div className="children-container">
-                            {employee.children?.map((child) => (
-                                <div key={child.id} className="child-node-wrapper">
-                                    {/* Vertical line from horizontal connector to child */}
-                                    <div className="connector-vertical-up"></div>
-                                    <RecursiveNode
-                                        employee={child}
-                                        onNodeClick={onNodeClick}
-                                        onEditClick={onEditClick}
-                                        onDeleteClick={onDeleteClick}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </>
-            )}
+const EmployeeColumn: React.FC<EmployeeColumnProps> = ({
+    employees,
+    onNodeClick,
+    onEditClick,
+    onDeleteClick,
+    position
+}) => {
+    if (employees.length === 0) return null;
+
+    return (
+        <div className={`employee-column ${position}`}>
+            {/* Vertical connector from top horizontal line */}
+            <div className={`vertical-connector-top ${position}`}></div>
+
+            {/* Vertical line running through column */}
+            <div className={`vertical-line ${position}`}></div>
+
+            {/* Employee nodes */}
+            {employees.map((emp, idx) => (
+                <EmployeeNode
+                    key={emp.id}
+                    employee={emp}
+                    onNodeClick={onNodeClick}
+                    onEditClick={onEditClick}
+                    onDeleteClick={onDeleteClick}
+                    position={position}
+                />
+            ))}
         </div>
     );
 };
@@ -166,7 +205,7 @@ const OrgChart: React.FC = () => {
         try {
             await deleteEmployee(emp.id);
             message.success('Employee deleted successfully');
-            loadOrgChart(); // Refresh data
+            loadOrgChart();
         } catch (error) {
             message.error('Failed to delete employee');
             console.error(error);
@@ -176,29 +215,51 @@ const OrgChart: React.FC = () => {
     const handleFormSubmit = async (values: any) => {
         try {
             if (editingEmployee) {
-                // Update existing employee
                 await updateEmployee(editingEmployee.id, {
                     ...values,
                     id: editingEmployee.id,
                     avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(values.name)}&background=random&color=fff&size=64&bold=true`,
-                    managerId: '0', // Default to manager
+                    managerId: '0',
                     department: 'ENABLEMENT R&C',
                 });
                 message.success('Employee updated successfully');
             } else {
-                // Create new employee
                 await createEmployee({
                     ...values,
-                    managerId: '0', // Default to manager
+                    managerId: '0',
                     department: 'ENABLEMENT R&C',
                 });
                 message.success('Employee added successfully');
             }
             setIsAddModalOpen(false);
-            loadOrgChart(); // Refresh data
+            loadOrgChart();
         } catch (error) {
             message.error(editingEmployee ? 'Failed to update employee' : 'Failed to add employee');
             console.error(error);
+        }
+    };
+
+    // Split children into 2-3 columns
+    const splitIntoColumns = (children: OrgEmployee[] = []) => {
+        const total = children.length;
+        if (total === 0) return { left: [], center: [], right: [] };
+
+        // Always try to split into 2 columns (left and right)
+        // If more than 8 employees, use 3 columns
+        if (total <= 8) {
+            const half = Math.ceil(total / 2);
+            return {
+                left: children.slice(0, half),
+                center: [],
+                right: children.slice(half)
+            };
+        } else {
+            const third = Math.ceil(total / 3);
+            return {
+                left: children.slice(0, third),
+                center: children.slice(third, third * 2),
+                right: children.slice(third * 2)
+            };
         }
     };
 
@@ -209,6 +270,9 @@ const OrgChart: React.FC = () => {
             </div>
         );
     }
+
+    const columns = splitIntoColumns(orgChartData?.children);
+    const hasMultipleColumns = columns.left.length > 0 && columns.right.length > 0;
 
     return (
         <div className="org-chart-wrapper">
@@ -241,16 +305,48 @@ const OrgChart: React.FC = () => {
 
             <div className="org-chart-viewport">
                 <div className="transform-container" style={{ transform: `scale(${scale})` }}>
-                    <div className="tree">
+                    <div className="org-tree">
+                        {/* Manager Card */}
                         {orgChartData && (
-                            <RecursiveNode
+                            <ManagerCard
                                 employee={orgChartData}
                                 onNodeClick={setSelectedEmployee}
                                 onEditClick={handleEditClick}
-                                onDeleteClick={handleDeleteClick}
-                                isRoot={true}
+                                childrenCount={orgChartData.children?.length || 0}
                             />
                         )}
+
+                        {/* Horizontal line connecting columns */}
+                        {hasMultipleColumns && (
+                            <div className="horizontal-connector-bar"></div>
+                        )}
+
+                        {/* Employee Columns */}
+                        <div className="columns-container">
+                            <EmployeeColumn
+                                employees={columns.left}
+                                onNodeClick={setSelectedEmployee}
+                                onEditClick={handleEditClick}
+                                onDeleteClick={handleDeleteClick}
+                                position="left"
+                            />
+                            {columns.center.length > 0 && (
+                                <EmployeeColumn
+                                    employees={columns.center}
+                                    onNodeClick={setSelectedEmployee}
+                                    onEditClick={handleEditClick}
+                                    onDeleteClick={handleDeleteClick}
+                                    position="center"
+                                />
+                            )}
+                            <EmployeeColumn
+                                employees={columns.right}
+                                onNodeClick={setSelectedEmployee}
+                                onEditClick={handleEditClick}
+                                onDeleteClick={handleDeleteClick}
+                                position="right"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
