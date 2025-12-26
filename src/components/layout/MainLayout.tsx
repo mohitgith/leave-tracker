@@ -16,8 +16,8 @@ const MainLayout: React.FC = () => {
             case 'dashboard':
                 navigate('/dashboard');
                 break;
-            case 'employees':
-                navigate('/employees');
+            case 'org-chart':
+                navigate('/org-chart');
                 break;
             case 'documents':
                 navigate('/leave-tracker');
@@ -33,7 +33,7 @@ const MainLayout: React.FC = () => {
     // Map route to key for highlighting
     const getSelectedKey = () => {
         const path = location.pathname;
-        if (path.includes('employees')) return 'employees';
+        if (path.includes('org-chart')) return 'org-chart';
         if (path.includes('leave-tracker')) return 'documents';
         if (path.includes('settings')) return 'settings';
         return 'dashboard';

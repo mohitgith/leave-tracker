@@ -27,7 +27,7 @@ const App: React.FC = () => {
                         }>
                             <Route index element={<Navigate to="/dashboard" replace />} />
                             <Route path="dashboard" element={<DashboardPage />} />
-                            <Route path="employees" element={<OrgChart />} />
+                            <Route path="org-chart" element={<OrgChart />} />
                             <Route path="leave-tracker" element={<LeaveTrackerPage />} />
                             <Route path="profile" element={<ProfilePage />} />
                             <Route path="settings" element={<SettingsPage />} />

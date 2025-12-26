@@ -65,17 +65,6 @@
   "managerId" : "0",
   "employeeType" : "permanent"
 }, {
-  "id" : "6",
-  "name" : "Dhanashree Vishwasrao",
-  "role" : "ASSOCIATE PROJECT MANAGER - IT SEC ANALYST",
-  "department" : "ENABLEMENT R&C",
-  "avatarUrl" : "https://ui-avatars.com/api/?name=Dhanashree%20Vishwasrao&background=e91e63&color=fff&size=64&bold=true",
-  "location" : "Office",
-  "email" : "dhanashree.v@company.com",
-  "phone" : "+1 (555) 100-0006",
-  "managerId" : "0",
-  "employeeType" : "permanent"
-}, {
   "id" : "7",
   "name" : "Eric Luo",
   "role" : "DEVELOPMENT ENGINEERING",

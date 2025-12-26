@@ -1,17 +1,17 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Typography, message, Spin } from 'antd';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import dayjs from 'dayjs';
 import { Scheduler } from '../scheduler';
-import { FilterBar, SearchInput, CreateLeaveModal } from '../common';
+import { FilterBar, SearchInput, CreateLeaveModal, PageHeader } from '../common';
 import { FilterOptions } from '../common/FilterBar';
 import { LeaveType, LeaveRecord, Employee } from '../../types';
 import { useAuth } from '../../context/AuthContext';
-import { 
-    fetchEmployees, 
-    fetchLeaves, 
-    createLeave as createLeaveAPI, 
-    updateLeave as updateLeaveAPI, 
+import {
+    fetchEmployees,
+    fetchLeaves,
+    createLeave as createLeaveAPI,
+    updateLeave as updateLeaveAPI,
     deleteLeave as deleteLeaveAPI,
     LeaveRecordAPI
 } from '../../services/api';
@@ -46,7 +46,7 @@ const LeaveTrackerPage: React.FC = () => {
                 fetchEmployees(),
                 fetchLeaves()
             ]);
-            
+
             // Map API data to frontend types (include employeeType)
             setEmployees(empData.map(e => ({
                 id: e.id,
@@ -56,7 +56,7 @@ const LeaveTrackerPage: React.FC = () => {
                 avatarUrl: e.avatarUrl,
                 employeeType: e.employeeType || 'permanent'
             })));
-            
+
             setLeaves(leaveData.map(l => ({
                 id: l.id,
                 employeeId: l.employeeId,
@@ -121,7 +121,7 @@ const LeaveTrackerPage: React.FC = () => {
             const employeeIdsWithMatchingLeaves = leaves
                 .filter(l => filters.leaveTypes.includes(l.type))
                 .map(l => l.employeeId);
-            result = result.filter(emp => 
+            result = result.filter(emp =>
                 employeeIdsWithMatchingLeaves.includes(emp.id)
             );
         }
@@ -183,7 +183,7 @@ const LeaveTrackerPage: React.FC = () => {
             message.warning('You can only delete your own leaves');
             return;
         }
-        
+
         try {
             await deleteLeaveAPI(leaveId);
             message.success('Leave deleted successfully');
@@ -251,31 +251,37 @@ const LeaveTrackerPage: React.FC = () => {
 
     return (
         <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {/* Date Navigation */}
-            <div className="date-navigation" style={{ padding: '16px 24px' }}>
-                <Text className="date-range" style={{ fontSize: 18, fontWeight: 600 }}>{dateRangeDisplay}</Text>
-                <div className="nav-arrows">
-                    <button className="nav-arrow" onClick={handlePrevious}>
-                        <LeftOutlined />
-                    </button>
-                    <button className="nav-arrow" onClick={handleNext}>
-                        <RightOutlined />
-                    </button>
+            {/* Page Header */}
+            <PageHeader title="Leave Tracker" />
+
+            {/* Date Navigation with Filters and Create Leave */}
+            <div className="date-navigation" style={{ padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <Text className="date-range" style={{ fontSize: 18, fontWeight: 600 }}>{dateRangeDisplay}</Text>
+                    <div className="nav-arrows">
+                        <button className="nav-arrow" onClick={handlePrevious}>
+                            <FiChevronLeft size={16} />
+                        </button>
+                        <button className="nav-arrow" onClick={handleNext}>
+                            <FiChevronRight size={16} />
+                        </button>
+                    </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <FilterBar
+                        viewMode={viewMode}
+                        onViewModeChange={setViewMode}
+                        onCreateLeave={handleCreateLeave}
+                        filters={filters}
+                        onFiltersChange={setFilters}
+                        hideViewMode={true}
+                    />
                 </div>
             </div>
 
-            {/* Filter Bar */}
-            <FilterBar
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
-                onCreateLeave={handleCreateLeave}
-                filters={filters}
-                onFiltersChange={setFilters}
-            />
-
             {/* Search and Scheduler Container */}
             <div className="scheduler-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                <div className="scheduler-search-row">
+                <div className="scheduler-search-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div className="search-section">
                         <SearchInput
                             value={searchValue}
@@ -283,6 +289,14 @@ const LeaveTrackerPage: React.FC = () => {
                             placeholder="Find employee"
                         />
                     </div>
+                    <FilterBar
+                        viewMode={viewMode}
+                        onViewModeChange={setViewMode}
+                        onCreateLeave={handleCreateLeave}
+                        filters={filters}
+                        onFiltersChange={setFilters}
+                        hideFilters={true}
+                    />
                 </div>
                 <div style={{ flex: 1, overflow: 'auto' }}>
                     <Scheduler

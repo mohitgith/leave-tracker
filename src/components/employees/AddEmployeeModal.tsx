@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Select, message } from 'antd';
-import { OrgEmployeeAPI } from '../../services/api';
+import { OrgEmployeeAPI, fetchOrgChart } from '../../services/api';
 
 type OrgEmployee = OrgEmployeeAPI;
 
@@ -11,8 +11,26 @@ interface AddEmployeeModalProps {
     initialValues?: OrgEmployee | null;
 }
 
+// Helper function to flatten org chart into list of managers
+const getManagers = (employee: OrgEmployee, managers: OrgEmployee[] = []): OrgEmployee[] => {
+    // Add this employee if they are permanent and a manager (have children)
+    if (employee.children && employee.children.length > 0) {
+        managers.push(employee);
+    }
+    // Also add the root even if no children (always a potential manager)
+    if (managers.length === 0) {
+        managers.push(employee);
+    }
+    // Recursively check children
+    if (employee.children) {
+        employee.children.forEach(child => getManagers(child, managers));
+    }
+    return managers;
+};
+
 const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, onSubmit, initialValues }) => {
     const [form] = Form.useForm();
+    const [managers, setManagers] = useState<OrgEmployee[]>([]);
 
     useEffect(() => {
         if (open) {
@@ -21,8 +39,20 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, onSu
             } else {
                 form.resetFields();
             }
+            // Load managers
+            loadManagers();
         }
     }, [open, initialValues, form]);
+
+    const loadManagers = async () => {
+        try {
+            const orgData = await fetchOrgChart();
+            const managerList = getManagers(orgData);
+            setManagers(managerList);
+        } catch (error) {
+            console.error('Failed to load managers:', error);
+        }
+    };
 
     const handleOk = () => {
         form.validateFields()
@@ -64,6 +94,15 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, onSu
                 </Form.Item>
                 <Form.Item name="role" label="Department / Role" rules={[{ required: true, message: 'Please input the role!' }]}>
                     <Input />
+                </Form.Item>
+                <Form.Item name="reportsTo" label="Reports To" rules={[{ required: true, message: 'Please select a manager!' }]}>
+                    <Select placeholder="Select a manager">
+                        {managers.map(manager => (
+                            <Select.Option key={manager.id} value={manager.id}>
+                                {manager.name}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </Form.Item>
                 <Form.Item name="location" label="Location" initialValue="Steller Foods Headquarters">
                     <Select>

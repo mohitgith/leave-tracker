@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Typography, Switch, Divider, message, Button, TimePicker, Tag, Input, Spin, Drawer } from 'antd';
-import {
-    BellOutlined,
-    SaveOutlined,
-    ClockCircleOutlined,
-    TeamOutlined,
-    PlusOutlined,
-    EditOutlined
-} from '@ant-design/icons';
-import { Sun, Moon } from 'lucide-react';
+import { FiBell, FiSave, FiClock, FiUsers, FiPlus, FiEdit2, FiSun, FiMoon } from 'react-icons/fi';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -17,9 +9,10 @@ import {
     NotificationSettingsAPI
 } from '../../services/api';
 import dayjs from 'dayjs';
+import { PageHeader } from '../common';
 import './SettingsPage.css';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 interface NotificationSettings {
     email: boolean;
@@ -158,20 +151,18 @@ const SettingsPage: React.FC = () => {
 
     return (
         <div className="settings-page">
-            <div className="settings-header">
-                <Title level={2}>Settings</Title>
-            </div>
+            <PageHeader title="Settings" />
 
             {/* Theme Settings */}
-            <Card className="settings-card" title={<><Sun size={18} /> Appearance</>}>
+            <Card className="settings-card" title={<><FiSun size={18} /> Appearance</>}>
                 <div className="setting-row setting-row-with-description">
                     <div className="setting-header-row">
                         <Text strong>Dark Mode</Text>
                         <Switch
                             checked={theme === 'dark'}
                             onChange={toggleTheme}
-                            checkedChildren={<span className="switch-icon"><Moon size={10} /></span>}
-                            unCheckedChildren={<span className="switch-icon"><Sun size={10} /></span>}
+                            checkedChildren={<span className="switch-icon"><FiMoon size={10} /></span>}
+                            unCheckedChildren={<span className="switch-icon"><FiSun size={10} /></span>}
                         />
                     </div>
                     <Text type="secondary" className="setting-description">
@@ -180,7 +171,7 @@ const SettingsPage: React.FC = () => {
                 </div>
             </Card>
 
-            <Card className="settings-card" title={<><BellOutlined /> Notifications</>}>
+            <Card className="settings-card" title={<><FiBell /> Notifications</>}>
                 <div className="setting-row">
                     <div className="setting-info">
                         <div>
@@ -192,7 +183,7 @@ const SettingsPage: React.FC = () => {
                         {notifications.email && (
                             <Button
                                 type="text"
-                                icon={<ClockCircleOutlined />}
+                                icon={<FiClock />}
                                 onClick={() => setDrawerOpen(true)}
                                 className="schedule-button"
                             />
@@ -222,7 +213,7 @@ const SettingsPage: React.FC = () => {
 
             {/* Email Notification Schedule Drawer */}
             <Drawer
-                title={<><ClockCircleOutlined /> Email Notification Schedule</>}
+                title={<><FiClock /> Email Notification Schedule</>}
                 placement="right"
                 open={drawerOpen}
                 onClose={handleDrawerClose}
@@ -231,7 +222,7 @@ const SettingsPage: React.FC = () => {
                     isManager && !isEditingEmail && (
                         <Button
                             type="text"
-                            icon={<EditOutlined />}
+                            icon={<FiEdit2 />}
                             onClick={() => setIsEditingEmail(true)}
                         >
                             Edit
@@ -248,7 +239,7 @@ const SettingsPage: React.FC = () => {
                     <>
                         <div className="drawer-setting-row">
                             <div className="setting-info">
-                                <ClockCircleOutlined className="setting-icon" />
+                                <FiClock className="setting-icon" />
                                 <div>
                                     <Text strong>Scheduled Time</Text>
                                     <Text type="secondary">Time to send daily notifications</Text>
@@ -270,7 +261,7 @@ const SettingsPage: React.FC = () => {
 
                         <div className="drawer-setting-row drawer-setting-row-recipients">
                             <div className="setting-info">
-                                <TeamOutlined className="setting-icon" />
+                                <FiUsers className="setting-icon" />
                                 <div>
                                     <Text strong>Recipients</Text>
                                     <Text type="secondary">
@@ -313,7 +304,7 @@ const SettingsPage: React.FC = () => {
                                     />
                                     <Button
                                         type="dashed"
-                                        icon={<PlusOutlined />}
+                                        icon={<FiPlus />}
                                         onClick={handleAddRecipient}
                                         style={{ marginTop: 8 }}
                                     >
@@ -330,7 +321,7 @@ const SettingsPage: React.FC = () => {
                                 </Button>
                                 <Button
                                     type="primary"
-                                    icon={<SaveOutlined />}
+                                    icon={<FiSave />}
                                     onClick={handleSaveEmailSettings}
                                 >
                                     Save

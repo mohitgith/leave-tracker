@@ -1,10 +1,5 @@
 import { Layout, Menu, Tooltip } from 'antd';
-import {
-    AppstoreOutlined,
-    TeamOutlined,
-    FileTextOutlined,
-    SettingOutlined,
-} from '@ant-design/icons';
+import { FiLayout, FiUsers, FiCalendar, FiSettings } from 'react-icons/fi';
 import './Sidebar.css';
 
 const { Sider } = Layout;
@@ -16,13 +11,13 @@ interface SidebarProps {
 }
 
 const menuItems = [
-    { key: 'dashboard', icon: <AppstoreOutlined />, label: 'Dashboard' },
-    { key: 'employees', icon: <TeamOutlined />, label: 'Employees' },
-    { key: 'documents', icon: <FileTextOutlined />, label: 'Leave Tracker' },
+    { key: 'dashboard', icon: <FiLayout size={18} />, label: 'Dashboard' },
+    { key: 'org-chart', icon: <FiUsers size={18} />, label: 'Org Chart' },
+    { key: 'documents', icon: <FiCalendar size={18} />, label: 'Leave Tracker' },
 ];
 
 const bottomItems = [
-    { key: 'settings', icon: <SettingOutlined />, label: 'Settings' },
+    { key: 'settings', icon: <FiSettings size={18} />, label: 'Settings' },
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ collapsed = true, onNavigate, selectedKey = 'dashboard' }) => {
@@ -43,7 +38,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed = true, onNavigate, selecte
                 items={menuItems.map(item => ({
                     key: item.key,
                     icon: collapsed ? (
-                        <Tooltip title={item.label} placement="right">
+                        <Tooltip title={item.label} placement="right" mouseEnterDelay={0}>
                             {item.icon}
                         </Tooltip>
                     ) : item.icon,
@@ -61,7 +56,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed = true, onNavigate, selecte
                     items={bottomItems.map(item => ({
                         key: item.key,
                         icon: collapsed ? (
-                            <Tooltip title={item.label} placement="right">
+                            <Tooltip title={item.label} placement="right" mouseEnterDelay={0}>
                                 {item.icon}
                             </Tooltip>
                         ) : item.icon,

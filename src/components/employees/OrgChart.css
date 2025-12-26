@@ -1,400 +1,320 @@
-/* =========================================
-   Main Container
-   ========================================= */
+/* Main Container */
 .org-chart-wrapper {
     position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background:
-        radial-gradient(circle, #e2e8f0 1px, transparent 1px);
-    background-size: 24px 24px;
-    background-color: #f1f5f9;
+    background: #f5f7fa;
     display: flex;
     flex-direction: column;
 }
 
-/* =========================================
-   Header - Same style as Dashboard
-   ========================================= */
+/* Header */
 .org-chart-header {
     display: flex;
     justify-content: space-between;
+    padding: 24px 32px;
+    position: relative;
+    z-index: 10;
     align-items: center;
-    padding: 20px 24px;
-    background: transparent;
-    gap: 24px;
-    flex-wrap: wrap;
+    background: #fff;
+    border-bottom: 1px solid #e8e8e8;
 }
 
-.header-left {
+.header-title-section {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.page-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #0f172a;
+.org-chart-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #231F20;
     margin: 0;
 }
 
-.page-subtitle {
+.org-chart-subtitle {
+    color: #9FA1A4;
     font-size: 14px;
-    color: #64748b;
     margin: 0;
 }
 
-/* Status Key */
-.status-key {
+.header-actions {
     display: flex;
     align-items: center;
+    gap: 16px;
+}
+
+.search-input {
+    width: 300px;
+    border-radius: 8px;
+}
+
+.search-input:hover {
+    border-color: #db0011
+}
+
+/* Employee Type Legend */
+.employee-type-legend {
+    display: flex;
     gap: 20px;
-    flex-wrap: wrap;
+    align-items: center;
 }
 
-.status-key-label {
-    font-size: 12px;
-    color: #64748b;
-    font-weight: 500;
-}
-
-.status-key-item {
+.legend-item {
     display: flex;
     align-items: center;
     gap: 6px;
     font-size: 12px;
-    color: #374151;
+    color: #666;
 }
 
-.status-dot-key {
-    width: 10px;
-    height: 10px;
+.legend-dot {
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
 }
 
-.status-dot-key.annual-leave {
-    background: #f97316;
+.legend-dot.permanent-dot {
+    background: #64b5f6;
 }
 
-.status-dot-key.sick-leave {
-    background: #ec4899;
+.legend-dot.contractor-dot {
+    background: #ff9800;
 }
 
-.header-right {
+/* Create Leave Button - Same as FilterBar */
+.create-leave-button {
+    border-radius: 6px;
     display: flex;
     align-items: center;
-    gap: 12px;
-}
-
-.search-input {
-    width: 200px;
-    border-radius: 8px;
-}
-
-.search-input .ant-input {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-}
-
-.add-member-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: none;
-    background: #3b82f6;
-    font-size: 14px;
-    font-weight: 600;
+    gap: 6px;
+    font-weight: 500;
+    background: #EE3524;
+    border: 1px solid #EE3524;
     color: #fff;
+    padding: 8px 16px;
     cursor: pointer;
+    transition: all 0.2s;
+    height: 40px;
+}
+
+.create-leave-button:hover {
+    background: #D42E1F;
+    border-color: #D42E1F;
+}
+
+/* Zoom Controls - Bottom Right */
+.zoom-controls {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    display: flex;
+    gap: 8px;
+    background: #fff;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.zoom-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
     transition: all 0.2s;
 }
 
-.add-member-btn:hover {
-    background: #2563eb;
+.zoom-btn:hover {
+    background: #f0f0f0;
+    color: #db0011;
+    border-color: #db0011;
 }
 
-/* =========================================
-   Viewport
-   ========================================= */
+/* Viewport for Drag/Scroll */
 .org-chart-viewport {
     flex: 1;
     overflow: auto;
-    padding: 40px 24px;
+    cursor: grab;
+}
+
+.org-chart-viewport:active {
+    cursor: grabbing;
 }
 
 .transform-container {
     transform-origin: top center;
     transition: transform 0.2s ease-out;
+    padding: 40px;
+    min-width: max-content;
     display: flex;
     justify-content: center;
-    min-height: 100%;
-    padding-bottom: 80px;
 }
 
 /* =========================================
-   Org Tree Structure
+   Standard CSS Tree Implementation
    ========================================= */
-.org-tree {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
 
-/* =========================================
-   Manager Card
-   ========================================= */
-.manager-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 0;
-}
-
-.manager-card {
-    width: 220px;
-    background: #fff;
-    border-radius: 16px;
-    padding: 16px 20px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e2e8f0;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.2s;
-}
-
-.manager-card:hover {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px);
-}
-
-.manager-badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #10b981;
-    color: white;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 5px 14px;
-    border-radius: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-}
-
-.manager-content {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.manager-avatar-section {
-    flex-shrink: 0;
-}
-
-.manager-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.manager-info {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.manager-name {
-    font-size: 15px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.reports-count {
-    font-size: 11px;
-    font-weight: 600;
-    color: #64748b;
-    background: #f1f5f9;
-    padding: 3px 8px;
-    border-radius: 10px;
-    width: fit-content;
-}
-
-.connector-down {
-    width: 2px;
-    height: 40px;
-    background: #cbd5e1;
-}
-
-/* =========================================
-   Horizontal Connector Bar
-   ========================================= */
-.h-connector-bar {
-    height: 2px;
-    background: #cbd5e1;
-    width: 680px;
-    max-width: calc(100% - 48px);
-}
-
-/* =========================================
-   Columns Wrapper
-   ========================================= */
-.columns-wrapper {
+/* The root UL equivalent */
+.tree {
     display: flex;
     justify-content: center;
-    gap: 24px;
-    padding-top: 40px;
+    padding-top: 20px;
     position: relative;
 }
 
-/* =========================================
-   Employee Column
-   ========================================= */
-.emp-column {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 200px;
+/* The LI equivalent */
+.tree-node {
+    float: left;
+    text-align: center;
+    list-style-type: none;
     position: relative;
+    padding: 20px 10px 0 10px;
+    transition: all 0.5s;
 }
 
-.emp-column.empty {
-    visibility: hidden;
-}
+/* We will use ::before and ::after to draw the connectors */
 
-/* Vertical connector from horizontal bar */
-.v-connector-top {
-    position: absolute;
-    top: -40px;
-    width: 2px;
-    height: 40px;
-    background: #cbd5e1;
-}
-
-.v-connector-top.left,
-.v-connector-top.center {
-    left: 32px;
-}
-
-.v-connector-top.right {
-    right: 32px;
-}
-
-/* Vertical line through column */
-.v-line {
+/* Vertical line up */
+.tree-node::before,
+.tree-node::after {
+    content: '';
     position: absolute;
     top: 0;
-    bottom: 28px;
-    width: 2px;
-    background: #cbd5e1;
+    right: 50%;
+    width: 50%;
+    height: 20px;
+    border-top: 2px solid #ccc;
 }
 
-.v-line.left,
-.v-line.center {
-    left: 32px;
+.tree-node::after {
+    right: auto;
+    left: 50%;
+    border-left: 2px solid #ccc;
 }
 
-.v-line.right {
-    right: 32px;
+/* We need to remove left-right connectors from elements without any siblings */
+.tree-node:only-child::after,
+.tree-node:only-child::before {
+    display: none;
 }
 
-/* =========================================
-   Employee Card Wrapper
-   ========================================= */
-.emp-card-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
+/* Remove space from the top of single children */
+.tree-node:only-child {
+    padding-top: 0;
 }
 
-.emp-card-wrapper.left,
-.emp-card-wrapper.center {
-    margin-left: 56px;
+/* Remove left connector from first child and right connector from last child */
+.tree-node:first-child::before {
+    border: 0;
 }
 
-.emp-card-wrapper.right {
-    margin-right: 56px;
-    flex-direction: row-reverse;
+.tree-node:last-child::after {
+    border: 0;
 }
 
-/* Horizontal connector */
-.h-connector {
+/* Adding back the vertical connector to the last nodes */
+.tree-node:last-child::before {
+    border-right: 2px solid #ccc;
+    border-radius: 0 5px 0 0;
+}
+
+.tree-node:first-child::after {
+    border-radius: 5px 0 0 0;
+}
+
+/* Time to add downward connectors from parents */
+.tree ul::before {
+    content: '';
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 24px;
-    height: 2px;
-    background: #cbd5e1;
+    top: 0;
+    left: 50%;
+    border-left: 2px solid #ccc;
+    width: 0;
+    height: 20px;
 }
 
-.h-connector.left,
-.h-connector.center {
-    left: -24px;
+/* Container for children (nested UL equivalent) */
+.children-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    position: relative;
 }
 
-.h-connector.right {
-    right: -24px;
+/* Connector line down from parent to children info */
+.children-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 2px solid #ccc;
+    width: 0;
+    height: 20px;
 }
+
 
 /* =========================================
-   Employee Card - Uniform Design
+   Card Design (Premium - Simplified)
    ========================================= */
-.emp-card {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
+
+.employee-card {
     background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    cursor: pointer;
+    border-radius: 8px;
+    width: 260px;
+    /* Slightly narrower */
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #eaeaea;
+    text-align: left;
+    display: inline-block;
+    position: relative;
+    z-index: 2;
     transition: all 0.2s;
-    flex: 1;
-    min-width: 0;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
 }
 
-.emp-card:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    border-color: #3b82f6;
-    transform: translateY(-1px);
+.employee-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+    border-color: #db0011;
 }
 
-.emp-avatar {
-    width: 36px;
-    height: 36px;
+.card-header {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.card-avatar {
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     object-fit: cover;
-    flex-shrink: 0;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.emp-info {
+.card-info {
     flex: 1;
     min-width: 0;
-}
-
-.emp-info.right {
-    text-align: right;
 }
 
 .emp-name {
-    font-size: 13px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 0 0 1px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -402,246 +322,182 @@
 
 .emp-role {
     font-size: 11px;
-    color: #64748b;
-    margin: 0;
+    color: #666;
+    margin-bottom: 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* Status Dot */
-.status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
+.emp-dept {
+    font-size: 10px;
+    color: #999;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
-.status-dot.annual-leave {
-    background: #f97316;
-}
-
-.status-dot.sick-leave {
-    background: #ec4899;
-}
-
-/* =========================================
-   Zoom Controls
-   ========================================= */
-.zoom-controls {
-    position: absolute;
-    bottom: 24px;
-    right: 24px;
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    background: #fff;
-    padding: 8px;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e2e8f0;
-}
-
-.zoom-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
+.card-body {
+    padding: 12px 16px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: #64748b;
+}
+
+.email-row {
+    display: flex;
+    align-items: center;
+    color: #666;
+    font-size: 12px;
+    overflow: hidden;
+}
+
+.email-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.card-footer {
+    padding: 8px 16px;
+    background: #fafafa;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    align-items: center;
+    border-radius: 0 0 8px 8px;
+}
+
+.edit-btn,
+.delete-btn {
+    font-size: 12px;
+    color: #666;
+    background: none;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
     transition: all 0.2s;
 }
 
-.zoom-btn:hover {
-    background: #f1f5f9;
-    color: #3b82f6;
+.edit-btn:hover {
+    color: #0066b3;
+    border-color: #0066b3;
+}
+
+.delete-btn:hover {
+    color: #db0011;
+    border-color: #db0011;
 }
 
 /* =========================================
-   Dark Mode
+   Dark Mode Styles
    ========================================= */
+
 .dark-mode .org-chart-wrapper {
-    background:
-        radial-gradient(circle, #374151 1px, transparent 1px);
-    background-size: 24px 24px;
-    background-color: #0f172a;
+    background: #1a1818;
 }
 
 .dark-mode .org-chart-header {
-    background: transparent;
+    background: #2d2a2b;
+    border-color: #3a3a3a;
 }
 
-.dark-mode .page-title {
-    color: #f1f5f9;
+.dark-mode .org-chart-title {
+    color: #fff;
 }
 
-.dark-mode .page-subtitle {
-    color: #94a3b8;
+.dark-mode .org-chart-subtitle {
+    color: #9FA1A4;
 }
 
-.dark-mode .status-key-label {
-    color: #94a3b8;
-}
-
-.dark-mode .status-key-item {
-    color: #cbd5e1;
+.dark-mode .legend-item {
+    color: #9FA1A4;
 }
 
 .dark-mode .search-input .ant-input {
-    background: #334155;
-    border-color: #475569;
-    color: #f1f5f9;
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #fff;
 }
 
 .dark-mode .search-input .ant-input-prefix {
-    color: #94a3b8;
+    color: #9FA1A4;
 }
 
-.dark-mode .add-member-btn {
-    background: #3b82f6;
+.dark-mode .create-leave-button {
+    background: #EE3524;
+    border-color: #EE3524;
+    color: #fff;
 }
 
-.dark-mode .add-member-btn:hover {
-    background: #2563eb;
-}
-
-.dark-mode .manager-card {
-    background: #1e293b;
-    border-color: #334155;
-}
-
-.dark-mode .manager-name {
-    color: #f1f5f9;
-}
-
-.dark-mode .reports-count {
-    background: #334155;
-    color: #94a3b8;
-}
-
-.dark-mode .connector-down,
-.dark-mode .h-connector-bar,
-.dark-mode .v-connector-top,
-.dark-mode .v-line,
-.dark-mode .h-connector {
-    background: #475569;
-}
-
-.dark-mode .emp-card {
-    background: #1e293b;
-    border-color: #334155;
-}
-
-.dark-mode .emp-card:hover {
-    border-color: #60a5fa;
-}
-
-.dark-mode .emp-name {
-    color: #f1f5f9;
-}
-
-.dark-mode .emp-role {
-    color: #94a3b8;
+.dark-mode .create-leave-button:hover {
+    background: #D42E1F;
+    border-color: #D42E1F;
 }
 
 .dark-mode .zoom-controls {
-    background: #1e293b;
-    border-color: #334155;
+    background: #2d2a2b;
 }
 
 .dark-mode .zoom-btn {
-    color: #94a3b8;
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #fff;
 }
 
 .dark-mode .zoom-btn:hover {
-    background: #334155;
-    color: #60a5fa;
+    border-color: #db0011;
+    color: #db0011;
 }
 
-/* =========================================
-   Responsive
-   ========================================= */
-@media (max-width: 900px) {
-    .columns-wrapper {
-        gap: 16px;
-    }
-
-    .emp-column {
-        width: 180px;
-    }
-
-    .h-connector-bar {
-        width: 520px;
-    }
+.dark-mode .employee-card {
+    background: #2d2a2b;
+    border-color: #3a3a3a;
 }
 
-@media (max-width: 768px) {
-    .org-chart-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+.dark-mode .employee-card:hover {
+    border-color: #db0011;
+}
 
-    .status-key {
-        order: 2;
-    }
+.dark-mode .emp-name {
+    color: #fff;
+}
 
-    .header-right {
-        order: 3;
-        width: 100%;
-        flex-wrap: wrap;
-    }
+.dark-mode .emp-role,
+.dark-mode .emp-dept {
+    color: #9FA1A4;
+}
 
-    .search-input {
-        flex: 1;
-        min-width: 150px;
-    }
+.dark-mode .email-row,
+.dark-mode .email-text {
+    color: #9FA1A4;
+}
 
-    .columns-wrapper {
-        flex-direction: column;
-        align-items: center;
-    }
+.dark-mode .card-header {
+    border-color: #3a3a3a;
+}
 
-    .h-connector-bar {
-        display: none;
-    }
+.dark-mode .card-footer {
+    background: #1a1818;
+    border-color: #3a3a3a;
+}
 
-    .v-connector-top {
-        display: none;
-    }
+.dark-mode .edit-btn,
+.dark-mode .delete-btn {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #fff;
+}
 
-    .emp-column {
-        width: 100%;
-        max-width: 280px;
-    }
-
-    /* Right column resets to left-aligned on mobile via the rules below */
-
-    .emp-column.right .emp-card-wrapper {
-        flex-direction: row;
-        margin-right: 0;
-        margin-left: 56px;
-    }
-
-    .emp-column.right .emp-card {
-        flex-direction: row;
-    }
-
-    .emp-column.right .emp-info {
-        text-align: left;
-    }
-
-    .emp-column.right .h-connector {
-        left: -24px;
-        right: auto;
-    }
-
-    .emp-column.right .v-line {
-        left: 32px;
-        right: auto;
-    }
+.dark-mode .tree-node::before,
+.dark-mode .tree-node::after,
+.dark-mode .tree-node:last-child::before,
+.dark-mode .children-container::before {
+    border-color: #4a4a4a;
 }

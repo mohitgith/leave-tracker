@@ -295,3 +295,8 @@
 .dark-mode .days-slider .ant-slider-mark-text {
     color: #9FA1A4;
 }
+
+/* Leave Tracker Header Dark Mode */
+.dark-mode .leave-tracker-title {
+    color: #fff !important;
+}

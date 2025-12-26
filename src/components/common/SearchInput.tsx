@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { FiSearch } from 'react-icons/fi';
 import './SearchInput.css';
 
 interface SearchInputProps {
@@ -16,7 +16,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
     return (
         <Input
-            prefix={<SearchOutlined className="search-icon" />}
+            prefix={<FiSearch className="search-icon" />}
             placeholder={placeholder}
             value={value}
             onChange={(e) => onChange(e.target.value)}
