@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, Avatar, Typography, Button, Form, Input, Divider, message, Upload, Modal } from 'antd';
 import { FiCamera, FiMail, FiPhone, FiUsers, FiCreditCard, FiUpload } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
-import { PageHeader } from '../common';
+
 import './ProfilePage.css';
 
 const { Title, Text } = Typography;
@@ -21,8 +21,6 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className="profile-page">
-            <PageHeader title="My Profile" />
-
             <Card className="profile-card">
                 <div className="profile-avatar-section">
                     <div className="avatar-container">

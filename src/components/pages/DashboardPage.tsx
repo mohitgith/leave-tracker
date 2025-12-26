@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Spin, message } from 'antd';
 import { FiUserX, FiClock, FiCalendar, FiUsers } from 'react-icons/fi';
-import { PageHeader } from '../common';
+
 import './DashboardPage.css';
 
 const API_BASE = 'http://localhost:3001/api';
@@ -106,12 +106,6 @@ const DashboardPage: React.FC = () => {
         }
     };
 
-    const today = new Date().toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'short',
-        day: 'numeric'
-    });
-
     if (loading) {
         return (
             <div className="dashboard-page" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
@@ -122,9 +116,6 @@ const DashboardPage: React.FC = () => {
 
     return (
         <div className="dashboard-page">
-            {/* Header */}
-            <PageHeader title="Leave Dashboard" subtitle={`Overview for ${today}`} />
-
             {/* Stats Cards */}
             <div className="stats-grid">
                 <div className="stat-card">

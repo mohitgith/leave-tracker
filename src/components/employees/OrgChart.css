@@ -17,8 +17,6 @@
     position: relative;
     z-index: 10;
     align-items: center;
-    background: #fff;
-    border-bottom: 1px solid #e8e8e8;
 }
 
 .header-title-section {
@@ -401,11 +399,6 @@
 
 .dark-mode .org-chart-wrapper {
     background: #1a1818;
-}
-
-.dark-mode .org-chart-header {
-    background: #2d2a2b;
-    border-color: #3a3a3a;
 }
 
 .dark-mode .org-chart-title {

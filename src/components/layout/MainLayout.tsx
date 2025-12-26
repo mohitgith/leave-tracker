@@ -1,10 +1,35 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Layout } from 'antd';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
+import { PageHeader } from '../common';
 
 const { Content } = Layout;
+
+// Route to header configuration mapping
+const getPageHeaderConfig = (pathname: string): { title: string; subtitle?: string } => {
+    const today = new Date().toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'short',
+        day: 'numeric'
+    });
+
+    if (pathname.includes('/org-chart')) {
+        return { title: 'Organization Chart', subtitle: `Team overview for ${today}` };
+    }
+    if (pathname.includes('/leave-tracker')) {
+        return { title: 'Leave Tracker' };
+    }
+    if (pathname.includes('/settings')) {
+        return { title: 'Settings' };
+    }
+    if (pathname.includes('/profile')) {
+        return { title: 'My Profile' };
+    }
+    // Default to dashboard
+    return { title: 'Leave Dashboard', subtitle: `Overview for ${today}` };
+};
 
 const MainLayout: React.FC = () => {
     const navigate = useNavigate();
@@ -47,6 +72,9 @@ const MainLayout: React.FC = () => {
 
     const hideSidebar = shouldHideSidebar();
 
+    // Get header config based on current route
+    const headerConfig = useMemo(() => getPageHeaderConfig(location.pathname), [location.pathname]);
+
     return (
         <Layout style={{ minHeight: '100vh', flexDirection: 'column' }}>
             {/* TopBar at the very top, full width */}
@@ -66,6 +94,9 @@ const MainLayout: React.FC = () => {
                         marginLeft: hideSidebar ? 0 : 60 // Account for sidebar width
                     }}
                 >
+                    {/* Unified PageHeader - stays in same position across all pages */}
+                    <PageHeader title={headerConfig.title} subtitle={headerConfig.subtitle} />
+
                     <Outlet />
                 </Content>
             </Layout>

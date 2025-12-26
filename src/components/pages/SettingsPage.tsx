@@ -9,7 +9,7 @@ import {
     NotificationSettingsAPI
 } from '../../services/api';
 import dayjs from 'dayjs';
-import { PageHeader } from '../common';
+
 import './SettingsPage.css';
 
 const { Text } = Typography;
@@ -151,8 +151,6 @@ const SettingsPage: React.FC = () => {
 
     return (
         <div className="settings-page">
-            <PageHeader title="Settings" />
-
             {/* Theme Settings */}
             <Card className="settings-card" title={<><FiSun size={18} /> Appearance</>}>
                 <div className="setting-row setting-row-with-description">

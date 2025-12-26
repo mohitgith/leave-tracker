@@ -3,7 +3,7 @@ import { Typography, message, Spin } from 'antd';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import dayjs from 'dayjs';
 import { Scheduler } from '../scheduler';
-import { FilterBar, SearchInput, CreateLeaveModal, PageHeader } from '../common';
+import { FilterBar, SearchInput, CreateLeaveModal } from '../common';
 import { FilterOptions } from '../common/FilterBar';
 import { LeaveType, LeaveRecord, Employee } from '../../types';
 import { useAuth } from '../../context/AuthContext';
@@ -251,9 +251,6 @@ const LeaveTrackerPage: React.FC = () => {
 
     return (
         <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {/* Page Header */}
-            <PageHeader title="Leave Tracker" />
-
             {/* Date Navigation with Filters and Create Leave */}
             <div className="date-navigation" style={{ padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

@@ -5,7 +5,7 @@ import { fetchOrgChart, createEmployee, updateEmployee, deleteEmployee, OrgEmplo
 import { useAuth } from '../../context/AuthContext';
 import EmployeeDetailModal from './EmployeeDetailModal';
 import AddEmployeeModal from './AddEmployeeModal';
-import { PageHeader } from '../common';
+
 import './OrgChart.css';
 
 // Use API type for OrgEmployee
@@ -179,16 +179,9 @@ const OrgChart: React.FC = () => {
         );
     }
 
-    const today = new Date().toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'short',
-        day: 'numeric'
-    });
-
     return (
         <div className="org-chart-wrapper">
             <div className="org-chart-header">
-                <PageHeader title="Organization Chart" subtitle={`Team overview for ${today}`} />
 
                 <div className="header-actions">
                     <Input
