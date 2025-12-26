@@ -15,6 +15,7 @@ import {
     deleteLeave as deleteLeaveAPI,
     LeaveRecordAPI
 } from '../../services/api';
+import './LeaveTrackerPage.css';
 
 const { Text } = Typography;
 
@@ -243,7 +244,7 @@ const LeaveTrackerPage: React.FC = () => {
 
     if (loading) {
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <div className="leave-tracker-loading">
                 <Spin size="large" />
             </div>
         );
@@ -252,9 +253,9 @@ const LeaveTrackerPage: React.FC = () => {
     return (
         <div className='leave-tracker-page'>
             {/* Date Navigation with Filters and Create Leave */}
-            <div className="date-navigation" style={{ padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <Text className="date-range" style={{ fontSize: 18, fontWeight: 600 }}>{dateRangeDisplay}</Text>
+            <div className="date-navigation">
+                <div className="date-nav-left">
+                    <Text className="date-range">{dateRangeDisplay}</Text>
                     <div className="nav-arrows">
                         <button className="nav-arrow" onClick={handlePrevious}>
                             <FiChevronLeft size={16} />
@@ -264,7 +265,7 @@ const LeaveTrackerPage: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div className="date-nav-right">
                     <FilterBar
                         viewMode={viewMode}
                         onViewModeChange={setViewMode}
@@ -277,8 +278,8 @@ const LeaveTrackerPage: React.FC = () => {
             </div>
 
             {/* Search and Scheduler Container */}
-            <div className="scheduler-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                <div className="scheduler-search-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="scheduler-container">
+                <div className="scheduler-search-row">
                     <div className="search-section">
                         <SearchInput
                             value={searchValue}
@@ -295,7 +296,7 @@ const LeaveTrackerPage: React.FC = () => {
                         hideFilters={true}
                     />
                 </div>
-                <div style={{ flex: 1, overflow: 'auto' }}>
+                <div className="scheduler-content">
                     <Scheduler
                         employees={filteredEmployees}
                         leaves={filteredLeaves}
