@@ -168,7 +168,7 @@ const TopBar: React.FC = () => {
                         <path d="M2 12L12 17L22 12" stroke="#fff" strokeWidth="2" />
                     </svg>
                 </div>
-                <Text className="brand-subtitle">Leave Tracker</Text>
+                <Text className="brand-subtitle">Leave Management Tool</Text>
             </div>
 
             <div className="topbar-actions">

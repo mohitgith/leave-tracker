@@ -12,8 +12,8 @@
 /* Header */
 .org-chart-header {
     display: flex;
-    justify-content: space-between;
-    padding: 24px 32px;
+    justify-content: flex-end;
+    padding: 16px 24px;
     position: relative;
     z-index: 10;
     align-items: center;
@@ -110,11 +110,27 @@
     right: 24px;
     z-index: 100;
     display: flex;
+    align-items: center;
     gap: 8px;
     background: #fff;
     padding: 8px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.zoom-percentage {
+    min-width: 40px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+}
+
+.zoom-divider {
+    width: 1px;
+    height: 20px;
+    background: #e0e0e0;
+    margin: 0 4px;
 }
 
 .zoom-btn {
@@ -398,7 +414,7 @@
    ========================================= */
 
 .dark-mode .org-chart-wrapper {
-    background: #1a1818;
+    background: #3a3737;
 }
 
 .dark-mode .org-chart-title {
@@ -447,6 +463,14 @@
 .dark-mode .zoom-btn:hover {
     border-color: #db0011;
     color: #db0011;
+}
+
+.dark-mode .zoom-percentage {
+    color: #fff;
+}
+
+.dark-mode .zoom-divider {
+    background: #4a4a4a;
 }
 
 .dark-mode .employee-card {
