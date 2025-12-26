@@ -1,5 +1,5 @@
 import { Layout, Menu, Tooltip } from 'antd';
-import { FiLayout, FiUsers, FiCalendar, FiSettings } from 'react-icons/fi';
+import { RiDashboardHorizontalLine, RiOrganizationChart, RiCalendarScheduleLine, RiSettings5Line } from "react-icons/ri";
 import './Sidebar.css';
 
 const { Sider } = Layout;
@@ -11,13 +11,13 @@ interface SidebarProps {
 }
 
 const menuItems = [
-    { key: 'dashboard', icon: <FiLayout size={18} />, label: 'Dashboard' },
-    { key: 'org-chart', icon: <FiUsers size={18} />, label: 'Org Chart' },
-    { key: 'documents', icon: <FiCalendar size={18} />, label: 'Leave Tracker' },
+    { key: 'dashboard', icon: <RiDashboardHorizontalLine size={18} />, label: 'Dashboard' },
+    { key: 'org-chart', icon: <RiOrganizationChart size={18} />, label: 'Org Chart' },
+    { key: 'documents', icon: <RiCalendarScheduleLine size={18} />, label: 'Leave Tracker' },
 ];
 
 const bottomItems = [
-    { key: 'settings', icon: <FiSettings size={18} />, label: 'Settings' },
+    { key: 'settings', icon: <RiSettings5Line size={18} />, label: 'Settings' },
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ collapsed = true, onNavigate, selectedKey = 'dashboard' }) => {
