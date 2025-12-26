@@ -63,16 +63,20 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth })
 
             {/* Days row */}
             <div className="timeline-days-row">
-                {days.map((day, index) => (
-                    <div
-                        key={index}
-                        className={`timeline-day ${day.isWeekend ? 'timeline-day-weekend' : ''} ${day.isMonthStart && index > 0 ? 'timeline-day-month-start' : ''} ${day.isToday ? 'timeline-day-today' : ''}`}
-                        style={{ flex: 1 }}
-                    >
-                        <span className="day-letter">{day.dayOfWeek}</span>
-                        <span className="day-number">{day.dayNum}</span>
-                    </div>
-                ))}
+                {days.map((day, index) => {
+                    // Use percentage width to match grid columns exactly
+                    const widthPercent = (1 / totalDays) * 100;
+                    return (
+                        <div
+                            key={index}
+                            className={`timeline-day ${day.isWeekend ? 'timeline-day-weekend' : ''} ${day.isMonthStart && index > 0 ? 'timeline-day-month-start' : ''} ${day.isToday ? 'timeline-day-today' : ''}`}
+                            style={{ width: `${widthPercent}%` }}
+                        >
+                            <span className="day-letter">{day.dayOfWeek}</span>
+                            <span className="day-number">{day.dayNum}</span>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );
