@@ -250,7 +250,7 @@ const LeaveTrackerPage: React.FC = () => {
     }
 
     return (
-        <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <div className='leave-tracker-page'>
             {/* Date Navigation with Filters and Create Leave */}
             <div className="date-navigation" style={{ padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
