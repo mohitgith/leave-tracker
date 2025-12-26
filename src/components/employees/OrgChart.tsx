@@ -193,7 +193,7 @@ const OrgChart: React.FC = () => {
 
                     {isManager && (
                         <button className="create-leave-button" onClick={handleAddClick}>
-                            <FiUserPlus size={16} style={{ marginRight: 8 }} /> Add Member
+                            <FiUserPlus size={16} style={{ marginRight: 8 }} /> Add Employee
                         </button>
                     )}
                 </div>

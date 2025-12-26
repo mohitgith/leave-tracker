@@ -1,6 +1,20 @@
 /* Page Header - Unified header for all pages */
 .page-header {
     padding: 24px 24px 0 24px;
+    width: 100%;
+}
+
+/* Wide variant - matches dashboard, leave-tracker, org-chart containers (1400px) */
+.page-header--wide {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Narrow variant - matches settings, profile containers (700px) */
+.page-header--narrow {
+    max-width: 700px;
+    min-width: 700px;
+    margin: 0 auto;
 }
 
 .page-header-title {

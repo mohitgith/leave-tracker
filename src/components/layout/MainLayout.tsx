@@ -8,7 +8,7 @@ import { PageHeader } from '../common';
 const { Content } = Layout;
 
 // Route to header configuration mapping
-const getPageHeaderConfig = (pathname: string): { title: string; subtitle?: string } => {
+const getPageHeaderConfig = (pathname: string): { title: string; subtitle?: string; variant: 'wide' | 'narrow' } => {
     const today = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
         month: 'short',
@@ -16,19 +16,19 @@ const getPageHeaderConfig = (pathname: string): { title: string; subtitle?: stri
     });
 
     if (pathname.includes('/org-chart')) {
-        return { title: 'Organization Chart', subtitle: `Team overview for ${today}` };
+        return { title: 'Organization Chart', subtitle: `Team overview for ${today}`, variant: 'wide' };
     }
     if (pathname.includes('/leave-tracker')) {
-        return { title: 'Leave Tracker' };
+        return { title: 'Leave Tracker', variant: 'wide' };
     }
     if (pathname.includes('/settings')) {
-        return { title: 'Settings' };
+        return { title: 'Settings', variant: 'narrow' };
     }
     if (pathname.includes('/profile')) {
-        return { title: 'My Profile' };
+        return { title: 'My Profile', variant: 'narrow' };
     }
     // Default to dashboard
-    return { title: 'Leave Dashboard', subtitle: `Overview for ${today}` };
+    return { title: 'Leave Dashboard', subtitle: `Overview for ${today}`, variant: 'wide' };
 };
 
 const MainLayout: React.FC = () => {
@@ -94,8 +94,8 @@ const MainLayout: React.FC = () => {
                         marginLeft: hideSidebar ? 0 : 60 // Account for sidebar width
                     }}
                 >
-                    {/* Unified PageHeader - stays in same position across all pages */}
-                    <PageHeader title={headerConfig.title} subtitle={headerConfig.subtitle} />
+                    {/* Unified PageHeader - follows container position based on variant */}
+                    <PageHeader title={headerConfig.title} subtitle={headerConfig.subtitle} variant={headerConfig.variant} />
 
                     <Outlet />
                 </Content>
