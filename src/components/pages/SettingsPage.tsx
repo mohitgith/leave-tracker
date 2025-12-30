@@ -99,9 +99,12 @@ const SettingsPage: React.FC = () => {
             return;
         }
 
+        const updatedRecipients = [...pendingEmailSettings.recipients, newRecipient.trim()];
+        console.log('Adding recipient:', newRecipient.trim(), 'New list:', updatedRecipients);
+
         setPendingEmailSettings({
             ...pendingEmailSettings,
-            recipients: [...pendingEmailSettings.recipients, newRecipient.trim()]
+            recipients: updatedRecipients
         });
         setNewRecipient('');
     };
@@ -125,9 +128,30 @@ const SettingsPage: React.FC = () => {
     const handleSaveEmailSettings = async () => {
         if (!pendingEmailSettings) return;
 
+        let settingsToSave = { ...pendingEmailSettings };
+
+        // Auto-add text from input if valid
+        if (newRecipient.trim()) {
+            const email = newRecipient.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (emailRegex.test(email) && !settingsToSave.recipients.includes(email)) {
+                settingsToSave = {
+                    ...settingsToSave,
+                    recipients: [...settingsToSave.recipients, email]
+                };
+                setNewRecipient(''); // Clear input
+                message.info(`Added ${email} to recipients`);
+            } else if (!emailRegex.test(email)) {
+                message.warning(`Ignored invalid email in input: ${email}`);
+            }
+        }
+
         try {
-            await updateNotificationSettings(pendingEmailSettings);
-            setSavedEmailSettings(pendingEmailSettings);
+            console.log('Saving settings:', settingsToSave);
+            await updateNotificationSettings(settingsToSave);
+            setSavedEmailSettings(settingsToSave);
+            setPendingEmailSettings(settingsToSave); // Update pending to match saved
             message.success('Email notification settings saved!');
             setIsEditingEmail(false);
         } catch (error) {

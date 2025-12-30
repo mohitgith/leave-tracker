@@ -1,6 +1,6 @@
 {
   "id" : "default",
-  "recipients" : [ ],
-  "scheduledTime" : "09:00",
+  "recipients" : [ "mohitshrivastava3294@gmail.com" ],
+  "scheduledTime" : "23:28",
   "enabled" : true
 }

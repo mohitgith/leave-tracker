@@ -23,6 +23,9 @@ public class NotificationController {
     @Autowired
     private DataPersistenceService dataPersistenceService;
 
+    @Autowired
+    private com.leavetracker.service.NotificationScheduler notificationScheduler;
+
     /**
      * Get current notification settings.
      */
@@ -45,6 +48,10 @@ public class NotificationController {
         settings.setId("default"); // Always use default ID
         NotificationSettings updated = notificationSettingsRepository.save(settings);
         dataPersistenceService.triggerImmediateSync();
+
+        // Reschedule notification based on new settings
+        notificationScheduler.reschedule();
+
         return ResponseEntity.ok(updated);
     }
 }
