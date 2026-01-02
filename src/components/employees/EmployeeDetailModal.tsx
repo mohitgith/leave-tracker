@@ -1,11 +1,6 @@
 import React from 'react';
 import { Modal, Typography, Button, message, Divider, Avatar } from 'antd';
-import {
-    MailOutlined,
-    PhoneOutlined,
-    CopyOutlined,
-    EnvironmentOutlined
-} from '@ant-design/icons';
+import { FiMail, FiPhone, FiCopy, FiMapPin } from 'react-icons/fi';
 import { OrgEmployee } from '../../data/orgChartData';
 
 interface EmployeeDetailModalProps {
@@ -42,7 +37,7 @@ const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({ employee, ope
                 <Text type="secondary" style={{ fontSize: 16 }}>{employee.role}</Text>
 
                 <div style={{ marginTop: 8, color: '#666' }}>
-                    <EnvironmentOutlined style={{ marginRight: 6 }} />
+                    <FiMapPin style={{ marginRight: 6 }} />
                     {employee.location}
                 </div>
             </div>
@@ -58,7 +53,7 @@ const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({ employee, ope
                             borderRadius: '50%',
                             color: '#1890ff'
                         }}>
-                            <MailOutlined />
+                            <FiMail />
                         </div>
                         <div>
                             <Text type="secondary" style={{ fontSize: 12, display: 'block' }}>Email</Text>
@@ -67,7 +62,7 @@ const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({ employee, ope
                     </div>
                     <Button
                         type="text"
-                        icon={<CopyOutlined />}
+                        icon={<FiCopy />}
                         onClick={() => handleCopy(employee.email, 'Email')}
                     />
                 </div>
@@ -80,7 +75,7 @@ const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({ employee, ope
                             borderRadius: '50%',
                             color: '#52c41a'
                         }}>
-                            <PhoneOutlined />
+                            <FiPhone />
                         </div>
                         <div>
                             <Text type="secondary" style={{ fontSize: 12, display: 'block' }}>Phone</Text>
@@ -89,7 +84,7 @@ const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({ employee, ope
                     </div>
                     <Button
                         type="text"
-                        icon={<CopyOutlined />}
+                        icon={<FiCopy />}
                         onClick={() => handleCopy(employee.phone, 'Phone Number')}
                     />
                 </div>

@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Tooltip, message, Popconfirm, Spin } from 'antd';
-import {
-    SearchOutlined,
-    CompressOutlined,
-    PlusOutlined,
-    MinusOutlined,
-    EditOutlined,
-    MailOutlined,
-    UserAddOutlined,
-    DeleteOutlined
-} from '@ant-design/icons';
+import { FiSearch, FiMinimize2, FiPlus, FiMinus, FiEdit2, FiMail, FiUserPlus, FiTrash2 } from 'react-icons/fi';
 import { fetchOrgChart, createEmployee, updateEmployee, deleteEmployee, OrgEmployeeAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import EmployeeDetailModal from './EmployeeDetailModal';
 import AddEmployeeModal from './AddEmployeeModal';
+
 import './OrgChart.css';
 
 // Use API type for OrgEmployee
@@ -24,28 +16,17 @@ interface RecursiveNodeProps {
     onNodeClick: (emp: OrgEmployee) => void;
     onEditClick: (emp: OrgEmployee) => void;
     onDeleteClick: (emp: OrgEmployee) => void;
-    isRoot?: boolean;
 }
 
-const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, onEditClick, onDeleteClick, isRoot = false }) => {
+const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, onEditClick, onDeleteClick }) => {
     const hasChildren = employee.children && employee.children.length > 0;
-    const employeeType = (employee as any).employeeType || 'permanent';
-    const isContractor = employeeType === 'contractor';
 
     return (
-        <div className={`tree-node ${isRoot ? 'root-node' : ''}`}>
-            <div
-                className={`employee-card ${isContractor ? 'contractor-card' : 'permanent-card'}`}
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onNodeClick(employee);
-                }}
-            >
-                {/* Employee Type Badge */}
-                <div className={`employee-type-badge ${isContractor ? 'contractor-badge' : 'permanent-badge'}`}>
-                    {isContractor ? 'Contractor' : 'Permanent'}
-                </div>
-
+        <div className="tree-node">
+            <div className="employee-card" onClick={(e) => {
+                e.stopPropagation();
+                onNodeClick(employee);
+            }}>
                 <div className="card-header">
                     <img src={employee.avatarUrl} alt={employee.name} className="card-avatar" />
                     <div className="card-info">
@@ -57,7 +38,7 @@ const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, on
 
                 <div className="card-body">
                     <div className="email-row">
-                        <MailOutlined style={{ marginRight: 6, color: '#999' }} />
+                        <FiMail size={14} style={{ marginRight: 6, color: '#999' }} />
                         <span className="email-text">{employee.email}</span>
                     </div>
                 </div>
@@ -67,7 +48,7 @@ const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, on
                         e.stopPropagation();
                         onEditClick(employee);
                     }}>
-                        <EditOutlined style={{ marginRight: 4 }} /> Edit
+                        <FiEdit2 size={12} style={{ marginRight: 4 }} /> Edit
                     </div>
                     {!hasChildren && (
                         <Popconfirm
@@ -82,7 +63,7 @@ const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, on
                             cancelText="No"
                         >
                             <div className="delete-btn" onClick={(e) => e.stopPropagation()}>
-                                <DeleteOutlined style={{ marginRight: 4 }} /> Delete
+                                <FiTrash2 size={12} style={{ marginRight: 4 }} /> Delete
                             </div>
                         </Popconfirm>
                     )}
@@ -90,29 +71,17 @@ const RecursiveNode: React.FC<RecursiveNodeProps> = ({ employee, onNodeClick, on
             </div>
 
             {hasChildren && (
-                <>
-                    {/* Vertical line from parent to horizontal connector */}
-                    <div className="connector-vertical-down"></div>
-
-                    {/* Horizontal connector spanning all children */}
-                    <div className="children-wrapper">
-                        <div className="connector-horizontal"></div>
-                        <div className="children-container">
-                            {employee.children?.map((child) => (
-                                <div key={child.id} className="child-node-wrapper">
-                                    {/* Vertical line from horizontal connector to child */}
-                                    <div className="connector-vertical-up"></div>
-                                    <RecursiveNode
-                                        employee={child}
-                                        onNodeClick={onNodeClick}
-                                        onEditClick={onEditClick}
-                                        onDeleteClick={onDeleteClick}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </>
+                <div className="children-container">
+                    {employee.children?.map(child => (
+                        <RecursiveNode
+                            key={child.id}
+                            employee={child}
+                            onNodeClick={onNodeClick}
+                            onEditClick={onEditClick}
+                            onDeleteClick={onDeleteClick}
+                        />
+                    ))}
+                </div>
             )}
         </div>
     );
@@ -213,30 +182,21 @@ const OrgChart: React.FC = () => {
     return (
         <div className="org-chart-wrapper">
             <div className="org-chart-header">
-                <Input
-                    prefix={<SearchOutlined style={{ color: '#bfbfbf' }} />}
-                    placeholder="Search employees..."
-                    className="search-input"
-                    size="large"
-                />
 
-                {/* Legend for employee types */}
-                <div className="employee-type-legend">
-                    <div className="legend-item">
-                        <div className="legend-dot permanent-dot"></div>
-                        <span>Permanent</span>
-                    </div>
-                    <div className="legend-item">
-                        <div className="legend-dot contractor-dot"></div>
-                        <span>Contractor</span>
-                    </div>
+                <div className="header-actions">
+                    <Input
+                        prefix={<FiSearch size={16} style={{ color: '#bfbfbf' }} />}
+                        placeholder="Search employees..."
+                        className="search-input"
+                        size="large"
+                    />
+
+                    {isManager && (
+                        <button className="create-leave-button" onClick={handleAddClick}>
+                            <FiUserPlus size={16} style={{ marginRight: 8 }} /> Add Employee
+                        </button>
+                    )}
                 </div>
-
-                {isManager && (
-                    <button className="global-add-btn" onClick={handleAddClick}>
-                        <UserAddOutlined style={{ marginRight: 8 }} /> Add Member
-                    </button>
-                )}
             </div>
 
             <div className="org-chart-viewport">
@@ -248,7 +208,6 @@ const OrgChart: React.FC = () => {
                                 onNodeClick={setSelectedEmployee}
                                 onEditClick={handleEditClick}
                                 onDeleteClick={handleDeleteClick}
-                                isRoot={true}
                             />
                         )}
                     </div>
@@ -257,17 +216,17 @@ const OrgChart: React.FC = () => {
 
             <div className="zoom-controls">
                 <Tooltip title="Zoom Out">
-                    <div className="zoom-btn" onClick={handleZoomOut}><MinusOutlined /></div>
+                    <div className="zoom-btn" onClick={handleZoomOut}><FiMinus size={16} /></div>
                 </Tooltip>
-                <div className="zoom-value">
+                <div className="zoom-percentage">
                     {Math.round(scale * 100)}%
                 </div>
                 <Tooltip title="Zoom In">
-                    <div className="zoom-btn" onClick={handleZoomIn}><PlusOutlined /></div>
+                    <div className="zoom-btn" onClick={handleZoomIn}><FiPlus size={16} /></div>
                 </Tooltip>
                 <div className="zoom-divider" />
                 <Tooltip title="Fit Screen">
-                    <div className="zoom-btn" onClick={handleResetZoom}><CompressOutlined /></div>
+                    <div className="zoom-btn" onClick={handleResetZoom}><FiMinimize2 size={16} /></div>
                 </Tooltip>
             </div>
 

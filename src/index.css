@@ -1,4 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* Univers Next Font - Using system fonts as fallback since Univers Next is proprietary */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* HSBC Color Variables */
+:root {
+  --hsbc-red: #EE3524;
+  --hsbc-red-hover: #D42E1F;
+  --hsbc-dark: #231F20;
+  --hsbc-white: #FFFFFF;
+  --hsbc-grey: #9FA1A4;
+  --hsbc-light-bg: #f5f7fa;
+  --hsbc-border: #e8e8e8;
+}
 
 * {
   margin: 0;
@@ -6,19 +18,23 @@
   box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   width: 100%;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Univers Next with fallbacks */
+  font-family: 'Univers Next', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f7fa;
+  background-color: var(--hsbc-light-bg);
+  color: var(--hsbc-dark);
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - HSBC themed */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -30,10 +46,69 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: var(--hsbc-grey);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1a1;
+  background: var(--hsbc-dark);
+}
+
+/* Dark mode scrollbar */
+.dark-mode ::-webkit-scrollbar-track {
+  background: #2d2a2b;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+  background: #4a4a4a;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: var(--hsbc-grey);
+}
+
+/* Common Page Header Styles */
+.page-header {
+  padding: 24px 24px 0 24px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--hsbc-dark);
+  margin: 0 0 4px 0;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: var(--hsbc-grey);
+  margin: 0;
+}
+
+.dark-mode .page-title {
+  color: var(--hsbc-white);
+}
+
+.dark-mode .page-subtitle {
+  color: var(--hsbc-grey);
+}
+
+/* HSBC Primary Button */
+.hsbc-btn-primary {
+  background: var(--hsbc-red);
+  border: 1px solid var(--hsbc-red);
+  color: var(--hsbc-white);
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hsbc-btn-primary:hover {
+  background: var(--hsbc-red-hover);
+  border-color: var(--hsbc-red-hover);
 }

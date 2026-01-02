@@ -4,25 +4,56 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #f5f7fa;
+    background: transparent;
     display: flex;
     flex-direction: column;
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 /* Header */
 .org-chart-header {
     display: flex;
-    justify-content: space-between;
-    padding: 24px 32px;
+    justify-content: flex-end;
+    padding: 16px 24px;
     position: relative;
     z-index: 10;
+    align-items: center;
+}
+
+.header-title-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.org-chart-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #231F20;
+    margin: 0;
+}
+
+.org-chart-subtitle {
+    color: #9FA1A4;
+    font-size: 14px;
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
     align-items: center;
     gap: 16px;
 }
 
 .search-input {
     width: 300px;
-    border-radius: 20px;
+    border-radius: 8px;
+}
+
+.search-input:hover {
+    border-color: #db0011
 }
 
 /* Employee Type Legend */
@@ -54,38 +85,55 @@
     background: #ff9800;
 }
 
-.global-add-btn {
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    padding: 8px 16px;
+/* Create Leave Button - Same as FilterBar */
+.create-leave-button {
     border-radius: 6px;
-    cursor: pointer;
-    font-weight: 500;
-    color: #333;
-    transition: all 0.2s;
-    height: 40px;
     display: flex;
     align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    background: #EE3524;
+    border: 1px solid #EE3524;
+    color: #fff;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    height: 40px;
 }
 
-.global-add-btn:hover {
-    color: #EE3524;
-    border-color: #EE3524;
-    background: #fff;
+.create-leave-button:hover {
+    background: #D42E1F;
+    border-color: #D42E1F;
 }
 
 /* Zoom Controls - Bottom Right */
 .zoom-controls {
     position: absolute;
-    bottom: 24px;
+    bottom: 48px;
     right: 24px;
     z-index: 100;
     display: flex;
+    align-items: center;
     gap: 8px;
     background: #fff;
     padding: 8px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.zoom-percentage {
+    min-width: 40px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+}
+
+.zoom-divider {
+    width: 1px;
+    height: 20px;
+    background: #e0e0e0;
+    margin: 0 4px;
 }
 
 .zoom-btn {
@@ -104,26 +152,8 @@
 
 .zoom-btn:hover {
     background: #f0f0f0;
-    color: #EE3524;
-    border-color: #EE3524;
-}
-
-.zoom-value {
-    min-width: 40px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #333;
-}
-
-.zoom-divider {
-    width: 1px;
-    height: 20px;
-    background: #eee;
-    margin: 0 4px;
+    color: #db0011;
+    border-color: #db0011;
 }
 
 /* Viewport for Drag/Scroll */
@@ -140,164 +170,126 @@
 .transform-container {
     transform-origin: top center;
     transition: transform 0.2s ease-out;
-    padding: 20px;
-    min-width: 100%;
+    padding: 40px;
+    min-width: max-content;
     display: flex;
     justify-content: center;
 }
 
 /* =========================================
-   Tree Layout
+   Standard CSS Tree Implementation
    ========================================= */
 
+/* The root UL equivalent */
 .tree {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 10px;
-}
-
-/* Tree Node */
-.tree-node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-}
-
-.tree-node.root-node {
-    padding-top: 0;
-}
-
-/* =========================================
-   Connector Lines
-   ========================================= */
-
-/* Vertical line from parent card DOWN to horizontal connector */
-.connector-vertical-down {
-    width: 2px;
-    height: 30px;
-    background: #9FA1A4;
-}
-
-/* Children wrapper - contains horizontal line and children */
-.children-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-}
-
-/* Horizontal connector - will span full width */
-.connector-horizontal {
-    height: 2px;
-    background: #9FA1A4;
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
-    right: 50%;
-}
-
-/* Children container - holds all child nodes */
-.children-container {
-    display: flex;
-    flex-wrap: nowrap;
     justify-content: center;
-    gap: 20px;
-    padding-top: 0;
+    padding-top: 20px;
     position: relative;
 }
 
-/* Child node wrapper - each child with its vertical connector */
-.child-node-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* The LI equivalent */
+.tree-node {
+    float: left;
+    text-align: center;
+    list-style-type: none;
     position: relative;
+    padding: 20px 10px 0 10px;
+    transition: all 0.5s;
 }
 
-/* Vertical line from horizontal connector UP to child card */
-.connector-vertical-up {
-    width: 2px;
-    height: 30px;
-    background: #9FA1A4;
-}
+/* We will use ::before and ::after to draw the connectors */
 
-/* Make horizontal line span from first to last child center */
-.children-container::before {
+/* Vertical line up */
+.tree-node::before,
+.tree-node::after {
     content: '';
     position: absolute;
     top: 0;
-    height: 2px;
-    background: #9FA1A4;
-    left: calc(50% - 1px);
-    right: calc(50% - 1px);
-}
-
-.child-node-wrapper:first-child~.child-node-wrapper:last-child~.children-container::before,
-.children-container::before {
-    left: 0;
-    right: 0;
-}
-
-/* Adjust horizontal line to span from centers of first to last child */
-.children-container {
-    position: relative;
-}
-
-/* Override - use flexbox gap and ensure horizontal line connects all */
-.children-wrapper .connector-horizontal {
-    display: none;
-    /* We'll use the pseudo-element instead */
-}
-
-/* Horizontal line spanning from first child center to last child center */
-.children-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    height: 2px;
-    width: 30px;
-    /* Half of horizontal gap approx */
-    background: #9FA1A4;
-    /* Will calculate dynamically */
-}
-
-/* For single child - just vertical line */
-.children-container:has(.child-node-wrapper:only-child)::before {
-    display: none;
-}
-
-/* For multiple children - span full width */
-.children-container:not(:has(.child-node-wrapper:only-child))::before {
-    left: 50%;
     right: 50%;
-    width: auto;
+    width: 50%;
+    height: 20px;
+    border-top: 2px solid #ccc;
 }
 
-/* Make the horizontal line actually work */
+.tree-node::after {
+    right: auto;
+    left: 50%;
+    border-left: 2px solid #ccc;
+}
+
+/* We need to remove left-right connectors from elements without any siblings */
+.tree-node:only-child::after,
+.tree-node:only-child::before {
+    display: none;
+}
+
+/* Remove space from the top of single children */
+.tree-node:only-child {
+    padding-top: 0;
+}
+
+/* Remove left connector from first child and right connector from last child */
+.tree-node:first-child::before {
+    border: 0;
+}
+
+.tree-node:last-child::after {
+    border: 0;
+}
+
+/* Adding back the vertical connector to the last nodes */
+.tree-node:last-child::before {
+    border-right: 2px solid #ccc;
+    border-radius: 0 5px 0 0;
+}
+
+.tree-node:first-child::after {
+    border-radius: 5px 0 0 0;
+}
+
+/* Time to add downward connectors from parents */
+.tree ul::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 2px solid #ccc;
+    width: 0;
+    height: 20px;
+}
+
+/* Container for children (nested UL equivalent) */
 .children-container {
-    padding-left: 10px;
-    padding-right: 10px;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    position: relative;
 }
 
-/* Proper horizontal line using direct calculation */
+/* Connector line down from parent to children info */
 .children-container::before {
-    left: calc(100px + 10px);
-    /* half of card width + padding */
-    right: calc(100px + 10px);
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 2px solid #ccc;
+    width: 0;
+    height: 20px;
 }
+
 
 /* =========================================
-   Employee Card Design
+   Card Design (Premium - Simplified)
    ========================================= */
 
 .employee-card {
     background: #fff;
     border-radius: 8px;
-    width: 240px;
+    width: 260px;
+    /* Slightly narrower */
     padding: 0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     border: 1px solid #eaeaea;
     text-align: left;
     display: inline-block;
@@ -305,80 +297,29 @@
     z-index: 2;
     transition: all 0.2s;
     cursor: pointer;
-    overflow: hidden;
-}
-
-/* Permanent employee - blue accent */
-.employee-card.permanent-card {
-    border-left: 3px solid #64b5f6;
-}
-
-/* Contractor employee - orange accent */
-.employee-card.contractor-card {
-    border-left: 3px solid #ff9800;
-}
-
-/* Root node (Manager) - larger card */
-.root-node>.employee-card {
-    width: 260px;
-}
-
-.root-node>.employee-card .card-avatar {
-    width: 42px;
-    height: 42px;
-}
-
-.root-node>.employee-card .emp-name {
-    font-size: 14px;
 }
 
 .employee-card:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
-    border-color: #EE3524;
-}
-
-/* Employee Type Badge */
-.employee-type-badge {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 9px;
-    font-weight: 600;
-    padding: 2px 6px;
-    border-radius: 3px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.employee-type-badge.permanent-badge {
-    background: rgba(100, 181, 246, 0.15);
-    color: #1976d2;
-}
-
-.employee-type-badge.contractor-badge {
-    background: rgba(255, 152, 0, 0.15);
-    color: #e65100;
+    border-color: #db0011;
 }
 
 .card-header {
-    padding: 12px;
-    padding-top: 28px;
-    /* Space for badge */
+    padding: 16px;
     border-bottom: 1px solid #f0f0f0;
     display: flex;
-    gap: 10px;
-    align-items: center;
+    gap: 12px;
+    align-items: flex-start;
 }
 
 .card-avatar {
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex-shrink: 0;
 }
 
 .card-info {
@@ -387,9 +328,9 @@
 }
 
 .emp-name {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
-    color: #231F20;
+    color: #1a1a1a;
     margin-bottom: 2px;
     white-space: nowrap;
     overflow: hidden;
@@ -398,23 +339,23 @@
 
 .emp-role {
     font-size: 11px;
-    color: #9FA1A4;
-    margin-bottom: 0;
+    color: #666;
+    margin-bottom: 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .emp-dept {
-    font-size: 9px;
-    color: #9FA1A4;
+    font-size: 10px;
+    color: #999;
     text-transform: uppercase;
     font-weight: 500;
     letter-spacing: 0.5px;
 }
 
 .card-body {
-    padding: 8px 12px;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
 }
@@ -422,8 +363,8 @@
 .email-row {
     display: flex;
     align-items: center;
-    color: #9FA1A4;
-    font-size: 10px;
+    color: #666;
+    font-size: 12px;
     overflow: hidden;
 }
 
@@ -435,25 +376,25 @@
 }
 
 .card-footer {
-    padding: 6px 12px;
+    padding: 8px 16px;
     background: #fafafa;
     border-top: 1px solid #f0f0f0;
     display: flex;
     justify-content: flex-end;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
     border-radius: 0 0 8px 8px;
 }
 
 .edit-btn,
 .delete-btn {
-    font-size: 10px;
+    font-size: 12px;
     color: #666;
     background: none;
     border: 1px solid #e0e0e0;
     background-color: #fff;
     cursor: pointer;
-    padding: 3px 8px;
+    padding: 4px 12px;
     border-radius: 4px;
     font-weight: 500;
     display: flex;
@@ -467,8 +408,8 @@
 }
 
 .delete-btn:hover {
-    color: #EE3524;
-    border-color: #EE3524;
+    color: #db0011;
+    border-color: #db0011;
 }
 
 /* =========================================
@@ -476,7 +417,63 @@
    ========================================= */
 
 .dark-mode .org-chart-wrapper {
-    background: #231F20;
+    background: #3a3737;
+}
+
+.dark-mode .org-chart-title {
+    color: #fff;
+}
+
+.dark-mode .org-chart-subtitle {
+    color: #9FA1A4;
+}
+
+.dark-mode .legend-item {
+    color: #9FA1A4;
+}
+
+.dark-mode .search-input .ant-input {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #fff;
+}
+
+.dark-mode .search-input .ant-input-prefix {
+    color: #9FA1A4;
+}
+
+.dark-mode .create-leave-button {
+    background: #EE3524;
+    border-color: #EE3524;
+    color: #fff;
+}
+
+.dark-mode .create-leave-button:hover {
+    background: #D42E1F;
+    border-color: #D42E1F;
+}
+
+.dark-mode .zoom-controls {
+    background: #2d2a2b;
+}
+
+.dark-mode .zoom-btn {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #fff;
+}
+
+.dark-mode .zoom-btn:hover {
+    border-color: #db0011;
+    color: #db0011;
+}
+
+.dark-mode .zoom-percentage {
+    color: #fff;
+}
+
+.dark-mode .zoom-divider {
+    background: #4a4a4a;
 }
 
 .dark-mode .employee-card {
@@ -484,41 +481,25 @@
     border-color: #3a3a3a;
 }
 
-.dark-mode .employee-card.permanent-card {
-    border-left-color: #64b5f6;
-}
-
-.dark-mode .employee-card.contractor-card {
-    border-left-color: #ff9800;
-}
-
 .dark-mode .employee-card:hover {
-    border-color: #EE3524;
-}
-
-.dark-mode .employee-type-badge.permanent-badge {
-    background: rgba(100, 181, 246, 0.2);
-    color: #90caf9;
-}
-
-.dark-mode .employee-type-badge.contractor-badge {
-    background: rgba(255, 152, 0, 0.2);
-    color: #ffb74d;
+    border-color: #db0011;
 }
 
 .dark-mode .emp-name {
-    color: #FFFFFF;
+    color: #fff;
 }
 
 .dark-mode .emp-role,
-.dark-mode .emp-dept,
-.dark-mode .email-text,
-.dark-mode .email-row {
+.dark-mode .emp-dept {
     color: #9FA1A4;
 }
 
-.dark-mode .card-header,
-.dark-mode .card-body {
+.dark-mode .email-row,
+.dark-mode .email-text {
+    color: #9FA1A4;
+}
+
+.dark-mode .card-header {
     border-color: #3a3a3a;
 }
 
@@ -531,60 +512,12 @@
 .dark-mode .delete-btn {
     background: #2d2a2b;
     border-color: #4a4a4a;
-    color: #FFFFFF;
+    color: #fff;
 }
 
-.dark-mode .global-add-btn {
-    background: #2d2a2b;
-    border-color: #4a4a4a;
-    color: #FFFFFF;
-}
-
-.dark-mode .global-add-btn:hover {
-    border-color: #EE3524;
-    color: #EE3524;
-}
-
-.dark-mode .zoom-controls {
-    background: #2d2a2b;
-}
-
-.dark-mode .zoom-btn {
-    background: #2d2a2b;
-    border-color: #4a4a4a;
-    color: #FFFFFF;
-}
-
-.dark-mode .zoom-btn:hover {
-    border-color: #EE3524;
-    color: #EE3524;
-}
-
-.dark-mode .connector-vertical-down,
-.dark-mode .connector-vertical-up,
-.dark-mode .connector-horizontal,
+.dark-mode .tree-node::before,
+.dark-mode .tree-node::after,
+.dark-mode .tree-node:last-child::before,
 .dark-mode .children-container::before {
-    background: #4a4a4a;
-}
-
-.dark-mode .search-input .ant-input {
-    background: #2d2a2b;
     border-color: #4a4a4a;
-    color: #FFFFFF;
-}
-
-.dark-mode .search-input .ant-input-prefix {
-    color: #9FA1A4;
-}
-
-.dark-mode .zoom-value {
-    color: #FFFFFF;
-}
-
-.dark-mode .zoom-divider {
-    background: #4a4a4a;
-}
-
-.dark-mode .legend-item {
-    color: #9FA1A4;
 }

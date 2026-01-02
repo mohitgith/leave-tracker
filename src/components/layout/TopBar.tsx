@@ -1,9 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Layout, Avatar, Badge, Dropdown, Typography, message, List, Button, Empty } from 'antd';
-import {
-    BellOutlined,
-    CheckOutlined,
-} from '@ant-design/icons';
+import { FiBell, FiCheck } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
 import { useAuth } from '../../context/AuthContext';
@@ -122,7 +119,7 @@ const TopBar: React.FC = () => {
                     <Button
                         type="link"
                         size="small"
-                        icon={<CheckOutlined />}
+                        icon={<FiCheck size={14} />}
                         onClick={handleMarkAllAsRead}
                     >
                         Mark all read
@@ -171,7 +168,7 @@ const TopBar: React.FC = () => {
                         <path d="M2 12L12 17L22 12" stroke="#fff" strokeWidth="2" />
                     </svg>
                 </div>
-                <Text className="brand-subtitle">Leave Tracker</Text>
+                <Text className="brand-subtitle">Leave Management Tool</Text>
             </div>
 
             <div className="topbar-actions">
@@ -184,7 +181,7 @@ const TopBar: React.FC = () => {
                 >
                     <div className="notification-wrapper">
                         <Badge count={unreadCount} size="small">
-                            <BellOutlined className="notification-icon" />
+                            <FiBell size={20} className="notification-icon" />
                         </Badge>
                     </div>
                 </Dropdown>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Checkbox, message, Divider } from 'antd';
-import { UserOutlined, LockOutlined, WindowsOutlined } from '@ant-design/icons';
+import { FiUser, FiLock } from 'react-icons/fi';
+import { BsWindows } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import hsbcLogo from '../../assets/hsbc-logo.png';
@@ -18,7 +19,7 @@ const LoginPage: React.FC = () => {
         setLoading(true);
         const success = await login(values.username, values.password);
         setLoading(false);
-        
+
         if (success) {
             message.success('Login successful');
             navigate('/dashboard');
@@ -65,7 +66,7 @@ const LoginPage: React.FC = () => {
                         rules={[{ required: true, message: 'Please input your username!' }]}
                     >
                         <Input
-                            prefix={<UserOutlined className="site-form-item-icon" />}
+                            prefix={<FiUser className="site-form-item-icon" />}
                             placeholder="Username"
                             size="large"
                         />
@@ -76,7 +77,7 @@ const LoginPage: React.FC = () => {
                         rules={[{ required: true, message: 'Please input your password!' }]}
                     >
                         <Input.Password
-                            prefix={<LockOutlined className="site-form-item-icon" />}
+                            prefix={<FiLock className="site-form-item-icon" />}
                             type="password"
                             placeholder="Password"
                             size="large"
@@ -94,11 +95,11 @@ const LoginPage: React.FC = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button 
-                            type="primary" 
-                            htmlType="submit" 
-                            style={{ width: '100%', background: '#db0011', borderColor: '#db0011' }} 
-                            size="large" 
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            style={{ width: '100%', background: '#db0011', borderColor: '#db0011' }}
+                            size="large"
                             loading={loading}
                         >
                             Log In
@@ -107,9 +108,9 @@ const LoginPage: React.FC = () => {
 
                     <Divider>or</Divider>
 
-                    <Button 
-                        icon={<WindowsOutlined />}
-                        style={{ width: '100%' }} 
+                    <Button
+                        icon={<BsWindows />}
+                        style={{ width: '100%' }}
                         size="large"
                         onClick={handleSSOLogin}
                     >

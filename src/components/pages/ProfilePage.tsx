@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Card, Avatar, Typography, Button, Form, Input, Divider, message, Upload, Modal } from 'antd';
-import { CameraOutlined, MailOutlined, PhoneOutlined, TeamOutlined, IdcardOutlined, UploadOutlined } from '@ant-design/icons';
+import { FiCamera, FiMail, FiPhone, FiUsers, FiCreditCard, FiUpload } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
+
 import './ProfilePage.css';
 
 const { Title, Text } = Typography;
@@ -20,10 +21,6 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className="profile-page">
-            <div className="profile-header">
-                <Title level={2}>My Profile</Title>
-            </div>
-
             <Card className="profile-card">
                 <div className="profile-avatar-section">
                     <div className="avatar-container">
@@ -31,9 +28,9 @@ const ProfilePage: React.FC = () => {
                             size={120}
                             src={avatarUrl}
                         />
-                        <Button 
+                        <Button
                             className="edit-avatar-btn"
-                            icon={<CameraOutlined />}
+                            icon={<FiCamera />}
                             shape="circle"
                             onClick={() => setIsModalOpen(true)}
                         />
@@ -48,42 +45,42 @@ const ProfilePage: React.FC = () => {
 
                 <Form layout="vertical" className="profile-form">
                     <Form.Item label="Full Name">
-                        <Input 
-                            value={user?.name || ''} 
-                            disabled 
-                            prefix={<IdcardOutlined />}
+                        <Input
+                            value={user?.name || ''}
+                            disabled
+                            prefix={<FiCreditCard />}
                         />
                     </Form.Item>
 
                     <Form.Item label="Role">
-                        <Input 
-                            value={user?.role || ''} 
-                            disabled 
-                            prefix={<TeamOutlined />}
+                        <Input
+                            value={user?.role || ''}
+                            disabled
+                            prefix={<FiUsers />}
                         />
                     </Form.Item>
 
                     <Form.Item label="Department">
-                        <Input 
-                            value={user?.department || ''} 
-                            disabled 
-                            prefix={<TeamOutlined />}
+                        <Input
+                            value={user?.department || ''}
+                            disabled
+                            prefix={<FiUsers />}
                         />
                     </Form.Item>
 
                     <Form.Item label="Email">
-                        <Input 
-                            value={user?.name ? `${user.name.toLowerCase().replace(' ', '.')}@hsbc.com` : ''} 
-                            disabled 
-                            prefix={<MailOutlined />}
+                        <Input
+                            value={user?.name ? `${user.name.toLowerCase().replace(' ', '.')}@hsbc.com` : ''}
+                            disabled
+                            prefix={<FiMail />}
                         />
                     </Form.Item>
 
                     <Form.Item label="Phone">
-                        <Input 
-                            value="+91 98765 43210" 
-                            disabled 
-                            prefix={<PhoneOutlined />}
+                        <Input
+                            value="+91 98765 43210"
+                            disabled
+                            prefix={<FiPhone />}
                         />
                     </Form.Item>
                 </Form>
@@ -119,7 +116,7 @@ const ProfilePage: React.FC = () => {
                             }}
                         >
                             <p className="upload-icon">
-                                <UploadOutlined style={{ fontSize: 32, color: '#9FA1A4' }} />
+                                <FiUpload style={{ fontSize: 32, color: '#9FA1A4' }} />
                             </p>
                             <p className="upload-text">Click or drag file to upload</p>
                             <p className="upload-hint">Support JPG, PNG up to 5MB</p>

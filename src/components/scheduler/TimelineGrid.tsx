@@ -14,9 +14,9 @@ interface TimelineGridProps {
     currentUserId?: string;
 }
 
-const TimelineGrid: React.FC<TimelineGridProps> = ({ 
-    employees, 
-    leaves, 
+const TimelineGrid: React.FC<TimelineGridProps> = ({
+    employees,
+    leaves,
     config,
     onEditLeave,
     onDeleteLeave,
@@ -66,7 +66,7 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({
                 {generateDayColumns.map((col, index) => (
                     <div
                         key={index}
-                        className={`grid-column ${col.isMonthStart ? 'grid-column-month' : ''} ${col.isWeekend ? 'grid-column-weekend' : ''} ${col.isToday ? 'grid-column-today' : ''}`}
+                        className={`grid-column ${col.isMonthStart && index > 0 ? 'grid-column-month' : ''} ${col.isWeekend ? 'grid-column-weekend' : ''} ${col.isToday ? 'grid-column-today' : ''}`}
                         style={{
                             left: `${col.percentOffset}%`,
                             width: `${col.percentWidth}%`
@@ -85,7 +85,7 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({
                         // Convert pixel position to percentage
                         const leftPercent = (position.left / (totalDays * config.dayWidth)) * 100;
                         const widthPercent = (position.width / (totalDays * config.dayWidth)) * 100;
-                        
+
                         // Check if current user owns this leave
                         const isOwner = currentUserId === leave.employeeId;
 

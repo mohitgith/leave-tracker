@@ -1,0 +1,61 @@
+.leave-tracker-page {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 24px 24px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Loading state */
+.leave-tracker-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* Date Navigation */
+.leave-tracker-page .date-navigation {
+    padding: 16px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leave-tracker-page .date-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.leave-tracker-page .date-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Scheduler Container */
+.leave-tracker-page .scheduler-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.leave-tracker-page .scheduler-search-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leave-tracker-page .scheduler-content {
+    flex: 1;
+    overflow: auto;
+}
+
+/* Dark Mode */
+.dark-mode .leave-tracker-page {
+    background: transparent;
+}

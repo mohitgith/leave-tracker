@@ -1,10 +1,35 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Layout } from 'antd';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
+import { PageHeader } from '../common';
 
 const { Content } = Layout;
+
+// Route to header configuration mapping
+const getPageHeaderConfig = (pathname: string): { title: string; subtitle?: string; variant: 'wide' | 'narrow' } => {
+    const today = new Date().toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'short',
+        day: 'numeric'
+    });
+
+    if (pathname.includes('/org-chart')) {
+        return { title: 'Organization Chart', subtitle: `Team overview for ${today}`, variant: 'wide' };
+    }
+    if (pathname.includes('/leave-tracker')) {
+        return { title: 'Leave Tracker', variant: 'wide' };
+    }
+    if (pathname.includes('/settings')) {
+        return { title: 'Settings', variant: 'narrow' };
+    }
+    if (pathname.includes('/profile')) {
+        return { title: 'My Profile', variant: 'narrow' };
+    }
+    // Default to dashboard
+    return { title: 'Leave Dashboard', subtitle: `Overview for ${today}`, variant: 'wide' };
+};
 
 const MainLayout: React.FC = () => {
     const navigate = useNavigate();
@@ -16,8 +41,8 @@ const MainLayout: React.FC = () => {
             case 'dashboard':
                 navigate('/dashboard');
                 break;
-            case 'employees':
-                navigate('/employees');
+            case 'org-chart':
+                navigate('/org-chart');
                 break;
             case 'documents':
                 navigate('/leave-tracker');
@@ -33,7 +58,7 @@ const MainLayout: React.FC = () => {
     // Map route to key for highlighting
     const getSelectedKey = () => {
         const path = location.pathname;
-        if (path.includes('employees')) return 'employees';
+        if (path.includes('org-chart')) return 'org-chart';
         if (path.includes('leave-tracker')) return 'documents';
         if (path.includes('settings')) return 'settings';
         return 'dashboard';
@@ -46,6 +71,9 @@ const MainLayout: React.FC = () => {
     };
 
     const hideSidebar = shouldHideSidebar();
+
+    // Get header config based on current route
+    const headerConfig = useMemo(() => getPageHeaderConfig(location.pathname), [location.pathname]);
 
     return (
         <Layout style={{ minHeight: '100vh', flexDirection: 'column' }}>
@@ -66,6 +94,9 @@ const MainLayout: React.FC = () => {
                         marginLeft: hideSidebar ? 0 : 60 // Account for sidebar width
                     }}
                 >
+                    {/* Unified PageHeader - follows container position based on variant */}
+                    <PageHeader title={headerConfig.title} subtitle={headerConfig.subtitle} variant={headerConfig.variant} />
+
                     <Outlet />
                 </Content>
             </Layout>

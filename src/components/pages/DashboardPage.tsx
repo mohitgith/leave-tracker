@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Spin, message } from 'antd';
-import {
-    UserDeleteOutlined,
-    ClockCircleOutlined,
-    CalendarOutlined,
-    TeamOutlined
-} from '@ant-design/icons';
+import { FiUserX, FiClock, FiCalendar, FiUsers } from 'react-icons/fi';
+
 import './DashboardPage.css';
 
 const API_BASE = 'http://localhost:3001/api';
@@ -110,12 +106,6 @@ const DashboardPage: React.FC = () => {
         }
     };
 
-    const today = new Date().toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'short',
-        day: 'numeric'
-    });
-
     if (loading) {
         return (
             <div className="dashboard-page" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
@@ -126,19 +116,13 @@ const DashboardPage: React.FC = () => {
 
     return (
         <div className="dashboard-page">
-            {/* Header */}
-            <div className="dashboard-header">
-                <h1 className="dashboard-title">Leave Dashboard</h1>
-                <p className="dashboard-subtitle">Overview for {today}</p>
-            </div>
-
             {/* Stats Cards */}
             <div className="stats-grid">
                 <div className="stat-card">
                     <div className="stat-card-header">
                         <span className="stat-label">Absent Today</span>
                         <div className="stat-icon absent">
-                            <UserDeleteOutlined />
+                            <FiUserX size={18} />
                         </div>
                     </div>
                     <div className="stat-value">{stats?.absentToday || 0}</div>
@@ -151,7 +135,7 @@ const DashboardPage: React.FC = () => {
                     <div className="stat-card-header">
                         <span className="stat-label">Pending Requests</span>
                         <div className="stat-icon pending">
-                            <ClockCircleOutlined />
+                            <FiClock size={18} />
                         </div>
                     </div>
                     <div className="stat-value">{stats?.pendingRequests || 0}</div>
@@ -164,7 +148,7 @@ const DashboardPage: React.FC = () => {
                     <div className="stat-card-header">
                         <span className="stat-label">Upcoming Holiday</span>
                         <div className="stat-icon holiday">
-                            <CalendarOutlined />
+                            <FiCalendar size={18} />
                         </div>
                     </div>
                     <div className="stat-value">{stats?.upcomingHoliday?.name || 'None'}</div>
@@ -203,7 +187,7 @@ const DashboardPage: React.FC = () => {
                             ))
                         ) : (
                             <div className="empty-state">
-                                <TeamOutlined className="empty-icon" />
+                                <FiUsers className="empty-icon" size={48} />
                                 <p className="empty-text">No one is on leave today</p>
                             </div>
                         )}
@@ -236,7 +220,7 @@ const DashboardPage: React.FC = () => {
                             ))
                         ) : (
                             <div className="empty-state">
-                                <CalendarOutlined className="empty-icon" />
+                                <FiCalendar className="empty-icon" size={48} />
                                 <p className="empty-text">No leaves scheduled for tomorrow</p>
                             </div>
                         )}
@@ -271,7 +255,7 @@ const DashboardPage: React.FC = () => {
                             ))
                         ) : (
                             <div className="empty-state">
-                                <CalendarOutlined className="empty-icon" />
+                                <FiCalendar className="empty-icon" size={48} />
                                 <p className="empty-text">No leaves scheduled for next week</p>
                             </div>
                         )}

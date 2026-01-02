@@ -30,6 +30,23 @@ spring:
       hibernate:
         format_sql: true
 
+  # Email Configuration (SMTP)
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: mohitshrivastava3294@gmail.com
+    password: pimrfgmwmcyjuxgf
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            # Recommended for Gmail reliability
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
 # Custom Configuration for Data Persistence
 data:
   persistence:

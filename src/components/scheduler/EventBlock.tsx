@@ -1,5 +1,5 @@
 import { Popover, Button, Popconfirm, Tooltip } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import dayjs from 'dayjs';
 import { LeaveRecord, LEAVE_TYPE_COLORS, LEAVE_TYPE_LABELS } from '../../types';
 import './EventBlock.css';
@@ -13,9 +13,9 @@ interface EventBlockProps {
     isOwner?: boolean;
 }
 
-const EventBlock: React.FC<EventBlockProps> = ({ 
-    leave, 
-    leftPercent, 
+const EventBlock: React.FC<EventBlockProps> = ({
+    leave,
+    leftPercent,
     widthPercent,
     onEdit,
     onDelete,
@@ -50,9 +50,9 @@ const EventBlock: React.FC<EventBlockProps> = ({
                 <div className="popover-duration">{duration} day{duration > 1 ? 's' : ''}</div>
             </div>
             <div className="popover-actions">
-                <Button 
-                    size="small" 
-                    icon={<EditOutlined />} 
+                <Button
+                    size="small"
+                    icon={<FiEdit2 />}
                     onClick={(e) => {
                         e.stopPropagation();
                         onEdit?.(leave);
@@ -70,10 +70,10 @@ const EventBlock: React.FC<EventBlockProps> = ({
                     okText="Yes"
                     cancelText="No"
                 >
-                    <Button 
-                        size="small" 
-                        danger 
-                        icon={<DeleteOutlined />}
+                    <Button
+                        size="small"
+                        danger
+                        icon={<FiTrash2 />}
                         onClick={(e) => e.stopPropagation()}
                     >
                         Delete
@@ -101,9 +101,9 @@ const EventBlock: React.FC<EventBlockProps> = ({
     // For non-owners, show tooltip with info only
     if (isOwner) {
         return (
-            <Popover 
-                content={popoverContent} 
-                trigger="click" 
+            <Popover
+                content={popoverContent}
+                trigger="click"
                 placement="top"
                 overlayClassName="event-popover-overlay"
             >

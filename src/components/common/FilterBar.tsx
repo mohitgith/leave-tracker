@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { Button, Radio, Tooltip, Dropdown, Checkbox, Slider, Space, Divider } from 'antd';
-import {
-    FilterOutlined,
-    PlusOutlined,
-    CloseOutlined,
-} from '@ant-design/icons';
+import { FiFilter, FiPlus, FiX } from 'react-icons/fi';
 import type { RadioChangeEvent } from 'antd';
 import type { LeaveType, EmployeeType } from '../../types';
 import './FilterBar.css';
@@ -21,6 +17,8 @@ interface FilterBarProps {
     onCreateLeave: () => void;
     filters: FilterOptions;
     onFiltersChange: (filters: FilterOptions) => void;
+    hideViewMode?: boolean;
+    hideFilters?: boolean;
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({
@@ -29,6 +27,8 @@ const FilterBar: React.FC<FilterBarProps> = ({
     onCreateLeave,
     filters,
     onFiltersChange,
+    hideViewMode = false,
+    hideFilters = false,
 }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -62,10 +62,10 @@ const FilterBar: React.FC<FilterBarProps> = ({
         });
     };
 
-    const hasActiveFilters = 
-        filters.leaveTypes.length > 0 || 
-        filters.employeeTypes.length > 0 || 
-        filters.daysRange[0] !== 0 || 
+    const hasActiveFilters =
+        filters.leaveTypes.length > 0 ||
+        filters.employeeTypes.length > 0 ||
+        filters.daysRange[0] !== 0 ||
         filters.daysRange[1] !== 15;
 
     const getActiveFilterCount = () => {
@@ -79,13 +79,13 @@ const FilterBar: React.FC<FilterBarProps> = ({
             <div className="filter-section">
                 <div className="filter-section-title">Leave Type</div>
                 <Space direction="vertical">
-                    <Checkbox 
+                    <Checkbox
                         checked={filters.leaveTypes.includes('vacation')}
                         onChange={(e) => handleLeaveTypeChange('vacation', e.target.checked)}
                     >
                         Annual Leave
                     </Checkbox>
-                    <Checkbox 
+                    <Checkbox
                         checked={filters.leaveTypes.includes('sick')}
                         onChange={(e) => handleLeaveTypeChange('sick', e.target.checked)}
                     >
@@ -99,13 +99,13 @@ const FilterBar: React.FC<FilterBarProps> = ({
             <div className="filter-section">
                 <div className="filter-section-title">Employee Type</div>
                 <Space direction="vertical">
-                    <Checkbox 
+                    <Checkbox
                         checked={filters.employeeTypes.includes('permanent')}
                         onChange={(e) => handleEmployeeTypeChange('permanent', e.target.checked)}
                     >
                         Permanent
                     </Checkbox>
-                    <Checkbox 
+                    <Checkbox
                         checked={filters.employeeTypes.includes('contractor')}
                         onChange={(e) => handleEmployeeTypeChange('contractor', e.target.checked)}
                     >
@@ -118,7 +118,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
 
             <div className="filter-section">
                 <div className="filter-section-title">Leave Duration: {filters.daysRange[0]} - {filters.daysRange[1]} days</div>
-                <Slider 
+                <Slider
                     range
                     min={0}
                     max={15}
@@ -131,9 +131,9 @@ const FilterBar: React.FC<FilterBarProps> = ({
             {hasActiveFilters && (
                 <>
                     <Divider style={{ margin: '12px 0' }} />
-                    <Button 
-                        type="link" 
-                        icon={<CloseOutlined />} 
+                    <Button
+                        type="link"
+                        icon={<FiX size={14} />}
                         onClick={clearFilters}
                         className="clear-filters-btn"
                     >
@@ -145,55 +145,59 @@ const FilterBar: React.FC<FilterBarProps> = ({
     );
 
     return (
-        <div className="filter-bar">
-            <div className="filter-left">
-                <Dropdown
-                    dropdownRender={() => filterDropdownContent}
-                    trigger={['click']}
-                    open={dropdownOpen}
-                    onOpenChange={setDropdownOpen}
-                    overlayClassName="filter-dropdown-overlay"
-                >
-                    <Button
-                        icon={<FilterOutlined />}
-                        className={`filter-button ${hasActiveFilters ? 'filter-active' : ''}`}
+        <div>
+            {!hideFilters && (
+                <div className="filter-right">
+                    <Dropdown
+                        dropdownRender={() => filterDropdownContent}
+                        trigger={['click']}
+                        open={dropdownOpen}
+                        onOpenChange={setDropdownOpen}
+                        overlayClassName="filter-dropdown-overlay"
                     >
-                        Filters {hasActiveFilters && `(${getActiveFilterCount()})`}
+                        <Button
+                            icon={<FiFilter size={14} />}
+                            className={`filter-button ${hasActiveFilters ? 'filter-active' : ''}`}
+                        >
+                            Filters {hasActiveFilters && `(${getActiveFilterCount()})`}
+                        </Button>
+                    </Dropdown>
+
+                    <Button
+                        type="primary"
+                        icon={<FiPlus size={14} />}
+                        className="create-leave-button"
+                        onClick={onCreateLeave}
+                    >
+                        Create Leave
                     </Button>
-                </Dropdown>
+                </div>
+            )}
 
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    className="create-leave-button"
-                    onClick={onCreateLeave}
-                >
-                    Create Leave
-                </Button>
-            </div>
-
-            <div className="filter-right">
-                <Radio.Group
-                    value={viewMode}
-                    onChange={handleViewChange}
-                    className="view-mode-group"
-                    optionType="button"
-                    buttonStyle="solid"
-                >
-                    <Tooltip title="1 Month View">
-                        <Radio.Button value="1">
-                            <span className="view-label">1</span>
-                            <span className="view-sublabel">month</span>
-                        </Radio.Button>
-                    </Tooltip>
-                    <Tooltip title="3 Months View">
-                        <Radio.Button value="3">
-                            <span className="view-label">3</span>
-                            <span className="view-sublabel">months</span>
-                        </Radio.Button>
-                    </Tooltip>
-                </Radio.Group>
-            </div>
+            {!hideViewMode && (
+                <div className="filter-right">
+                    <Radio.Group
+                        value={viewMode}
+                        onChange={handleViewChange}
+                        className="view-mode-group"
+                        optionType="button"
+                        buttonStyle="solid"
+                    >
+                        <Tooltip title="1 Month View">
+                            <Radio.Button value="1">
+                                <span className="view-label">1</span>
+                                <span className="view-sublabel">month</span>
+                            </Radio.Button>
+                        </Tooltip>
+                        <Tooltip title="3 Months View">
+                            <Radio.Button value="3">
+                                <span className="view-label">3</span>
+                                <span className="view-sublabel">months</span>
+                            </Radio.Button>
+                        </Tooltip>
+                    </Radio.Group>
+                </div>
+            )}
         </div>
     );
 };
