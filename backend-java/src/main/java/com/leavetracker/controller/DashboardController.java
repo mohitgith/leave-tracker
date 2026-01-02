@@ -27,6 +27,9 @@ public class DashboardController {
     @Autowired
     private LeaveRepository leaveRepository;
 
+    @Autowired
+    private com.leavetracker.repository.HolidayRepository holidayRepository;
+
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /**
@@ -51,9 +54,17 @@ public class DashboardController {
         stats.put("absentToday", absentToday);
         stats.put("pendingRequests", pendingRequests);
         stats.put("totalEmployees", totalEmployees);
-        stats.put("upcomingHoliday", Map.of(
-                "name", "New Year's Day",
-                "date", "Jan 1 (Wednesday)"));
+        stats.put("totalEmployees", totalEmployees);
+
+        // Get upcoming holiday
+        holidayRepository.findNextHoliday(today).ifPresentOrElse(
+                holiday -> {
+                    String dateStr = holiday.getDate().format(DateTimeFormatter.ofPattern("MMM d (EEEE)"));
+                    stats.put("upcomingHoliday", Map.of(
+                            "name", holiday.getName(),
+                            "date", dateStr));
+                },
+                () -> stats.put("upcomingHoliday", null));
 
         return ResponseEntity.ok(stats);
     }

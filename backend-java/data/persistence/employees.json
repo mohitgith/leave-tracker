@@ -8,7 +8,8 @@
   "email" : "lohit.ganta@company.com",
   "phone" : "+1 (555) 000-0000",
   "managerId" : null,
-  "employeeType" : "permanent"
+  "employeeType" : "permanent",
+  "username" : "lohitg"
 }, {
   "id" : "1",
   "name" : "Aditya Pathak",
@@ -19,7 +20,8 @@
   "email" : "aditya.pathak@company.com",
   "phone" : "+1 (555) 100-0001",
   "managerId" : "0",
-  "employeeType" : "contractor"
+  "employeeType" : "contractor",
+  "username" : "adityap"
 }, {
   "id" : "2",
   "name" : "Atul Tewathia",
@@ -30,7 +32,8 @@
   "email" : "atul.tewathia@company.com",
   "phone" : "+1 (555) 100-0002",
   "managerId" : "0",
-  "employeeType" : "contractor"
+  "employeeType" : "contractor",
+  "username" : "atult"
 }, {
   "id" : "3",
   "name" : "Bertrand Iwunna",
@@ -41,7 +44,8 @@
   "email" : "bertrand.iwunna@company.com",
   "phone" : "+1 (555) 100-0003",
   "managerId" : "0",
-  "employeeType" : "contractor"
+  "employeeType" : "contractor",
+  "username" : "bertrandi"
 }, {
   "id" : "4",
   "name" : "Carrick Mak",
@@ -52,7 +56,8 @@
   "email" : "carrick.mak@company.com",
   "phone" : "+1 (555) 100-0004",
   "managerId" : "0",
-  "employeeType" : "permanent"
+  "employeeType" : "permanent",
+  "username" : "carrickm"
 }, {
   "id" : "5",
   "name" : "Chris C Lee",
@@ -63,7 +68,8 @@
   "email" : "chris.lee@company.com",
   "phone" : "+1 (555) 100-0005",
   "managerId" : "0",
-  "employeeType" : "permanent"
+  "employeeType" : "permanent",
+  "username" : "chrisl"
 }, {
   "id" : "7",
   "name" : "Eric Luo",
@@ -74,7 +80,8 @@
   "email" : "eric.luo@company.com",
   "phone" : "+1 (555) 100-0007",
   "managerId" : "0",
-  "employeeType" : "contractor"
+  "employeeType" : "contractor",
+  "username" : "ericl"
 }, {
   "id" : "8",
   "name" : "Gavin Guan",
@@ -85,7 +92,8 @@
   "email" : "gavin.guan@company.com",
   "phone" : "+1 (555) 100-0008",
   "managerId" : "0",
-  "employeeType" : "contractor"
+  "employeeType" : "contractor",
+  "username" : "gaving"
 }, {
   "id" : "9",
   "name" : "Jacky Hu",
@@ -96,7 +104,8 @@
   "email" : "jacky.hu@company.com",
   "phone" : "+1 (555) 100-0009",
   "managerId" : "0",
-  "employeeType" : "contractor"
+  "employeeType" : "contractor",
+  "username" : "jackyh"
 }, {
   "id" : "10",
   "name" : "Mohit Shrivastava",
@@ -107,7 +116,8 @@
   "email" : "mohit.shrivastava@company.com",
   "phone" : "+1 (555) 100-0010",
   "managerId" : "0",
-  "employeeType" : "permanent"
+  "employeeType" : "permanent",
+  "username" : "mohits"
 }, {
   "id" : "11",
   "name" : "Sameer Kumar Sahu",
@@ -118,7 +128,8 @@
   "email" : "sameer.sahu@company.com",
   "phone" : "+1 (555) 100-0011",
   "managerId" : "0",
-  "employeeType" : "permanent"
+  "employeeType" : "permanent",
+  "username" : "sameers"
 }, {
   "id" : "12",
   "name" : "Sreelakshmi Vineetha Movva",
@@ -129,5 +140,6 @@
   "email" : "sreelakshmi.movva@company.com",
   "phone" : "+1 (555) 100-0012",
   "managerId" : "0",
-  "employeeType" : "permanent"
+  "employeeType" : "permanent",
+  "username" : "sreelakshmim"
 } ]

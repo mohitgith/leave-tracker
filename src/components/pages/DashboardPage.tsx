@@ -4,8 +4,6 @@ import { FiUserX, FiClock, FiCalendar, FiUsers } from 'react-icons/fi';
 
 import './DashboardPage.css';
 
-const API_BASE = 'http://localhost:3001/api';
-
 interface DashboardStats {
     absentToday: number;
     pendingRequests: number;
@@ -36,6 +34,15 @@ interface UpcomingLeaves {
     nextWeek: LeaveItem[];
 }
 
+import {
+    fetchDashboardStats,
+    fetchAbsentToday,
+    fetchUpcomingLeaves,
+    fetchPendingRequests
+} from '../../services/api';
+
+// ... interfaces ...
+
 const DashboardPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -52,25 +59,17 @@ const DashboardPage: React.FC = () => {
             setLoading(true);
 
             // Fetch all dashboard data in parallel
-            const [statsRes, absentRes, upcomingRes, pendingRes] = await Promise.all([
-                fetch(`${API_BASE}/dashboard/stats`),
-                fetch(`${API_BASE}/dashboard/absent-today`),
-                fetch(`${API_BASE}/dashboard/upcoming-leaves`),
-                fetch(`${API_BASE}/dashboard/pending-requests`)
+            const [statsData, absentData, upcomingData, pendingData] = await Promise.all([
+                fetchDashboardStats(),
+                fetchAbsentToday(),
+                fetchUpcomingLeaves(),
+                fetchPendingRequests()
             ]);
 
-            if (statsRes.ok) {
-                setStats(await statsRes.json());
-            }
-            if (absentRes.ok) {
-                setAbsentToday(await absentRes.json());
-            }
-            if (upcomingRes.ok) {
-                setUpcomingLeaves(await upcomingRes.json());
-            }
-            if (pendingRes.ok) {
-                setPendingRequests(await pendingRes.json());
-            }
+            setStats(statsData);
+            setAbsentToday(absentData);
+            setUpcomingLeaves(upcomingData);
+            setPendingRequests(pendingData);
         } catch (error) {
             console.error('Error loading dashboard data:', error);
             message.error('Failed to load dashboard data');

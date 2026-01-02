@@ -31,6 +31,12 @@ public class Employee {
     private String managerId; // null for CEO/root, parent ID otherwise
     private String employeeType; // "permanent" or "contractor"
 
+    @Column(unique = true)
+    private String username;
+
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private String password;
+
     public Employee() {
     }
 
@@ -126,5 +132,21 @@ public class Employee {
 
     public void setEmployeeType(String employeeType) {
         this.employeeType = employeeType;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

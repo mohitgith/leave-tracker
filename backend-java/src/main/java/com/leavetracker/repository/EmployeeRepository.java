@@ -23,6 +23,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
     // Search employees by name
     List<Employee> findByNameContainingIgnoreCase(String name);
 
+    // Find by username for authentication
+    Optional<Employee> findByUsername(String username);
+
     // Count employees by department
     @Query("SELECT e.department, COUNT(e) FROM Employee e GROUP BY e.department")
     List<Object[]> countByDepartment();
