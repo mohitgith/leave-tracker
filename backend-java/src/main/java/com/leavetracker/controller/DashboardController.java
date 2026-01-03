@@ -57,7 +57,7 @@ public class DashboardController {
         stats.put("totalEmployees", totalEmployees);
 
         // Get upcoming holiday
-        holidayRepository.findNextHoliday(today).ifPresentOrElse(
+        holidayRepository.findFirstByDateGreaterThanEqualOrderByDateAsc(today).ifPresentOrElse(
                 holiday -> {
                     String dateStr = holiday.getDate().format(DateTimeFormatter.ofPattern("MMM d (EEEE)"));
                     stats.put("upcomingHoliday", Map.of(

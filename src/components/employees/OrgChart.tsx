@@ -95,8 +95,32 @@ const OrgChart: React.FC = () => {
     const [editingEmployee, setEditingEmployee] = useState<OrgEmployee | null>(null);
     const [orgChartData, setOrgChartData] = useState<OrgEmployee | null>(null);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const isManager = user?.isManager ?? false;
+
+    // Filter org chart data based on search term (recursive)
+    const filterOrgData = (node: OrgEmployee, term: string): OrgEmployee | null => {
+        if (!term.trim()) return node;
+
+        const lowerTerm = term.toLowerCase();
+        const matchesName = node.name.toLowerCase().includes(lowerTerm);
+        const matchesRole = node.role?.toLowerCase().includes(lowerTerm);
+        const matchesEmail = node.email?.toLowerCase().includes(lowerTerm);
+
+        // Filter children recursively
+        const filteredChildren = node.children
+            ?.map(child => filterOrgData(child, term))
+            .filter((child): child is OrgEmployee => child !== null) || [];
+
+        // Include node if it matches OR has matching children
+        if (matchesName || matchesRole || matchesEmail || filteredChildren.length > 0) {
+            return { ...node, children: filteredChildren };
+        }
+        return null;
+    };
+
+    const filteredOrgData = orgChartData ? filterOrgData(orgChartData, searchTerm) : null;
 
     // Fetch org chart data from API
     const loadOrgChart = async () => {
@@ -189,6 +213,9 @@ const OrgChart: React.FC = () => {
                         placeholder="Search employees..."
                         className="search-input"
                         size="large"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        allowClear
                     />
 
                     {isManager && (
@@ -202,13 +229,18 @@ const OrgChart: React.FC = () => {
             <div className="org-chart-viewport">
                 <div className="transform-container" style={{ transform: `scale(${scale})` }}>
                     <div className="tree">
-                        {orgChartData && (
+                        {filteredOrgData && (
                             <RecursiveNode
-                                employee={orgChartData}
+                                employee={filteredOrgData}
                                 onNodeClick={setSelectedEmployee}
                                 onEditClick={handleEditClick}
                                 onDeleteClick={handleDeleteClick}
                             />
+                        )}
+                        {searchTerm && !filteredOrgData && (
+                            <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>
+                                No employees found matching "{searchTerm}"
+                            </div>
                         )}
                     </div>
                 </div>
