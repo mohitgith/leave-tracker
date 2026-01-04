@@ -1,0 +1,99 @@
+/* Error Pages - Always Light Mode */
+
+.error-page-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+}
+
+.error-page-content {
+    text-align: center;
+    padding: 60px 40px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    max-width: 480px;
+    width: 90%;
+}
+
+.error-icon {
+    margin-bottom: 24px;
+}
+
+/* HSBC Gray for 404 - Not critical */
+.error-icon-404 {
+    color: #9FA1A4;
+}
+
+/* HSBC Red for 500 - Critical error */
+.error-icon-500 {
+    color: #EE3524;
+}
+
+.error-code {
+    font-size: 96px;
+    font-weight: 700;
+    color: #231F20;
+    margin: 0;
+    line-height: 1;
+}
+
+.error-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin: 16px 0 12px;
+}
+
+.error-message {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 32px;
+    line-height: 1.5;
+}
+
+.error-button {
+    background: linear-gradient(135deg, #EE3524 0%, #D42E1F 100%) !important;
+    border-color: #EE3524 !important;
+    height: 44px;
+    padding: 0 24px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.error-button:hover {
+    background: linear-gradient(135deg, #D42E1F 0%, #b82518 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(238, 53, 36, 0.3);
+}
+
+.error-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.error-button-secondary {
+    height: 44px;
+    padding: 0 24px;
+    font-weight: 500;
+    background: #fff !important;
+    border-color: #d9d9d9 !important;
+    color: #333 !important;
+}
+
+.error-button-secondary:hover {
+    border-color: #EE3524 !important;
+    color: #EE3524 !important;
+}

@@ -184,6 +184,17 @@
 .dark-mode .ant-input-affix-wrapper {
     background: #3a3737 !important;
     border-color: #5a5a5a !important;
+    transition: all 0.3s ease;
+}
+
+.dark-mode .ant-input-affix-wrapper:hover {
+    border-color: #EE3524 !important;
+}
+
+.dark-mode .ant-input-affix-wrapper:focus,
+.dark-mode .ant-input-affix-wrapper-focused {
+    border-color: #EE3524 !important;
+    box-shadow: 0 0 0 2px rgba(238, 53, 36, 0.2) !important;
 }
 
 .dark-mode .ant-input-affix-wrapper .ant-input {
