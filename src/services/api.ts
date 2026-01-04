@@ -1,5 +1,5 @@
 // API Service for Leave Tracker Backend
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = 'http://localhost:3001/api/v1';
 
 // Helper for authenticated requests
 const authFetch = async (endpoint: string, options: RequestInit = {}): Promise<Response> => {

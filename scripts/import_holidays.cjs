@@ -3,8 +3,8 @@ const path = require('path');
 const fs = require('fs');
 
 try {
-    const filePath = path.join(__dirname, '../Holiday-2026.xlsx');
-    const outPath = path.join(__dirname, '../backend-java/data/persistence/holidays.json');
+    const filePath = path.join(__dirname, '../data/seeds/Holiday-2026.xlsx');
+    const outPath = path.join(__dirname, '../backend/data/persistence/holidays.json');
     
     console.log(`Reading: ${filePath}`);
     const workbook = XLSX.readFile(filePath);

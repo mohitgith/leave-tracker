@@ -2,14 +2,14 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
-import ProtectedRoute from './components/common/ProtectedRoute';
-import LoginPage from './components/auth/LoginPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import LoginPage from './features/auth/LoginPage';
 import MainLayout from './components/layout/MainLayout';
-import DashboardPage from './components/pages/DashboardPage';
-import LeaveTrackerPage from './components/pages/LeaveTrackerPage';
-import ProfilePage from './components/pages/ProfilePage';
-import SettingsPage from './components/pages/SettingsPage';
-import OrgChart from './components/employees/OrgChart';
+import DashboardPage from './features/dashboard/DashboardPage';
+import LeaveTrackerPage from './features/leave-tracker/LeaveTrackerPage';
+import ProfilePage from './features/profile/ProfilePage';
+import SettingsPage from './features/settings/SettingsPage';
+import OrgChart from './features/employees/OrgChart';
 import './App.css';
 
 const App: React.FC = () => {

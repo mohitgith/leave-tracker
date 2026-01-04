@@ -593,3 +593,49 @@
     flex-direction: column;
     align-items: flex-start;
 }
+
+/* =========================================
+   Light Theme Override - Forces light mode
+   Used on Login page to prevent dark mode
+   ========================================= */
+
+.light-theme-override .ant-input,
+.light-theme-override .ant-input-affix-wrapper,
+.light-theme-override .ant-input-affix-wrapper .ant-input {
+    background: #fff !important;
+    border-color: #d9d9d9 !important;
+    color: #333 !important;
+}
+
+.light-theme-override .ant-input::placeholder,
+.light-theme-override .ant-input-affix-wrapper .ant-input::placeholder {
+    color: #999 !important;
+}
+
+.light-theme-override .ant-input-affix-wrapper .ant-input-prefix,
+.light-theme-override .ant-input-affix-wrapper .ant-input-suffix {
+    color: #999 !important;
+}
+
+.light-theme-override .ant-btn-default {
+    background: #fff !important;
+    border-color: #d9d9d9 !important;
+    color: #333 !important;
+}
+
+.light-theme-override .ant-btn-default:hover {
+    border-color: #EE3524 !important;
+    color: #EE3524 !important;
+}
+
+.light-theme-override .ant-checkbox-wrapper {
+    color: #333 !important;
+}
+
+.light-theme-override .ant-divider {
+    border-color: #e8e8e8 !important;
+}
+
+.light-theme-override .ant-divider-inner-text {
+    color: #999 !important;
+}
