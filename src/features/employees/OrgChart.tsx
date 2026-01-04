@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Tooltip, message, Popconfirm, Spin } from 'antd';
-import { FiSearch, FiMinimize2, FiPlus, FiMinus, FiEdit2, FiMail, FiUserPlus, FiTrash2 } from 'react-icons/fi';
+import { Input, Tooltip, message, Popconfirm, Spin, Radio, Table } from 'antd';
+import { FiSearch, FiMinimize2, FiPlus, FiMinus, FiEdit2, FiMail, FiUserPlus, FiTrash2, FiList } from 'react-icons/fi';
+import { RiOrganizationChart } from 'react-icons/ri';
 import { fetchOrgChart, createEmployee, updateEmployee, deleteEmployee, OrgEmployeeAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import EmployeeDetailModal from './EmployeeDetailModal';
@@ -96,6 +97,7 @@ const OrgChart: React.FC = () => {
     const [orgChartData, setOrgChartData] = useState<OrgEmployee | null>(null);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [viewMode, setViewMode] = useState<'tree' | 'list'>('list');
 
     const isManager = user?.isManager ?? false;
 
@@ -121,6 +123,18 @@ const OrgChart: React.FC = () => {
     };
 
     const filteredOrgData = orgChartData ? filterOrgData(orgChartData, searchTerm) : null;
+
+    // Flatten org tree to list for table view
+    const flattenOrgData = (node: OrgEmployee | null): OrgEmployee[] => {
+        if (!node) return [];
+        const result: OrgEmployee[] = [node];
+        if (node.children) {
+            node.children.forEach(child => {
+                result.push(...flattenOrgData(child));
+            });
+        }
+        return result;
+    };
 
     // Fetch org chart data from API
     const loadOrgChart = async () => {
@@ -206,8 +220,7 @@ const OrgChart: React.FC = () => {
     return (
         <div className="org-chart-wrapper">
             <div className="org-chart-header">
-
-                <div className="header-actions">
+                <div className="header-top-row">
                     <Input
                         prefix={<FiSearch size={16} style={{ color: '#bfbfbf' }} />}
                         placeholder="Search employees..."
@@ -224,43 +237,138 @@ const OrgChart: React.FC = () => {
                         </button>
                     )}
                 </div>
+
+                <div className="header-bottom-row">
+                    <Radio.Group
+                        value={viewMode}
+                        onChange={(e) => setViewMode(e.target.value)}
+                        className="view-mode-toggle"
+                        optionType="button"
+                        buttonStyle="solid"
+                    >
+                        <Tooltip title="List View">
+                            <Radio.Button value="list">
+                                <FiList size={16} />
+                            </Radio.Button>
+                        </Tooltip>
+                        <Tooltip title="Tree View">
+                            <Radio.Button value="tree">
+                                <RiOrganizationChart size={16} />
+                            </Radio.Button>
+                        </Tooltip>
+                    </Radio.Group>
+                </div>
             </div>
 
-            <div className="org-chart-viewport">
-                <div className="transform-container" style={{ transform: `scale(${scale})` }}>
-                    <div className="tree">
-                        {filteredOrgData && (
-                            <RecursiveNode
-                                employee={filteredOrgData}
-                                onNodeClick={setSelectedEmployee}
-                                onEditClick={handleEditClick}
-                                onDeleteClick={handleDeleteClick}
-                            />
-                        )}
-                        {searchTerm && !filteredOrgData && (
-                            <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>
-                                No employees found matching "{searchTerm}"
-                            </div>
-                        )}
+            {viewMode === 'tree' ? (
+                <div className="org-chart-viewport">
+                    <div className="transform-container" style={{ transform: `scale(${scale})` }}>
+                        <div className="tree">
+                            {filteredOrgData && (
+                                <RecursiveNode
+                                    employee={filteredOrgData}
+                                    onNodeClick={setSelectedEmployee}
+                                    onEditClick={handleEditClick}
+                                    onDeleteClick={handleDeleteClick}
+                                />
+                            )}
+                            {searchTerm && !filteredOrgData && (
+                                <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>
+                                    No employees found matching "{searchTerm}"
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="zoom-controls">
-                <Tooltip title="Zoom Out">
-                    <div className="zoom-btn" onClick={handleZoomOut}><FiMinus size={16} /></div>
-                </Tooltip>
-                <div className="zoom-percentage">
-                    {Math.round(scale * 100)}%
+            ) : (
+                <div className="org-list-container">
+                    <Table<OrgEmployee>
+                        dataSource={flattenOrgData(filteredOrgData)}
+                        rowKey="id"
+                        pagination={false}
+                        rowSelection={undefined}
+                        expandable={{ childrenColumnName: 'none' }}
+                        onRow={(record) => ({
+                            onClick: () => setSelectedEmployee(record),
+                            style: { cursor: 'pointer' }
+                        })}
+                        locale={{ emptyText: searchTerm ? `No employees found matching "${searchTerm}"` : 'No data' }}
+                        columns={[
+                            {
+                                title: 'Employee',
+                                key: 'employee',
+                                render: (_, record: OrgEmployee) => (
+                                    <div className="list-employee-cell">
+                                        <img src={record.avatarUrl} alt={record.name} className="list-avatar" />
+                                        <div className="list-info">
+                                            <div className="list-name">{record.name}</div>
+                                            <div className="list-role">{record.role}</div>
+                                        </div>
+                                    </div>
+                                ),
+                            },
+                            {
+                                title: 'Email',
+                                dataIndex: 'email',
+                                key: 'email',
+                                render: (email: string) => (
+                                    <div className="list-email">
+                                        <FiMail size={14} style={{ marginRight: 6 }} />
+                                        {email}
+                                    </div>
+                                ),
+                            },
+                            {
+                                title: 'Location',
+                                dataIndex: 'location',
+                                key: 'location',
+                            },
+                            {
+                                title: 'Actions',
+                                key: 'actions',
+                                width: 150,
+                                render: (_, record: OrgEmployee) => (
+                                    <div className="list-actions">
+                                        <button className="list-action-btn" onClick={(e) => { e.stopPropagation(); handleEditClick(record); }}>
+                                            <FiEdit2 size={14} />
+                                        </button>
+                                        <Popconfirm
+                                            title="Delete Employee"
+                                            description="Are you sure?"
+                                            onConfirm={(e) => { e?.stopPropagation(); handleDeleteClick(record); }}
+                                            onCancel={(e) => e?.stopPropagation()}
+                                            okText="Yes"
+                                            cancelText="No"
+                                        >
+                                            <button className="list-action-btn list-action-delete" onClick={(e) => e.stopPropagation()}>
+                                                <FiTrash2 size={14} />
+                                            </button>
+                                        </Popconfirm>
+                                    </div>
+                                ),
+                            },
+                        ]}
+                    />
                 </div>
-                <Tooltip title="Zoom In">
-                    <div className="zoom-btn" onClick={handleZoomIn}><FiPlus size={16} /></div>
-                </Tooltip>
-                <div className="zoom-divider" />
-                <Tooltip title="Fit Screen">
-                    <div className="zoom-btn" onClick={handleResetZoom}><FiMinimize2 size={16} /></div>
-                </Tooltip>
-            </div>
+            )}
+
+            {viewMode === 'tree' && (
+                <div className="zoom-controls">
+                    <Tooltip title="Zoom Out">
+                        <div className="zoom-btn" onClick={handleZoomOut}><FiMinus size={16} /></div>
+                    </Tooltip>
+                    <div className="zoom-percentage">
+                        {Math.round(scale * 100)}%
+                    </div>
+                    <Tooltip title="Zoom In">
+                        <div className="zoom-btn" onClick={handleZoomIn}><FiPlus size={16} /></div>
+                    </Tooltip>
+                    <div className="zoom-divider" />
+                    <Tooltip title="Fit Screen">
+                        <div className="zoom-btn" onClick={handleResetZoom}><FiMinimize2 size={16} /></div>
+                    </Tooltip>
+                </div>
+            )}
 
             <EmployeeDetailModal
                 employee={selectedEmployee}

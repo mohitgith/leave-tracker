@@ -151,12 +151,12 @@
 
 /* Scheduler container */
 .dark-mode .scheduler-container {
-    background: #3a3737;
+    background: #2d2a2b;
     border-color: #4a4a4a;
 }
 
 .dark-mode .scheduler-search-row {
-    background: #3a3737;
+    background: #1a1818;
     border-color: #4a4a4a;
 }
 
