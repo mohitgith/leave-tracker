@@ -74,13 +74,18 @@
 }
 
 .view-mode-group .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
-    background: #231F20 !important;
-    border-color: #231F20 !important;
+    background: #EE3524 !important;
+    border-color: #EE3524 !important;
 }
 
 .view-mode-group .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
-    background: #000000 !important;
-    border-color: #000000 !important;
+    background: #D42E1F !important;
+    border-color: #D42E1F !important;
+}
+
+.view-mode-group .ant-radio-button-wrapper:hover {
+    color: #EE3524;
+    border-color: #EE3524;
 }
 
 .view-mode-group {

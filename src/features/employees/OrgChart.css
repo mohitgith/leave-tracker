@@ -15,11 +15,26 @@
 /* Header */
 .org-chart-header {
     display: flex;
-    justify-content: flex-end;
-    padding: 16px 24px;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 0 16px 0;
     position: relative;
     z-index: 10;
+}
+
+.header-top-row {
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.header-bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
 }
 
 .header-title-section {
@@ -520,4 +535,183 @@
 .dark-mode .tree-node:last-child::before,
 .dark-mode .children-container::before {
     border-color: #4a4a4a;
+}
+
+/* =========================================
+   View Mode Toggle
+   ========================================= */
+
+.view-mode-toggle {
+    display: flex;
+}
+
+.view-mode-toggle .ant-radio-button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+    height: 40px;
+    line-height: 1;
+}
+
+.view-mode-toggle .ant-radio-button-wrapper>span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-mode-toggle .ant-radio-button-wrapper:hover {
+    color: #EE3524;
+    border-color: #EE3524;
+}
+
+.view-mode-toggle .ant-radio-button-wrapper-checked {
+    background: #EE3524 !important;
+    border-color: #EE3524 !important;
+    color: #fff !important;
+}
+
+.view-mode-toggle .ant-radio-button-wrapper-checked:hover {
+    background: #D42E1F !important;
+    border-color: #D42E1F !important;
+}
+
+.dark-mode .view-mode-toggle .ant-radio-button-wrapper {
+    background: #3a3737;
+    border-color: #5a5a5a;
+    color: #fff;
+}
+
+.dark-mode .view-mode-toggle .ant-radio-button-wrapper:hover {
+    color: #EE3524;
+}
+
+.dark-mode .view-mode-toggle .ant-radio-button-wrapper-checked {
+    background: #EE3524 !important;
+    border-color: #EE3524 !important;
+}
+
+/* =========================================
+   List View Styles
+   ========================================= */
+
+.org-list-container {
+    flex: 1;
+    padding: 0;
+    overflow: auto;
+    width: 100%;
+}
+
+.org-list-container .ant-table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.org-list-container .ant-table-thead>tr>th {
+    background: #fafafa;
+    font-weight: 600;
+    color: #333;
+}
+
+.org-list-container .ant-table-tbody>tr:hover>td {
+    background: rgba(238, 53, 36, 0.05);
+}
+
+.list-employee-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.list-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.list-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.list-name {
+    font-weight: 600;
+    color: #333;
+}
+
+.list-role {
+    font-size: 12px;
+    color: #666;
+}
+
+.list-email {
+    display: flex;
+    align-items: center;
+    color: #666;
+}
+
+.list-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.list-action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    transition: all 0.2s;
+}
+
+.list-action-btn:hover {
+    border-color: #0066b3;
+    color: #0066b3;
+}
+
+.list-action-delete:hover {
+    border-color: #EE3524;
+    color: #EE3524;
+}
+
+/* Dark mode list view */
+.dark-mode .org-list-container .ant-table {
+    background: #2d2a2b;
+}
+
+.dark-mode .org-list-container .ant-table-thead>tr>th {
+    background: #1a1818;
+    color: #fff;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .org-list-container .ant-table-tbody>tr>td {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #fff;
+}
+
+.dark-mode .org-list-container .ant-table-tbody>tr:hover>td {
+    background: rgba(238, 53, 36, 0.1);
+}
+
+.dark-mode .list-name {
+    color: #fff;
+}
+
+.dark-mode .list-role,
+.dark-mode .list-email {
+    color: #9FA1A4;
+}
+
+.dark-mode .list-action-btn {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #fff;
 }

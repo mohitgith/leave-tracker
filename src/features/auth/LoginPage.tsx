@@ -28,9 +28,43 @@ const LoginPage: React.FC = () => {
         }
     };
 
-    const handleSSOLogin = () => {
-        // No operation - SSO not implemented
-        message.info('SSO Login is not available at this time');
+    const handleSSOLogin = async () => {
+        setLoading(true);
+        try {
+            // Logout first
+            await fetch("/api/sso?action=logout");
+            // Login via SSO
+            const response = await fetch("/api/sso?action=login");
+            const loginRes = await response.json();
+            console.log("🚀 ~ handleSsoLogin ~ admin:", loginRes.user.admin);
+
+            // Map SSO response to User structure and store
+            const ssoUser = {
+                id: loginRes.user.id || loginRes.user.staffId || '',
+                name: loginRes.user.staffName || loginRes.user.name,
+                role: loginRes.user.role || '',
+                department: loginRes.user.department || '',
+                isManager: loginRes.user.admin === true,
+            };
+
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('currentUser', JSON.stringify(ssoUser));
+            if (loginRes.accessToken) {
+                localStorage.setItem('token', loginRes.accessToken);
+            }
+            localStorage.setItem(
+                "pageCount",
+                loginRes.pageCount ? JSON.stringify(loginRes.pageCount) : ""
+            );
+
+            message.success('SSO Login successful');
+            navigate(loginRes.user.admin ? '/dashboard' : '/dashboard');
+        } catch (error) {
+            console.log("🚀 ~ handleSsoLogin ~ error:", error);
+            message.error('SSO Login failed');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
