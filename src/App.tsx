@@ -2,14 +2,16 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
-import ProtectedRoute from './components/common/ProtectedRoute';
-import LoginPage from './components/auth/LoginPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import LoginPage from './features/auth/LoginPage';
 import MainLayout from './components/layout/MainLayout';
-import DashboardPage from './components/pages/DashboardPage';
-import LeaveTrackerPage from './components/pages/LeaveTrackerPage';
-import ProfilePage from './components/pages/ProfilePage';
-import SettingsPage from './components/pages/SettingsPage';
-import OrgChart from './components/employees/OrgChart';
+import DashboardPage from './features/dashboard/DashboardPage';
+import LeaveTrackerPage from './features/leave-tracker/LeaveTrackerPage';
+import ProfilePage from './features/profile/ProfilePage';
+import SettingsPage from './features/settings/SettingsPage';
+import OrgChart from './features/employees/OrgChart';
+import NotFoundPage from './features/errors/NotFoundPage';
+import ServerErrorPage from './features/errors/ServerErrorPage';
 import './App.css';
 
 const App: React.FC = () => {
@@ -19,6 +21,7 @@ const App: React.FC = () => {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/login" element={<LoginPage />} />
+                        <Route path="/error/500" element={<ServerErrorPage />} />
 
                         <Route path="/" element={
                             <ProtectedRoute>
@@ -32,6 +35,9 @@ const App: React.FC = () => {
                             <Route path="profile" element={<ProfilePage />} />
                             <Route path="settings" element={<SettingsPage />} />
                         </Route>
+
+                        {/* 404 - Catch all unmatched routes */}
+                        <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                 </BrowserRouter>
             </AuthProvider>
@@ -40,4 +46,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-

@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { fetchEmployees, EmployeeAPI } from '../services/api';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { loginUser } from '../services/api';
 
 interface User {
     id: string;
@@ -7,6 +7,7 @@ interface User {
     role: string;
     department: string;
     isManager: boolean;
+    username?: string;
 }
 
 interface AuthContextType {
@@ -19,23 +20,54 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Generate username from employee name (e.g., "Lohit Ganta" -> "lohitg")
-const generateUsername = (name: string): string => {
-    const parts = name.toLowerCase().split(' ');
-    if (parts.length >= 2) {
-        return parts[0] + parts[parts.length - 1].charAt(0);
-    }
-    return parts[0];
-};
+// Inactivity timeout in milliseconds (15 minutes)
+const INACTIVITY_TIMEOUT = 15 * 60 * 1000;
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    let idleTimer: any;
+
+    const logout = useCallback(() => {
+        setUser(null);
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
+        if (idleTimer) clearTimeout(idleTimer);
+    }, []);
+
+    const resetIdleTimer = useCallback(() => {
+        if (idleTimer) clearTimeout(idleTimer);
+        if (user) {
+            idleTimer = setTimeout(() => {
+                console.log('User inactive for 15 minutes, logging out...');
+                logout();
+                window.location.href = '/login';
+            }, INACTIVITY_TIMEOUT);
+        }
+    }, [user, logout]);
+
+    // Setup idle listeners
+    useEffect(() => {
+        if (!user) return;
+
+        const events = ['mousemove', 'keydown', 'mousedown', 'touchstart'];
+        const handleActivity = () => resetIdleTimer();
+
+        events.forEach(event => window.addEventListener(event, handleActivity));
+        resetIdleTimer(); // Start timer
+
+        return () => {
+            events.forEach(event => window.removeEventListener(event, handleActivity));
+            if (idleTimer) clearTimeout(idleTimer);
+        };
+    }, [user, resetIdleTimer]);
 
     // Restore session on mount
     useEffect(() => {
         const storedUser = localStorage.getItem('currentUser');
-        if (storedUser) {
+        const token = localStorage.getItem('token');
+        if (storedUser && token) {
             setUser(JSON.parse(storedUser));
         }
         setLoading(false);
@@ -43,30 +75,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const login = async (username: string, password: string): Promise<boolean> => {
         try {
-            const employees = await fetchEmployees();
-            
-            // Find employee whose generated username matches
-            const employee = employees.find((emp: EmployeeAPI) => {
-                const expectedUsername = generateUsername(emp.name);
-                return expectedUsername === username.toLowerCase() && password.toLowerCase() === username.toLowerCase();
-            });
+            const data = await loginUser({ username, password });
 
-            if (employee) {
+            if (data && data.accessToken) {
+                const employee = data.user;
                 // Check if manager (managerId is null or role contains MANAGER)
-                const isManager = employee.managerId === null || 
-                    employee.role.toUpperCase().includes('MANAGER');
-                
+                const isManager = employee.managerId === null ||
+                    (employee.role && employee.role.toUpperCase().includes('MANAGER'));
+
                 const loggedInUser: User = {
                     id: employee.id,
                     name: employee.name,
                     role: employee.role,
                     department: employee.department,
+                    username: employee.username,
                     isManager,
                 };
 
                 setUser(loggedInUser);
                 localStorage.setItem('isAuthenticated', 'true');
                 localStorage.setItem('currentUser', JSON.stringify(loggedInUser));
+                localStorage.setItem('token', data.accessToken);
                 return true;
             }
             return false;
@@ -74,12 +103,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             console.error('Login error:', error);
             return false;
         }
-    };
-
-    const logout = () => {
-        setUser(null);
-        localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('currentUser');
     };
 
     return (

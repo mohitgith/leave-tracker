@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
-import { PageHeader } from '../common';
+import { PageHeader } from '../';
 
 const { Content } = Layout;
 

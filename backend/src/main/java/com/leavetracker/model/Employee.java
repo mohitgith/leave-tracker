@@ -1,0 +1,152 @@
+package com.leavetracker.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+
+/**
+ * Unified Employee entity with hierarchy support.
+ * Used for both employee list and org chart (via managerId relationship).
+ */
+@Entity
+@Table(name = "employees")
+public class Employee {
+    @Id
+    private String id;
+
+    @Column(nullable = false)
+    private String name;
+
+    private String role;
+    private String department;
+
+    @Column(length = 500)
+    private String avatarUrl;
+
+    // Additional fields for org chart
+    private String location;
+    private String email;
+    private String phone;
+    private String managerId; // null for CEO/root, parent ID otherwise
+    private String employeeType; // "permanent" or "contractor"
+
+    @Column(unique = true)
+    private String username;
+
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private String password;
+
+    public Employee() {
+    }
+
+    public Employee(String id, String name, String role, String department, String avatarUrl,
+            String location, String email, String phone, String managerId) {
+        this.id = id;
+        this.name = name;
+        this.role = role;
+        this.department = department;
+        this.avatarUrl = avatarUrl;
+        this.location = location;
+        this.email = email;
+        this.phone = phone;
+        this.managerId = managerId;
+    }
+
+    // Getters and Setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(String managerId) {
+        this.managerId = managerId;
+    }
+
+    public String getEmployeeType() {
+        return employeeType;
+    }
+
+    public void setEmployeeType(String employeeType) {
+        this.employeeType = employeeType;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}

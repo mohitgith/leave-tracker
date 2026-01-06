@@ -9,6 +9,17 @@ export interface Employee {
     employeeType?: EmployeeType;
 }
 
+export interface OrgEmployee {
+    id: string;
+    name: string;
+    role: string;
+    location: string;
+    avatarUrl: string;
+    email: string;
+    phone: string;
+    children?: OrgEmployee[];
+}
+
 export type LeaveType = 'vacation' | 'sick';
 export type LeaveStatus = 'Applied';
 
