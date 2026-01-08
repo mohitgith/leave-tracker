@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table, Popconfirm } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
 import { FiMail, FiEdit2, FiTrash2 } from 'react-icons/fi';
 import type { OrgEmployeeAPI } from '../../services/api';
 
@@ -24,7 +25,7 @@ const OrgList: React.FC<OrgListProps> = ({
     hideEmailLocation = false,
     hideHeaders = false
 }) => {
-    const columns: any[] = [
+    const columns: ColumnsType<OrgEmployeeAPI> = [
         {
             title: 'Employee',
             key: 'employee',
@@ -46,6 +47,16 @@ const OrgList: React.FC<OrgListProps> = ({
             ),
         },
     ];
+
+    // Conditionally add Manager column if showManager is true
+    if (_showManager) {
+        columns.push({
+            title: 'Manager',
+            dataIndex: 'reportsTo',
+            key: 'reportsTo',
+            render: (reportsTo: string) => reportsTo || 'N/A',
+        });
+    }
 
     // Conditionally add Email and Location columns
     if (!hideEmailLocation) {
@@ -70,10 +81,12 @@ const OrgList: React.FC<OrgListProps> = ({
     }
 
     // Conditionally add Actions column if showActions is true
-    if (showActions && (onEditClick || onDeleteClick)) {
+    if (showActions) {
         columns.push({
-            title: 'Actions',
+            title: hideHeaders ? '' : 'Actions',
             key: 'actions',
+            align: 'right',
+            width: 100,
             render: (_: any, record: OrgEmployeeAPI) => (
                 <div className="list-actions">
                     {onEditClick && (
@@ -90,7 +103,7 @@ const OrgList: React.FC<OrgListProps> = ({
                     {onDeleteClick && (
                         <Popconfirm
                             title="Delete Employee"
-                            description="Are you sure?"
+                            description="Are you sure you want to delete this employee?"
                             onConfirm={(e) => {
                                 e?.stopPropagation();
                                 onDeleteClick(record);
@@ -98,6 +111,7 @@ const OrgList: React.FC<OrgListProps> = ({
                             onCancel={(e) => e?.stopPropagation()}
                             okText="Yes"
                             cancelText="No"
+                            okButtonProps={{ danger: true }}
                         >
                             <button
                                 className="list-action-btn list-action-delete"
@@ -121,6 +135,7 @@ const OrgList: React.FC<OrgListProps> = ({
                 rowSelection={undefined}
                 expandable={{ childrenColumnName: 'none' }}
                 showHeader={!hideHeaders}
+                locale={{ emptyText: 'Nothing found' }}
                 onRow={(record) => ({
                     onClick: () => onEmployeeClick?.(record),
                     style: { cursor: onEmployeeClick ? 'pointer' : 'default' }

@@ -1,0 +1,73 @@
+.filter-dropdown-content {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 260px;
+    padding: 0;
+}
+
+.filter-dropdown-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.filter-dropdown-header h4 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #231F20;
+}
+
+.filter-dropdown-body {
+    padding: 12px 16px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.filter-checkbox-item {
+    margin-bottom: 8px;
+}
+
+.filter-checkbox-item:last-child {
+    margin-bottom: 0;
+}
+
+.filter-checkbox-item .ant-checkbox-wrapper {
+    margin-left: 0;
+}
+
+.filter-dropdown-footer {
+    padding: 12px 16px;
+    border-top: 1px solid #e8e8e8;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.filter-badge {
+    background: #EE3524;
+    color: #fff;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+/* Dark mode */
+.dark-mode .filter-dropdown-content {
+    background: #2d2a2b;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .filter-dropdown-header {
+    border-color: #3a3a3a;
+}
+
+.dark-mode .filter-dropdown-header h4 {
+    color: #fff;
+}
+
+.dark-mode .filter-dropdown-footer {
+    border-color: #3a3a3a;
+}

@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Spin, message } from 'antd';
-import { FiClock, FiCalendar, FiUsers, FiSearch } from 'react-icons/fi';
+import dayjs from 'dayjs';
+import { FiClock, FiCalendar, FiUsers, FiSearch, FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
 import { fetchOrgChart, type OrgEmployeeAPI, deleteEmployee } from '../../services/api';
 import OrgList from '../employees/OrgList';
 import PendingRequestsModal from './PendingRequestsModal';
 import EmployeeDetailModal from '../employees/EmployeeDetailModal';
+import AddEmployeeModal from '../employees/AddEmployeeModal';
+import Scheduler from '../scheduler/Scheduler';
+import FilterDropdown from './FilterDropdown';
+import { CreateLeaveModal } from '../../components';
 
 import './DashboardPage.css';
 
@@ -31,7 +36,8 @@ interface UpcomingLeaves {
 import {
     fetchAbsentToday,
     fetchUpcomingLeaves,
-    fetchPendingRequests
+    fetchPendingRequests,
+    fetchLeaves
 } from '../../services/api';
 
 const DashboardPage: React.FC = () => {
@@ -43,7 +49,13 @@ const DashboardPage: React.FC = () => {
     const [showPendingModal, setShowPendingModal] = useState(false);
     const [selectedEmployee, setSelectedEmployee] = useState<OrgEmployeeAPI | null>(null);
     const [showEmployeeModal, setShowEmployeeModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [schedulerLeaves, setSchedulerLeaves] = useState<any[]>([]);
+    const [schedulerStartDate, setSchedulerStartDate] = useState(dayjs());
+    const [schedulerSearch, setSchedulerSearch] = useState('');
+    const [showCreateLeaveModal, setShowCreateLeaveModal] = useState(false);
+    const [leaveTypeFilter, setLeaveTypeFilter] = useState<string[]>([]);
 
     useEffect(() => {
         loadDashboardData();
@@ -76,17 +88,19 @@ const DashboardPage: React.FC = () => {
             setLoading(true);
 
             // Fetch all dashboard data in parallel
-            const [absentData, upcomingData, pendingData, orgChartData] = await Promise.all([
+            const [absentData, upcomingData, pendingData, orgChartData, leavesData] = await Promise.all([
                 fetchAbsentToday(),
                 fetchUpcomingLeaves(),
                 fetchPendingRequests(),
-                fetchOrgChart()
+                fetchOrgChart(),
+                fetchLeaves()
             ]);
 
             setAbsentToday(absentData);
             setUpcomingLeaves(upcomingData);
             setPendingRequests(pendingData);
             setOrgData(orgChartData);
+            setSchedulerLeaves(leavesData);
         } catch (error) {
             console.error('Error loading dashboard data:', error);
             message.error('Failed to load dashboard data');
@@ -122,9 +136,9 @@ const DashboardPage: React.FC = () => {
         setShowEmployeeModal(true);
     };
 
-    const handleEmployeeEdit = (emp: OrgEmployeeAPI) => {
+    const handleEditEmployee = (emp: OrgEmployeeAPI) => {
         setSelectedEmployee(emp);
-        setShowEmployeeModal(true);
+        setShowEditModal(true);
     };
 
     const handleEmployeeDelete = async (emp: OrgEmployeeAPI) => {
@@ -135,6 +149,54 @@ const DashboardPage: React.FC = () => {
         } catch (error) {
             message.error('Failed to delete employee');
         }
+    };
+
+    const handlePrevMonth = () => {
+        setSchedulerStartDate(schedulerStartDate.subtract(1, 'month'));
+    };
+
+    const handleNextMonth = () => {
+        setSchedulerStartDate(schedulerStartDate.add(1, 'month'));
+    };
+
+    const handleApplyFilter = (types: string[]) => {
+        setLeaveTypeFilter(types);
+    };
+
+    const handleCreateLeave = async () => {
+        await loadDashboardData(); // Reload to show new leave
+        setShowCreateLeaveModal(false);
+    };
+
+    // Filter employees based on search
+    const filterSchedulerEmployees = () => {
+        if (!schedulerSearch.trim()) return flattenOrgData(orgData);
+        const lowerSearch = schedulerSearch.toLowerCase();
+        return flattenOrgData(orgData).filter(emp =>
+            emp.name.toLowerCase().includes(lowerSearch) ||
+            emp.role.toLowerCase().includes(lowerSearch)
+        );
+    };
+
+    // Filter leaves based on search and type filter
+    const filterSchedulerLeaves = () => {
+        let filtered = schedulerLeaves;
+
+        // Filter by type
+        if (leaveTypeFilter.length > 0) {
+            filtered = filtered.filter(leave => leaveTypeFilter.includes(leave.type));
+        }
+
+        // Filter by search (employee name)
+        if (schedulerSearch.trim()) {
+            const lowerSearch = schedulerSearch.toLowerCase();
+            const searchedEmployeeIds = flattenOrgData(orgData)
+                .filter(emp => emp.name.toLowerCase().includes(lowerSearch))
+                .map(emp => emp.id);
+            filtered = filtered.filter(leave => searchedEmployeeIds.includes(leave.employeeId));
+        }
+
+        return filtered;
     };
 
     if (loading) {
@@ -245,16 +307,18 @@ const DashboardPage: React.FC = () => {
                 <div className="dashboard-org-column">
                     <div className="org-column-header">
                         <h3 className="org-column-title">Team Members</h3>
-                        <span className="org-member-count">{flattenOrgData(orgData).length} Members</span>
-                        <div className="org-search-wrapper">
-                            <FiSearch className="org-search-icon" size={16} />
-                            <input
-                                type="text"
-                                placeholder="Search employees..."
-                                className="org-search-input"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
+                        <div className="org-header-right">
+                            <span className="org-member-count">{flattenOrgData(orgData).length} Members</span>
+                            <div className="org-search-wrapper">
+                                <FiSearch className="org-search-icon" size={16} />
+                                <input
+                                    type="text"
+                                    placeholder="Search employees..."
+                                    className="org-search-input"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className="org-list-wrapper">
@@ -265,7 +329,7 @@ const DashboardPage: React.FC = () => {
                             hideEmailLocation={true}
                             hideHeaders={true}
                             onEmployeeClick={handleEmployeeClick}
-                            onEditClick={handleEmployeeEdit}
+                            onEditClick={handleEditEmployee}
                             onDeleteClick={handleEmployeeDelete}
                         />
                     </div>
@@ -291,6 +355,94 @@ const DashboardPage: React.FC = () => {
                     }}
                 />
             )}
+
+            {/* Edit Employee Modal */}
+            {selectedEmployee && (
+                <AddEmployeeModal
+                    open={showEditModal}
+                    initialValues={selectedEmployee}
+                    onClose={() => {
+                        setShowEditModal(false);
+                        setSelectedEmployee(null);
+                    }}
+                    onSubmit={async (values) => {
+                        try {
+                            await import('../../services/api').then(({ updateEmployee }) =>
+                                updateEmployee(selectedEmployee.id, values)
+                            );
+                            setShowEditModal(false);
+                            setSelectedEmployee(null);
+                            await loadDashboardData();
+                        } catch (error) {
+                            console.error('Failed to update employee:', error);
+                            message.error('Failed to update employee');
+                        }
+                    }}
+                />
+            )}
+
+            {/* Leave Tracker / Scheduler */}
+            <div className="dashboard-scheduler-section">
+                <div className="scheduler-custom-header">
+                    <div className="scheduler-header-top">
+                        <h3 className="scheduler-title">Leave Tracker</h3>
+                        <div className="scheduler-month-nav">
+                            <button className="month-nav-btn" onClick={handlePrevMonth}>
+                                <FiChevronLeft size={20} />
+                            </button>
+                            <span className="current-month">{schedulerStartDate.format('MMMM YYYY')}</span>
+                            <button className="month-nav-btn" onClick={handleNextMonth}>
+                                <FiChevronRight size={20} />
+                            </button>
+                        </div>
+                    </div>
+                    <div className="scheduler-header-bottom">
+                        <div className="scheduler-actions">
+                            <button className="scheduler-action-btn create-btn" onClick={() => setShowCreateLeaveModal(true)}>
+                                <FiPlus size={16} />
+                                <span>Create Leave</span>
+                            </button>
+                            <FilterDropdown
+                                selectedTypes={leaveTypeFilter as any}
+                                onApply={handleApplyFilter}
+                                buttonClassName="scheduler-action-btn filter-btn"
+                            />
+                        </div>
+                        <div className="scheduler-search-wrapper">
+                            <FiSearch className="scheduler-search-icon" size={16} />
+                            <input
+                                type="text"
+                                placeholder="Search employees..."
+                                className="scheduler-search-input"
+                                value={schedulerSearch}
+                                onChange={(e) => setSchedulerSearch(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                </div>
+                {filterSchedulerEmployees().length === 0 ? (
+                    <div className="scheduler-empty-wrapper">
+                        <p className="scheduler-empty-text">Nothing found</p>
+                    </div>
+                ) : (
+                    <Scheduler
+                        employees={filterSchedulerEmployees() as any}
+                        leaves={filterSchedulerLeaves()}
+                        startDate={schedulerStartDate.startOf('month')}
+                        endDate={schedulerStartDate.endOf('month')}
+                        viewMode="1"
+                    />
+                )}
+            </div>
+
+            {/* Create Leave Modal */}
+            <CreateLeaveModal
+                open={showCreateLeaveModal}
+                onClose={() => setShowCreateLeaveModal(false)}
+                onSubmit={async () => {
+                    await handleCreateLeave();
+                }}
+            />
         </div>
     );
 };
