@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Spin, message } from 'antd';
-import { FiUserX, FiClock, FiCalendar, FiUsers } from 'react-icons/fi';
+import { FiClock, FiCalendar, FiUsers, FiSearch } from 'react-icons/fi';
+import { fetchOrgChart, type OrgEmployeeAPI, deleteEmployee } from '../../services/api';
+import OrgList from '../employees/OrgList';
+import PendingRequestsModal from './PendingRequestsModal';
+import EmployeeDetailModal from '../employees/EmployeeDetailModal';
 
 import './DashboardPage.css';
-
-interface DashboardStats {
-    absentToday: number;
-    pendingRequests: number;
-    totalEmployees: number;
-    upcomingHoliday: {
-        name: string;
-        date: string;
-    };
-}
 
 interface LeaveItem {
     leave: {
@@ -35,52 +29,70 @@ interface UpcomingLeaves {
 }
 
 import {
-    fetchDashboardStats,
     fetchAbsentToday,
     fetchUpcomingLeaves,
     fetchPendingRequests
 } from '../../services/api';
 
-// ... interfaces ...
-
 const DashboardPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
-    const [stats, setStats] = useState<DashboardStats | null>(null);
     const [absentToday, setAbsentToday] = useState<LeaveItem[]>([]);
     const [upcomingLeaves, setUpcomingLeaves] = useState<UpcomingLeaves>({ tomorrow: [], nextWeek: [] });
     const [pendingRequests, setPendingRequests] = useState<LeaveItem[]>([]);
+    const [orgData, setOrgData] = useState<OrgEmployeeAPI | null>(null);
+    const [showPendingModal, setShowPendingModal] = useState(false);
+    const [selectedEmployee, setSelectedEmployee] = useState<OrgEmployeeAPI | null>(null);
+    const [showEmployeeModal, setShowEmployeeModal] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         loadDashboardData();
     }, []);
+
+    // Flatten org tree to list
+    const flattenOrgData = (node: OrgEmployeeAPI | null): OrgEmployeeAPI[] => {
+        if (!node) return [];
+        const result: OrgEmployeeAPI[] = [node];
+        if (node.children) {
+            node.children.forEach(child => {
+                result.push(...flattenOrgData(child));
+            });
+        }
+        return result;
+    };
+
+    const filterEmployees = (employees: OrgEmployeeAPI[], term: string): OrgEmployeeAPI[] => {
+        if (!term.trim()) return employees;
+        const lowerTerm = term.toLowerCase();
+        return employees.filter(emp =>
+            emp.name.toLowerCase().includes(lowerTerm) ||
+            emp.role.toLowerCase().includes(lowerTerm) ||
+            emp.email.toLowerCase().includes(lowerTerm)
+        );
+    };
 
     const loadDashboardData = async () => {
         try {
             setLoading(true);
 
             // Fetch all dashboard data in parallel
-            const [statsData, absentData, upcomingData, pendingData] = await Promise.all([
-                fetchDashboardStats(),
+            const [absentData, upcomingData, pendingData, orgChartData] = await Promise.all([
                 fetchAbsentToday(),
                 fetchUpcomingLeaves(),
-                fetchPendingRequests()
+                fetchPendingRequests(),
+                fetchOrgChart()
             ]);
 
-            setStats(statsData);
             setAbsentToday(absentData);
             setUpcomingLeaves(upcomingData);
             setPendingRequests(pendingData);
+            setOrgData(orgChartData);
         } catch (error) {
             console.error('Error loading dashboard data:', error);
             message.error('Failed to load dashboard data');
         } finally {
             setLoading(false);
         }
-    };
-
-    const formatDate = (dateStr: string) => {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     };
 
     const getLeaveTypeClass = (type: string) => {
@@ -105,6 +117,26 @@ const DashboardPage: React.FC = () => {
         }
     };
 
+    const handleEmployeeClick = (emp: OrgEmployeeAPI) => {
+        setSelectedEmployee(emp);
+        setShowEmployeeModal(true);
+    };
+
+    const handleEmployeeEdit = (emp: OrgEmployeeAPI) => {
+        setSelectedEmployee(emp);
+        setShowEmployeeModal(true);
+    };
+
+    const handleEmployeeDelete = async (emp: OrgEmployeeAPI) => {
+        try {
+            await deleteEmployee(emp.id);
+            message.success('Employee deleted successfully');
+            loadDashboardData(); // Reload data
+        } catch (error) {
+            message.error('Failed to delete employee');
+        }
+    };
+
     if (loading) {
         return (
             <div className="dashboard-page" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
@@ -115,186 +147,149 @@ const DashboardPage: React.FC = () => {
 
     return (
         <div className="dashboard-page">
-            {/* Stats Cards */}
-            <div className="stats-grid">
-                <div className="stat-card">
-                    <div className="stat-card-header">
-                        <span className="stat-label">Absent Today</span>
-                        <div className="stat-icon absent">
-                            <FiUserX size={18} />
+            <div className="dashboard-layout">
+                {/* Left Column - Tiles (1/3 width) */}
+                <div className="dashboard-tiles">
+                    {/* On Leave Today Tile */}
+                    <div className="dashboard-tile">
+                        <div className="tile-header today">
+                            <h3 className="tile-title">On Leave Today</h3>
+                            <span className="tile-count-badge today">{absentToday.length} People</span>
+                        </div>
+                        <div className="tile-content">
+                            {absentToday.length > 0 ? (
+                                absentToday.map((item, index) => (
+                                    <div key={item.leave.id || index} className="tile-leave-item">
+                                        <div className="tile-avatar-wrapper">
+                                            <img
+                                                src={item.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.employeeName || 'User')}&background=random`}
+                                                alt={item.employeeName}
+                                                className="tile-avatar"
+                                            />
+                                            <div className={`tile-status-dot ${getLeaveTypeClass(item.leave.type)}`}></div>
+                                        </div>
+                                        <div className="tile-info">
+                                            <p className="tile-name">{item.employeeName}</p>
+                                            <p className="tile-role">{item.employeeRole}</p>
+                                        </div>
+                                        <span className={`tile-type-badge ${getLeaveTypeClass(item.leave.type)}`}>
+                                            {getLeaveTypeLabel(item.leave.type)}
+                                        </span>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="tile-empty-state">
+                                    <FiUsers className="empty-icon" size={32} />
+                                    <p className="empty-text">No one is on leave today</p>
+                                </div>
+                            )}
                         </div>
                     </div>
-                    <div className="stat-value">{stats?.absentToday || 0}</div>
-                    <span className="stat-change">
-                        {absentToday.length > 0 ? `${absentToday.length} employees on leave` : 'No absences today'}
-                    </span>
-                </div>
 
-                <div className="stat-card">
-                    <div className="stat-card-header">
-                        <span className="stat-label">Pending Requests</span>
-                        <div className="stat-icon pending">
-                            <FiClock size={18} />
+                    {/* Tomorrow Tile */}
+                    <div className="dashboard-tile">
+                        <div className="tile-header">
+                            <h3 className="tile-title">Tomorrow</h3>
+                            <span className="tile-count-badge">{upcomingLeaves.tomorrow.length} People</span>
+                        </div>
+                        <div className="tile-content">
+                            {upcomingLeaves.tomorrow.length > 0 ? (
+                                upcomingLeaves.tomorrow.map((item, index) => (
+                                    <div key={item.leave.id || index} className="tile-leave-item">
+                                        <div className="tile-avatar-wrapper">
+                                            <img
+                                                src={item.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.employeeName || 'User')}&background=random`}
+                                                alt={item.employeeName}
+                                                className="tile-avatar"
+                                            />
+                                        </div>
+                                        <div className="tile-info">
+                                            <p className="tile-name">{item.employeeName}</p>
+                                            <p className="tile-role">{item.employeeRole}</p>
+                                        </div>
+                                        <span className="tile-dates">Whole Day</span>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="tile-empty-state">
+                                    <FiCalendar className="empty-icon" size={32} />
+                                    <p className="empty-text">No leaves scheduled</p>
+                                </div>
+                            )}
                         </div>
                     </div>
-                    <div className="stat-value">{stats?.pendingRequests || 0}</div>
-                    <span className="stat-change">
-                        {(stats?.pendingRequests || 0) > 0 ? 'Needs review' : 'All requests processed'}
-                    </span>
-                </div>
 
-                <div className="stat-card">
-                    <div className="stat-card-header">
-                        <span className="stat-label">Upcoming Holiday</span>
-                        <div className="stat-icon holiday">
-                            <FiCalendar size={18} />
+                    {/* Leave Requests Tile (Clickable) */}
+                    <div className="dashboard-tile clickable" onClick={() => setShowPendingModal(true)}>
+                        <div className="tile-header requests">
+                            <h3 className="tile-title">Leave Requests</h3>
+                            <span className="tile-count-badge requests">{pendingRequests.length} Requests</span>
+                        </div>
+                        <div className="tile-content">
+                            {pendingRequests.length > 0 ? (
+                                <div className="tile-requests-summary">
+                                    <FiClock className="requests-icon" size={32} />
+                                    <p className="requests-text">Click to view leave requests</p>
+                                </div>
+                            ) : (
+                                <div className="tile-empty-state">
+                                    <FiClock className="empty-icon" size={32} />
+                                    <p className="empty-text">No pending requests</p>
+                                </div>
+                            )}
                         </div>
                     </div>
-                    <div className="stat-value">{stats?.upcomingHoliday?.name || 'None'}</div>
-                    <span className="stat-change">{stats?.upcomingHoliday?.date || ''}</span>
-                </div>
-            </div>
-
-            {/* Leave Sections */}
-            <div className="leave-sections">
-                {/* On Leave Today */}
-                <div className="leave-section">
-                    <div className="leave-section-header today">
-                        <h2 className="leave-section-title">On Leave Today</h2>
-                        <span className="leave-count-badge today">{absentToday.length} People</span>
-                    </div>
-                    <div className="leave-list">
-                        {absentToday.length > 0 ? (
-                            absentToday.map((item, index) => (
-                                <div key={item.leave.id || index} className="leave-item">
-                                    <div className="leave-avatar-wrapper">
-                                        <img
-                                            src={item.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.employeeName || 'User')}&background=random`}
-                                            alt={item.employeeName}
-                                            className="leave-avatar"
-                                        />
-                                        <div className={`leave-status-dot ${getLeaveTypeClass(item.leave.type)}`}></div>
-                                    </div>
-                                    <div className="leave-info">
-                                        <p className="leave-name">{item.employeeName}</p>
-                                        <p className="leave-role">{item.employeeRole}</p>
-                                    </div>
-                                    <span className={`leave-type-badge ${getLeaveTypeClass(item.leave.type)}`}>
-                                        {getLeaveTypeLabel(item.leave.type)}
-                                    </span>
-                                </div>
-                            ))
-                        ) : (
-                            <div className="empty-state">
-                                <FiUsers className="empty-icon" size={48} />
-                                <p className="empty-text">No one is on leave today</p>
-                            </div>
-                        )}
-                    </div>
                 </div>
 
-                {/* Tomorrow */}
-                <div className="leave-section">
-                    <div className="leave-section-header">
-                        <h2 className="leave-section-title">Tomorrow</h2>
-                        <span className="leave-count-badge">{upcomingLeaves.tomorrow.length} People</span>
+                {/* Right Column - Org List (2/3 width) */}
+                <div className="dashboard-org-column">
+                    <div className="org-column-header">
+                        <h3 className="org-column-title">Team Members</h3>
+                        <span className="org-member-count">{flattenOrgData(orgData).length} Members</span>
+                        <div className="org-search-wrapper">
+                            <FiSearch className="org-search-icon" size={16} />
+                            <input
+                                type="text"
+                                placeholder="Search employees..."
+                                className="org-search-input"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
                     </div>
-                    <div className="leave-list">
-                        {upcomingLeaves.tomorrow.length > 0 ? (
-                            upcomingLeaves.tomorrow.map((item, index) => (
-                                <div key={item.leave.id || index} className="leave-item">
-                                    <div className="leave-avatar-wrapper">
-                                        <img
-                                            src={item.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.employeeName || 'User')}&background=random`}
-                                            alt={item.employeeName}
-                                            className="leave-avatar"
-                                        />
-                                    </div>
-                                    <div className="leave-info">
-                                        <p className="leave-name">{item.employeeName}</p>
-                                        <p className="leave-role">{item.employeeRole}</p>
-                                    </div>
-                                    <span className="leave-dates">Whole Day</span>
-                                </div>
-                            ))
-                        ) : (
-                            <div className="empty-state">
-                                <FiCalendar className="empty-icon" size={48} />
-                                <p className="empty-text">No leaves scheduled for tomorrow</p>
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {/* Next Week */}
-                <div className="leave-section">
-                    <div className="leave-section-header">
-                        <h2 className="leave-section-title">Next Week</h2>
-                        <span className="leave-count-badge">{upcomingLeaves.nextWeek.length} Upcoming</span>
-                    </div>
-                    <div className="leave-list">
-                        {upcomingLeaves.nextWeek.length > 0 ? (
-                            upcomingLeaves.nextWeek.map((item, index) => (
-                                <div key={item.leave.id || index} className="leave-item">
-                                    <div className="leave-avatar-wrapper">
-                                        <img
-                                            src={item.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.employeeName || 'User')}&background=random`}
-                                            alt={item.employeeName}
-                                            className="leave-avatar"
-                                        />
-                                    </div>
-                                    <div className="leave-info">
-                                        <p className="leave-name">{item.employeeName}</p>
-                                        <p className="leave-role">{item.employeeRole}</p>
-                                    </div>
-                                    <span className="leave-dates">
-                                        {formatDate(item.leave.startDate)} - {formatDate(item.leave.endDate)}
-                                    </span>
-                                </div>
-                            ))
-                        ) : (
-                            <div className="empty-state">
-                                <FiCalendar className="empty-icon" size={48} />
-                                <p className="empty-text">No leaves scheduled for next week</p>
-                            </div>
-                        )}
+                    <div className="org-list-wrapper">
+                        <OrgList
+                            employees={filterEmployees(flattenOrgData(orgData), searchTerm)}
+                            showManager={false}
+                            showActions={true}
+                            hideEmailLocation={true}
+                            hideHeaders={true}
+                            onEmployeeClick={handleEmployeeClick}
+                            onEditClick={handleEmployeeEdit}
+                            onDeleteClick={handleEmployeeDelete}
+                        />
                     </div>
                 </div>
             </div>
 
-            {/* Pending Requests Section */}
-            {pendingRequests.length > 0 && (
-                <div className="leave-sections" style={{ marginTop: '0' }}>
-                    <div className="leave-section" style={{ gridColumn: 'span 2' }}>
-                        <div className="leave-section-header">
-                            <h2 className="leave-section-title">Pending Leave Requests</h2>
-                            <span className="leave-count-badge">{pendingRequests.length} Pending</span>
-                        </div>
-                        <div className="leave-list">
-                            {pendingRequests.map((item, index) => (
-                                <div key={item.leave.id || index} className="leave-item">
-                                    <div className="leave-avatar-wrapper">
-                                        <img
-                                            src={item.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.employeeName || 'User')}&background=random`}
-                                            alt={item.employeeName}
-                                            className="leave-avatar"
-                                        />
-                                    </div>
-                                    <div className="leave-info">
-                                        <p className="leave-name">{item.employeeName}</p>
-                                        <p className="leave-role">{item.employeeRole}</p>
-                                    </div>
-                                    <span className={`leave-type-badge ${getLeaveTypeClass(item.leave.type)}`}>
-                                        {getLeaveTypeLabel(item.leave.type)}
-                                    </span>
-                                    <span className="leave-dates">
-                                        {formatDate(item.leave.startDate)} - {formatDate(item.leave.endDate)}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
+            {/* Pending Requests Modal */}
+            <PendingRequestsModal
+                visible={showPendingModal}
+                onClose={() => setShowPendingModal(false)}
+                requests={pendingRequests}
+            />
+
+            {/* Employee Detail Modal */}
+            {selectedEmployee && (
+                <EmployeeDetailModal
+                    open={showEmployeeModal}
+                    employee={selectedEmployee}
+                    onClose={() => {
+                        setShowEmployeeModal(false);
+                        setSelectedEmployee(null);
+                        loadDashboardData(); // Reload to reflect any changes
+                    }}
+                />
             )}
         </div>
     );
