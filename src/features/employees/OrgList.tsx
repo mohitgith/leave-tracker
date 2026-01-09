@@ -76,6 +76,11 @@ const OrgList: React.FC<OrgListProps> = ({
                 title: 'Location',
                 dataIndex: 'location',
                 key: 'location',
+            },
+            {
+                title: 'Phone',
+                dataIndex: 'phone',
+                key: 'phone',
             }
         );
     }

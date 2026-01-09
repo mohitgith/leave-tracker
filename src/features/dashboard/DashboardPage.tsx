@@ -3,6 +3,7 @@ import { Spin, message } from 'antd';
 import dayjs from 'dayjs';
 import { FiClock, FiCalendar, FiUsers, FiSearch, FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
 import { fetchOrgChart, type OrgEmployeeAPI, deleteEmployee } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 import OrgList from '../employees/OrgList';
 import PendingRequestsModal from './PendingRequestsModal';
 import EmployeeDetailModal from '../employees/EmployeeDetailModal';
@@ -41,6 +42,7 @@ import {
 } from '../../services/api';
 
 const DashboardPage: React.FC = () => {
+    const { user } = useAuth();
     const [loading, setLoading] = useState(true);
     const [absentToday, setAbsentToday] = useState<LeaveItem[]>([]);
     const [upcomingLeaves, setUpcomingLeaves] = useState<UpcomingLeaves>({ tomorrow: [], nextWeek: [] });
@@ -74,13 +76,21 @@ const DashboardPage: React.FC = () => {
     };
 
     const filterEmployees = (employees: OrgEmployeeAPI[], term: string): OrgEmployeeAPI[] => {
-        if (!term.trim()) return employees;
-        const lowerTerm = term.toLowerCase();
-        return employees.filter(emp =>
-            emp.name.toLowerCase().includes(lowerTerm) ||
-            emp.role.toLowerCase().includes(lowerTerm) ||
-            emp.email.toLowerCase().includes(lowerTerm)
-        );
+        return employees.filter(emp => {
+            // Exclude managers (anyone with 'MANAGER' in their role)
+            if (emp.role && emp.role.toUpperCase().includes('MANAGER')) {
+                return false;
+            }
+
+            // Apply search filter
+            if (!term.trim()) return true;
+            const lowerTerm = term.toLowerCase();
+            return (
+                emp.name.toLowerCase().includes(lowerTerm) ||
+                emp.role.toLowerCase().includes(lowerTerm) ||
+                emp.email.toLowerCase().includes(lowerTerm)
+            );
+        });
     };
 
     const loadDashboardData = async () => {
@@ -308,7 +318,7 @@ const DashboardPage: React.FC = () => {
                     <div className="org-column-header">
                         <h3 className="org-column-title">Team Members</h3>
                         <div className="org-header-right">
-                            <span className="org-member-count">{flattenOrgData(orgData).length} Members</span>
+                            <span className="org-member-count">{filterEmployees(flattenOrgData(orgData), '').length} Members</span>
                             <div className="org-search-wrapper">
                                 <FiSearch className="org-search-icon" size={16} />
                                 <input
@@ -325,8 +335,8 @@ const DashboardPage: React.FC = () => {
                         <OrgList
                             employees={filterEmployees(flattenOrgData(orgData), searchTerm)}
                             showManager={false}
-                            showActions={true}
-                            hideEmailLocation={true}
+                            showActions={false}
+                            hideEmailLocation={false}
                             hideHeaders={true}
                             onEmployeeClick={handleEmployeeClick}
                             onEditClick={handleEditEmployee}
@@ -351,8 +361,17 @@ const DashboardPage: React.FC = () => {
                     onClose={() => {
                         setShowEmployeeModal(false);
                         setSelectedEmployee(null);
-                        loadDashboardData(); // Reload to reflect any changes
+                        loadDashboardData();
                     }}
+                    onEdit={(emp) => {
+                        setShowEmployeeModal(false);
+                        handleEditEmployee(emp as any);
+                    }}
+                    onDelete={(emp) => {
+                        setShowEmployeeModal(false);
+                        handleEmployeeDelete(emp as any);
+                    }}
+                    showActions={user?.role?.toUpperCase().includes('MANAGER') || false}
                 />
             )}
 
