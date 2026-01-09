@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Spin, message } from 'antd';
 import dayjs from 'dayjs';
-import { FiClock, FiCalendar, FiUsers, FiSearch, FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
-import { fetchOrgChart, type OrgEmployeeAPI, deleteEmployee } from '../../services/api';
+import { FiClock, FiCalendar, FiUsers, FiSearch, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { fetchOrgChart, type OrgEmployeeAPI, deleteEmployee, createLeave } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import OrgList from '../employees/OrgList';
 import PendingRequestsModal from './PendingRequestsModal';
 import EmployeeDetailModal from '../employees/EmployeeDetailModal';
 import AddEmployeeModal from '../employees/AddEmployeeModal';
 import Scheduler from '../scheduler/Scheduler';
-import FilterDropdown from './FilterDropdown';
+import FilterBar, { FilterOptions } from '../../components/FilterBar';
 import { CreateLeaveModal } from '../../components';
 
 import './DashboardPage.css';
@@ -58,6 +58,11 @@ const DashboardPage: React.FC = () => {
     const [schedulerSearch, setSchedulerSearch] = useState('');
     const [showCreateLeaveModal, setShowCreateLeaveModal] = useState(false);
     const [leaveTypeFilter, setLeaveTypeFilter] = useState<string[]>([]);
+    const [filters, setFilters] = useState<FilterOptions>({
+        leaveTypes: [],
+        employeeTypes: [],
+        daysRange: [0, 15]
+    });
 
     useEffect(() => {
         loadDashboardData();
@@ -169,23 +174,51 @@ const DashboardPage: React.FC = () => {
         setSchedulerStartDate(schedulerStartDate.add(1, 'month'));
     };
 
-    const handleApplyFilter = (types: string[]) => {
-        setLeaveTypeFilter(types);
+    const handleFiltersChange = (newFilters: FilterOptions) => {
+        setFilters(newFilters);
+        setLeaveTypeFilter(newFilters.leaveTypes);
     };
 
-    const handleCreateLeave = async () => {
-        await loadDashboardData(); // Reload to show new leave
-        setShowCreateLeaveModal(false);
+    const handleCreateLeave = async (values: { startDate: string; endDate: string; type: any; description: string; employeeId?: string }) => {
+        try {
+            await createLeave({
+                id: `leave-${Date.now()}`,
+                employeeId: values.employeeId || user?.id || '',
+                startDate: values.startDate,
+                endDate: values.endDate,
+                type: values.type,
+                status: 'Applied'
+            });
+            await loadDashboardData(); // Reload to show new leave
+            setShowCreateLeaveModal(false);
+            message.success('Leave request created successfully');
+        } catch (error) {
+            console.error('Failed to create leave:', error);
+            message.error('Failed to create leave request');
+        }
     };
 
-    // Filter employees based on search
+    // Filter employees based on search and employee type filter
     const filterSchedulerEmployees = () => {
-        if (!schedulerSearch.trim()) return flattenOrgData(orgData);
-        const lowerSearch = schedulerSearch.toLowerCase();
-        return flattenOrgData(orgData).filter(emp =>
-            emp.name.toLowerCase().includes(lowerSearch) ||
-            emp.role.toLowerCase().includes(lowerSearch)
-        );
+        let emps = flattenOrgData(orgData);
+
+        // Filter by employee type if set
+        if (filters.employeeTypes.length > 0) {
+            emps = emps.filter(emp =>
+                filters.employeeTypes.includes(emp.employeeType as any)
+            );
+        }
+
+        // Filter by search term
+        if (schedulerSearch.trim()) {
+            const lowerSearch = schedulerSearch.toLowerCase();
+            emps = emps.filter(emp =>
+                emp.name.toLowerCase().includes(lowerSearch) ||
+                emp.role.toLowerCase().includes(lowerSearch)
+            );
+        }
+
+        return emps;
     };
 
     // Filter leaves based on search and type filter
@@ -416,17 +449,14 @@ const DashboardPage: React.FC = () => {
                         </div>
                     </div>
                     <div className="scheduler-header-bottom">
-                        <div className="scheduler-actions">
-                            <button className="scheduler-action-btn create-btn" onClick={() => setShowCreateLeaveModal(true)}>
-                                <FiPlus size={16} />
-                                <span>Create Leave</span>
-                            </button>
-                            <FilterDropdown
-                                selectedTypes={leaveTypeFilter as any}
-                                onApply={handleApplyFilter}
-                                buttonClassName="scheduler-action-btn filter-btn"
-                            />
-                        </div>
+                        <FilterBar
+                            viewMode="1"
+                            onViewModeChange={() => { }}
+                            onCreateLeave={() => setShowCreateLeaveModal(true)}
+                            filters={filters}
+                            onFiltersChange={handleFiltersChange}
+                            hideViewMode={true}
+                        />
                         <div className="scheduler-search-wrapper">
                             <FiSearch className="scheduler-search-icon" size={16} />
                             <input
@@ -458,9 +488,7 @@ const DashboardPage: React.FC = () => {
             <CreateLeaveModal
                 open={showCreateLeaveModal}
                 onClose={() => setShowCreateLeaveModal(false)}
-                onSubmit={async () => {
-                    await handleCreateLeave();
-                }}
+                onSubmit={handleCreateLeave}
             />
         </div>
     );

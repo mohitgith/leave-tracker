@@ -148,6 +148,14 @@ const FilterBar: React.FC<FilterBarProps> = ({
         <div>
             {!hideFilters && (
                 <div className="filter-right">
+                    <Button
+                        type="primary"
+                        icon={<FiPlus size={14} />}
+                        className="create-leave-button"
+                        onClick={onCreateLeave}
+                    >
+                        Create Leave
+                    </Button>
                     <Dropdown
                         dropdownRender={() => filterDropdownContent}
                         trigger={['click']}
@@ -162,15 +170,6 @@ const FilterBar: React.FC<FilterBarProps> = ({
                             Filters {hasActiveFilters && `(${getActiveFilterCount()})`}
                         </Button>
                     </Dropdown>
-
-                    <Button
-                        type="primary"
-                        icon={<FiPlus size={14} />}
-                        className="create-leave-button"
-                        onClick={onCreateLeave}
-                    >
-                        Create Leave
-                    </Button>
                 </div>
             )}
 
