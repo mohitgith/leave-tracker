@@ -36,7 +36,6 @@ const LeaveTrackerPage: React.FC = () => {
     const [filters, setFilters] = useState<FilterOptions>({
         leaveTypes: [],
         employeeTypes: [],
-        daysRange: [0, 15],
     });
 
     // Fetch data from API
@@ -84,17 +83,6 @@ const LeaveTrackerPage: React.FC = () => {
         return startDate.add(months, 'month').subtract(1, 'day');
     }, [startDate, viewMode]);
 
-    // Calculate leave days for an employee
-    const getEmployeeLeaveDays = (employeeId: string): number => {
-        return leaves
-            .filter(l => l.employeeId === employeeId)
-            .reduce((total, leave) => {
-                const start = dayjs(leave.startDate);
-                const end = dayjs(leave.endDate);
-                return total + end.diff(start, 'day') + 1;
-            }, 0);
-    };
-
     // Filter employees based on search and filters
     const filteredEmployees = useMemo(() => {
         let result = employees;
@@ -125,14 +113,6 @@ const LeaveTrackerPage: React.FC = () => {
             result = result.filter(emp =>
                 employeeIdsWithMatchingLeaves.includes(emp.id)
             );
-        }
-
-        // Leave days filter using slider range
-        if (filters.daysRange[0] !== 0 || filters.daysRange[1] !== 15) {
-            result = result.filter(emp => {
-                const days = getEmployeeLeaveDays(emp.id);
-                return days >= filters.daysRange[0] && days <= filters.daysRange[1];
-            });
         }
 
         return result;

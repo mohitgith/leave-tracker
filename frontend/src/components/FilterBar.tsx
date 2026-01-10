@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Radio, Tooltip, Dropdown, Checkbox, Slider, Space, Divider } from 'antd';
+import { Button, Radio, Tooltip, Dropdown, Checkbox, Space, Divider } from 'antd';
 import { FiFilter, FiPlus, FiX } from 'react-icons/fi';
 import type { RadioChangeEvent } from 'antd';
 import type { LeaveType, EmployeeType } from '../types';
@@ -8,7 +8,6 @@ import './FilterBar.css';
 export interface FilterOptions {
     leaveTypes: LeaveType[];
     employeeTypes: EmployeeType[];
-    daysRange: [number, number];
 }
 
 interface FilterBarProps {
@@ -50,28 +49,19 @@ const FilterBar: React.FC<FilterBarProps> = ({
         onFiltersChange({ ...filters, employeeTypes: newTypes });
     };
 
-    const handleDaysRangeChange = (value: number[]) => {
-        onFiltersChange({ ...filters, daysRange: [value[0], value[1]] });
-    };
-
     const clearFilters = () => {
         onFiltersChange({
             leaveTypes: [],
             employeeTypes: [],
-            daysRange: [0, 15],
         });
     };
 
     const hasActiveFilters =
         filters.leaveTypes.length > 0 ||
-        filters.employeeTypes.length > 0 ||
-        filters.daysRange[0] !== 0 ||
-        filters.daysRange[1] !== 15;
+        filters.employeeTypes.length > 0;
 
     const getActiveFilterCount = () => {
-        let count = filters.leaveTypes.length + filters.employeeTypes.length;
-        if (filters.daysRange[0] !== 0 || filters.daysRange[1] !== 15) count++;
-        return count;
+        return filters.leaveTypes.length + filters.employeeTypes.length;
     };
 
     const filterDropdownContent = (
@@ -112,20 +102,6 @@ const FilterBar: React.FC<FilterBarProps> = ({
                         Contractor
                     </Checkbox>
                 </Space>
-            </div>
-
-            <Divider style={{ margin: '12px 0' }} />
-
-            <div className="filter-section">
-                <div className="filter-section-title">Leave Duration: {filters.daysRange[0]} - {filters.daysRange[1]} days</div>
-                <Slider
-                    range
-                    min={0}
-                    max={15}
-                    value={filters.daysRange}
-                    onChange={handleDaysRangeChange}
-                    className="days-slider"
-                />
             </div>
 
             {hasActiveFilters && (

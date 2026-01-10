@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Spin, message } from 'antd';
 import dayjs from 'dayjs';
 import { FiClock, FiCalendar, FiUsers, FiSearch, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import { fetchOrgChart, type OrgEmployeeAPI, deleteEmployee, createLeave } from '../../services/api';
+import { LEAVE_TYPE_COLORS, LEAVE_TYPE_LABELS, LeaveType } from '../../types';
+import { fetchOrgChart, type OrgEmployeeAPI, deleteEmployee, createLeave, updateLeave, deleteLeave as deleteLeaveAPI, LeaveRecordAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import OrgList from '../employees/OrgList';
 import PendingRequestsModal from './PendingRequestsModal';
@@ -61,8 +62,8 @@ const DashboardPage: React.FC = () => {
     const [filters, setFilters] = useState<FilterOptions>({
         leaveTypes: [],
         employeeTypes: [],
-        daysRange: [0, 15]
     });
+    const [editingLeave, setEditingLeave] = useState<LeaveRecordAPI | null>(null);
 
     useEffect(() => {
         loadDashboardData();
@@ -179,22 +180,63 @@ const DashboardPage: React.FC = () => {
         setLeaveTypeFilter(newFilters.leaveTypes);
     };
 
-    const handleCreateLeave = async (values: { startDate: string; endDate: string; type: any; description: string; employeeId?: string }) => {
+    const handleLeaveSubmit = async (values: { startDate: string; endDate: string; type: any; description: string; employeeId?: string }) => {
         try {
-            await createLeave({
-                id: `leave-${Date.now()}`,
-                employeeId: values.employeeId || user?.id || '',
-                startDate: values.startDate,
-                endDate: values.endDate,
-                type: values.type,
-                status: 'Applied'
-            });
-            await loadDashboardData(); // Reload to show new leave
+            if (editingLeave) {
+                // Update existing leave
+                await updateLeave(editingLeave.id, {
+                    id: editingLeave.id,
+                    employeeId: editingLeave.employeeId,
+                    startDate: values.startDate,
+                    endDate: values.endDate,
+                    type: values.type,
+                    status: 'Applied'
+                });
+                message.success('Leave updated successfully');
+            } else {
+                // Create new leave
+                await createLeave({
+                    id: `leave-${Date.now()}`,
+                    employeeId: values.employeeId || user?.id || '',
+                    startDate: values.startDate,
+                    endDate: values.endDate,
+                    type: values.type,
+                    status: 'Applied'
+                });
+                message.success('Leave request created successfully');
+            }
+            await loadDashboardData();
             setShowCreateLeaveModal(false);
-            message.success('Leave request created successfully');
+            setEditingLeave(null);
         } catch (error) {
-            console.error('Failed to create leave:', error);
-            message.error('Failed to create leave request');
+            console.error('Failed to save leave:', error);
+            message.error(editingLeave ? 'Failed to update leave' : 'Failed to create leave request');
+        }
+    };
+
+    const handleEditLeave = (leave: any) => {
+        // Only allow editing own leaves
+        if (leave.employeeId !== user?.id) {
+            message.warning('You can only edit your own leaves');
+            return;
+        }
+        setEditingLeave(leave);
+        setShowCreateLeaveModal(true);
+    };
+
+    const handleDeleteLeave = async (leaveId: string) => {
+        const leave = schedulerLeaves.find(l => l.id === leaveId);
+        if (leave && leave.employeeId !== user?.id) {
+            message.warning('You can only delete your own leaves');
+            return;
+        }
+        try {
+            await deleteLeaveAPI(leaveId);
+            message.success('Leave deleted successfully');
+            await loadDashboardData();
+        } catch (error) {
+            console.error('Failed to delete leave:', error);
+            message.error('Failed to delete leave');
         }
     };
 
@@ -480,16 +522,44 @@ const DashboardPage: React.FC = () => {
                         startDate={schedulerStartDate.startOf('month')}
                         endDate={schedulerStartDate.endOf('month')}
                         viewMode="1"
+                        onEditLeave={handleEditLeave}
+                        onDeleteLeave={handleDeleteLeave}
+                        currentUserId={user?.id}
                     />
                 )}
+
+                {/* Leave Types Legend */}
+                <div className="scheduler-legend">
+                    {(Object.keys(LEAVE_TYPE_COLORS) as LeaveType[]).map((type) => (
+                        <div key={type} className="legend-item">
+                            <span
+                                className="legend-color"
+                                style={{
+                                    backgroundColor: LEAVE_TYPE_COLORS[type].bg,
+                                    borderColor: LEAVE_TYPE_COLORS[type].border
+                                }}
+                            />
+                            <span className="legend-label">{LEAVE_TYPE_LABELS[type]}</span>
+                        </div>
+                    ))}
+                </div>
             </div>
 
             {/* Create Leave Modal */}
             <CreateLeaveModal
                 open={showCreateLeaveModal}
-                onClose={() => setShowCreateLeaveModal(false)}
-                onSubmit={handleCreateLeave}
+                onClose={() => {
+                    setShowCreateLeaveModal(false);
+                    setEditingLeave(null);
+                }}
+                onSubmit={handleLeaveSubmit}
+                initialValues={editingLeave as any}
             />
+
+            {/* Dashboard Footer */}
+            <footer className="dashboard-footer">
+                <p>© {new Date().getFullYear()} Leave Tracker. All rights reserved.</p>
+            </footer>
         </div>
     );
 };

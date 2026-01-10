@@ -624,3 +624,65 @@
 .dark-mode .scheduler-action-btn.filter-btn:hover {
     background: #4a4a4a;
 }
+
+/* Scheduler Legend */
+.scheduler-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 16px 20px;
+    border-top: 1px solid #e8e8e8;
+    background: #fafafa;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 2px solid;
+}
+
+.legend-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+}
+
+/* Dashboard Footer */
+.dashboard-footer {
+    margin-top: 32px;
+    padding: 24px;
+    text-align: center;
+    border-top: 1px solid #e8e8e8;
+}
+
+.dashboard-footer p {
+    font-size: 12px;
+    color: #9FA1A4;
+    margin: 0;
+}
+
+/* Dark Mode - Legend & Footer */
+.dark-mode .scheduler-legend {
+    background: #1a1818;
+    border-color: #3a3a3a;
+}
+
+.dark-mode .legend-label {
+    color: #9FA1A4;
+}
+
+.dark-mode .dashboard-footer {
+    border-color: #3a3a3a;
+}
+
+.dark-mode .dashboard-footer p {
+    color: #666;
+}
