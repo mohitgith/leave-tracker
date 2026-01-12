@@ -34,6 +34,9 @@
 .scheduler-header-right {
     flex: 1;
     overflow: hidden;
+    /* Reserve space for scrollbar to match body alignment */
+    scrollbar-gutter: stable;
+    /* border-right: 1px solid #e8e8e8; */
 }
 
 .scheduler-body {
@@ -44,6 +47,8 @@
     max-height: 480px;
     overflow-y: auto;
     overflow-x: hidden;
+    /* Reserve consistent scrollbar space for alignment with header */
+    scrollbar-gutter: stable;
 }
 
 .scheduler-employees {
