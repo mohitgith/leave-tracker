@@ -28,11 +28,6 @@ const EventBlock: React.FC<EventBlockProps> = ({
     const endDate = dayjs(leave.endDate).format('MMM D, YYYY');
     const duration = dayjs(leave.endDate).diff(dayjs(leave.startDate), 'day') + 1;
 
-    // Show label text if width is sufficient (roughly more than 5% of container)
-    const showLabel = widthPercent > 5;
-    const displayText = showLabel ? label : '';
-
-    // Tooltip content for non-owners
     const tooltipContent = (
         <div className="event-tooltip">
             <div className="tooltip-type">{label}</div>
@@ -93,7 +88,6 @@ const EventBlock: React.FC<EventBlockProps> = ({
                 borderColor: colors.border,
             }}
         >
-            {showLabel && <span className="event-label">{displayText}</span>}
         </div>
     );
 

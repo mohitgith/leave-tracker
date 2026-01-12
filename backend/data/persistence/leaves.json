@@ -96,4 +96,25 @@
   "endDate" : "2025-12-31",
   "type" : "vacation",
   "status" : "Applied"
+}, {
+  "id" : "leave-1767964318759",
+  "employeeId" : "0",
+  "startDate" : "2026-01-12",
+  "endDate" : "2026-01-14",
+  "type" : "vacation",
+  "status" : "Applied"
+}, {
+  "id" : "leave-1767971137940",
+  "employeeId" : "0",
+  "startDate" : "2026-01-15",
+  "endDate" : "2026-01-15",
+  "type" : "sick",
+  "status" : "Applied"
+}, {
+  "id" : "leave-1767971563539",
+  "employeeId" : "0",
+  "startDate" : "2026-01-09",
+  "endDate" : "2026-01-09",
+  "type" : "vacation",
+  "status" : "Applied"
 } ]

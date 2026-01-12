@@ -1,17 +1,20 @@
 import React from 'react';
-import { Modal, Typography, Button, message, Divider, Avatar } from 'antd';
-import { FiMail, FiPhone, FiCopy, FiMapPin } from 'react-icons/fi';
+import { Modal, Typography, Button, message, Divider, Avatar, Popconfirm } from 'antd';
+import { FiMail, FiPhone, FiCopy, FiMapPin, FiEdit2, FiTrash2 } from 'react-icons/fi';
 import { OrgEmployee } from '../../types';
 
 interface EmployeeDetailModalProps {
     employee: OrgEmployee | null;
     open: boolean;
     onClose: () => void;
+    onEdit?: (employee: OrgEmployee) => void;
+    onDelete?: (employee: OrgEmployee) => void;
+    showActions?: boolean;
 }
 
 const { Title, Text } = Typography;
 
-const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({ employee, open, onClose }) => {
+const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({ employee, open, onClose, onEdit, onDelete, showActions = false }) => {
     if (!employee) return null;
 
     const handleCopy = (text: string, label: string) => {
@@ -23,7 +26,28 @@ const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({ employee, ope
         <Modal
             open={open}
             onCancel={onClose}
-            footer={null}
+            footer={
+                showActions && employee ? (
+                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                        <Button
+                            icon={<FiEdit2 />}
+                            onClick={() => onEdit?.(employee)}
+                            type="default"
+                            title="Edit"
+                        />
+                        <Popconfirm
+                            title="Delete Employee"
+                            description="Are you sure you want to delete this employee?"
+                            onConfirm={() => onDelete?.(employee)}
+                            okText="Yes"
+                            cancelText="No"
+                            okButtonProps={{ danger: true }}
+                        >
+                            <Button danger icon={<FiTrash2 />} title="Delete" />
+                        </Popconfirm>
+                    </div>
+                ) : null
+            }
             width={450}
             centered
         >

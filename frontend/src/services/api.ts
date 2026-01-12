@@ -65,6 +65,7 @@ export interface OrgEmployeeAPI {
     avatarUrl: string;
     email: string;
     phone: string;
+    employeeType?: 'permanent' | 'contractor';
     children: OrgEmployeeAPI[];
 }
 

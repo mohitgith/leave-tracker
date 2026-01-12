@@ -44,9 +44,6 @@ public class DataPersistenceService {
     @Autowired
     private AppNotificationRepository appNotificationRepository;
 
-    @Autowired
-    private HolidayRepository holidayRepository;
-
     @Value("${data.persistence.directory:data/persistence}")
     private String persistenceDirectory;
 
@@ -138,16 +135,6 @@ public class DataPersistenceService {
                         });
                 appNotificationRepository.saveAll(notifications);
                 logger.info("Loaded {} app notifications from flat file", notifications.size());
-            }
-
-            // Load holidays
-            File holidaysFile = new File(persistenceDirectory, "holidays.json");
-            if (holidaysFile.exists()) {
-                List<Holiday> holidays = objectMapper.readValue(holidaysFile,
-                        new TypeReference<List<Holiday>>() {
-                        });
-                holidayRepository.saveAll(holidays);
-                logger.info("Loaded {} holidays from flat file", holidays.size());
             }
 
         } catch (IOException e) {
@@ -273,10 +260,6 @@ public class DataPersistenceService {
             // Sync app notifications
             List<AppNotification> notifications = appNotificationRepository.findAll();
             objectMapper.writeValue(new File(persistenceDirectory, "app_notifications.json"), notifications);
-
-            // Sync holidays
-            List<Holiday> holidays = holidayRepository.findAll();
-            objectMapper.writeValue(new File(persistenceDirectory, "holidays.json"), holidays);
 
             logger.debug("Data sync complete");
 

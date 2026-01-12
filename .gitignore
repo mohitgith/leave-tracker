@@ -1,3 +1,31 @@
-node_modules
-backend/target
-backend/.idea/
+# Dependencies
+*/node_modules/
+
+# Build outputs
+dist/
+build/
+target/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Vite
+.vite/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Lock files (keep only one per project)
+# package-lock.json is in frontend/

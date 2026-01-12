@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Checkbox, message, Divider, ConfigProvider, theme } from 'antd';
 import { FiUser, FiLock } from 'react-icons/fi';
-import { BsWindows } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import hsbcLogo from '../../assets/hsbc-logo.png';
