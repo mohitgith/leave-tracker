@@ -1,0 +1,46 @@
+.unified-gridlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.unified-grid-column {
+    position: absolute;
+    top: 0;
+    border-right: 1px solid #f0f0f0;
+    box-sizing: border-box;
+}
+
+.unified-grid-column-month {
+    border-left: 2px solid #d0d0d0;
+}
+
+.unified-grid-column-weekend {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.unified-grid-column-today {
+    background: rgba(238, 53, 36, 0.08);
+}
+
+/* =========================================
+   Dark Mode
+   ========================================= */
+
+.dark-mode .unified-grid-column {
+    border-color: #4a4a4a;
+}
+
+.dark-mode .unified-grid-column-month {
+    border-left-color: #5a5a5a;
+}
+
+.dark-mode .unified-grid-column-weekend {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.dark-mode .unified-grid-column-today {
+    background: rgba(238, 53, 36, 0.15);
+}

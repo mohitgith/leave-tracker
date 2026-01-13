@@ -1,23 +1,20 @@
 .timeline-header {
     display: flex;
     flex-direction: column;
-    background: #fff;
-    border-bottom: 1px solid #e8e8e8;
+    background: transparent;
 }
 
 .timeline-months-row {
     display: flex;
     height: 32px;
-    border-bottom: 1px solid #f0f0f0;
 }
 
 .timeline-month {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-right: 2px solid #d0d0d0;
     flex-shrink: 0;
-    background: #fafafa;
+    background: transparent;
 }
 
 .timeline-month:last-child {
@@ -37,6 +34,8 @@
 .timeline-days-row {
     display: flex;
     height: 36px;
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
 }
 
 .timeline-day {
@@ -44,18 +43,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-right: 1px solid #f0f0f0;
     gap: 1px;
     box-sizing: border-box;
+    background: transparent;
 }
 
 .timeline-day:last-child {
     border-right: none;
 }
 
-.timeline-day-weekend {
-    background: rgba(0, 0, 0, 0.02);
-}
 
 .day-letter {
     font-size: 9px;
@@ -117,6 +113,10 @@
 
 .dark-mode .month-label {
     color: #EE3524;
+}
+
+.dark-mode .timeline-days-row {
+    border-color: #4a4a4a;
 }
 
 .dark-mode .timeline-day {

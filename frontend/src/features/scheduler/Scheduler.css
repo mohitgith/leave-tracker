@@ -1,75 +1,75 @@
 .scheduler {
     display: flex;
-    flex-direction: column;
     background: #fff;
     border-radius: 8px;
-    /* border: 1px solid #e8e8e8; */
     overflow: hidden;
 }
 
-.scheduler-header {
-    display: flex;
-    border-bottom: 1px solid #e8e8e8;
-    background: #fff;
-    flex-shrink: 0;
-}
-
-.scheduler-header-left {
+/* Left column - fixed employee header and list */
+.scheduler-left-column {
     width: 220px;
     min-width: 220px;
     flex-shrink: 0;
     border-right: 1px solid #e8e8e8;
+    background: #fff;
+    z-index: 2;
+}
+
+.scheduler-header-left {
+    height: 68px;
     display: flex;
     align-items: flex-end;
+    border-bottom: 1px solid #e8e8e8;
 }
 
 .employee-search-header {
     height: 68px;
-    /* Match header height: 32px month row + 36px days row */
     display: flex;
     align-items: center;
     padding: 0 16px;
 }
 
-.scheduler-header-right {
-    flex: 1;
-    overflow-x: auto;
-    overflow-y: hidden;
-    /* Hide scrollbar but allow scroll (sync with body) */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.scheduler-header-right::-webkit-scrollbar {
-    display: none;
-}
-
-.scheduler-body {
-    display: flex;
-    align-items: flex-start;
-    overflow-x: hidden;
-}
-
 .scheduler-employees {
-    width: 220px;
-    min-width: 220px;
-    flex-shrink: 0;
-    border-right: 1px solid #e8e8e8;
     background: #fff;
 }
 
-.scheduler-timeline {
+/* Right column - timeline wrapper with unified gridlines */
+.scheduler-right-column {
     flex: 1;
+    overflow: hidden;
+}
+
+.scheduler-timeline-wrapper {
+    position: relative;
     overflow-x: auto;
 }
 
-/* Scrollbar sync */
-.scheduler-timeline::-webkit-scrollbar {
+.scheduler-header-right {
+    position: relative;
+    z-index: 1;
+}
+
+.scheduler-timeline {
+    position: relative;
+    z-index: 1;
+}
+
+/* Scrollbar styling */
+.scheduler-timeline-wrapper::-webkit-scrollbar {
     height: 8px;
 }
 
-.scheduler-header-right {
-    overflow-x: hidden;
+.scheduler-timeline-wrapper::-webkit-scrollbar-track {
+    background: #f5f5f5;
+}
+
+.scheduler-timeline-wrapper::-webkit-scrollbar-thumb {
+    background: #d0d0d0;
+    border-radius: 4px;
+}
+
+.scheduler-timeline-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #b0b0b0;
 }
 
 /* =========================================
@@ -81,8 +81,8 @@
     border-color: #4a4a4a;
 }
 
-.dark-mode .scheduler-header {
-    background: #1a1818;
+.dark-mode .scheduler-left-column {
+    background: #2d2a2b;
     border-color: #4a4a4a;
 }
 
@@ -92,5 +92,12 @@
 
 .dark-mode .scheduler-employees {
     background: #2d2a2b;
-    border-color: #4a4a4a;
+}
+
+.dark-mode .scheduler-timeline-wrapper::-webkit-scrollbar-track {
+    background: #3a3a3a;
+}
+
+.dark-mode .scheduler-timeline-wrapper::-webkit-scrollbar-thumb {
+    background: #5a5a5a;
 }

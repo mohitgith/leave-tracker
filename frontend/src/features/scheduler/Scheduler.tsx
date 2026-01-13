@@ -5,6 +5,7 @@ import { TimelineConfig, generateTimelineConfig } from '../../lib/timelineUtils'
 import EmployeeRow from './EmployeeRow';
 import TimelineHeader from './TimelineHeader';
 import TimelineGrid from './TimelineGrid';
+import UnifiedGridlines from './UnifiedGridlines';
 import './Scheduler.css';
 
 interface SchedulerProps {
@@ -17,6 +18,10 @@ interface SchedulerProps {
     onDeleteLeave?: (leaveId: string) => void;
     currentUserId?: string;
 }
+
+const MONTHS_ROW_HEIGHT = 32;
+const DAYS_ROW_HEIGHT = 36;
+const ROW_HEIGHT = 48;
 
 const Scheduler: React.FC<SchedulerProps> = ({
     employees,
@@ -93,37 +98,44 @@ const Scheduler: React.FC<SchedulerProps> = ({
 
     return (
         <div className="scheduler">
-            {/* Header section */}
-            <div className="scheduler-header">
+            {/* Left column - fixed employee header and list */}
+            <div className="scheduler-left-column">
                 <div className="scheduler-header-left">
                     <div className="employee-search-header">
                         {/* Empty space for alignment */}
                     </div>
                 </div>
-                <div className="scheduler-header-right" ref={headerRef}>
-                    <TimelineHeader config={config} currentMonth={currentMonth} />
-                </div>
-            </div>
-
-            {/* Body section */}
-            <div className="scheduler-body">
-                {/* Employee list (left fixed column) */}
                 <div className="scheduler-employees">
                     {employees.map(employee => (
                         <EmployeeRow key={employee.id} employee={employee} />
                     ))}
                 </div>
+            </div>
 
-                {/* Timeline grid */}
-                <div className="scheduler-timeline" ref={timelineRef}>
-                    <TimelineGrid
-                        employees={employees}
-                        leaves={leaves}
+            {/* Right column - timeline with unified gridlines */}
+            <div className="scheduler-right-column">
+                {/* Unified gridlines spanning days row and body */}
+                <div className="scheduler-timeline-wrapper" ref={headerRef}>
+                    <UnifiedGridlines
                         config={config}
-                        onEditLeave={onEditLeave}
-                        onDeleteLeave={onDeleteLeave}
-                        currentUserId={currentUserId}
+                        employeeCount={employees.length}
+                        monthsRowHeight={MONTHS_ROW_HEIGHT}
+                        daysRowHeight={DAYS_ROW_HEIGHT}
+                        rowHeight={ROW_HEIGHT}
                     />
+                    <div className="scheduler-header-right">
+                        <TimelineHeader config={config} currentMonth={currentMonth} />
+                    </div>
+                    <div className="scheduler-timeline" ref={timelineRef}>
+                        <TimelineGrid
+                            employees={employees}
+                            leaves={leaves}
+                            config={config}
+                            onEditLeave={onEditLeave}
+                            onDeleteLeave={onDeleteLeave}
+                            currentUserId={currentUserId}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -131,3 +143,4 @@ const Scheduler: React.FC<SchedulerProps> = ({
 };
 
 export default Scheduler;
+
