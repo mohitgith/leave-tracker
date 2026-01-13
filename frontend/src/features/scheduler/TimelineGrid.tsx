@@ -24,6 +24,8 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({
 }) => {
     const today = dayjs();
     const totalDays = config.totalDays;
+    // Calculate total width based on dayWidth * totalDays
+    const totalWidth = config.dayWidth * totalDays;
 
     const leavesByEmployee = useMemo(() => {
         const grouped: Record<string, LeaveRecord[]> = {};
@@ -60,7 +62,7 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({
     }, [config, today, totalDays]);
 
     return (
-        <div className="timeline-grid">
+        <div className="timeline-grid" style={{ minWidth: `${totalWidth}px` }}>
             {/* Day column grid lines */}
             <div className="grid-lines">
                 {generateDayColumns.map((col, index) => (

@@ -10,6 +10,8 @@ interface TimelineHeaderProps {
 const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth }) => {
     const today = dayjs();
     const totalDays = config.totalDays;
+    // Calculate total width based on dayWidth * totalDays
+    const totalWidth = config.dayWidth * totalDays;
 
     // Generate all days for the visible range
     const generateDays = () => {
@@ -41,7 +43,7 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ config, currentMonth })
     const days = generateDays();
 
     return (
-        <div className="timeline-header">
+        <div className="timeline-header" style={{ minWidth: `${totalWidth}px` }}>
             {/* Month row */}
             <div className="timeline-months-row">
                 {config.months.map((monthData, index) => {

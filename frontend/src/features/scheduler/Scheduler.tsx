@@ -62,8 +62,16 @@ const Scheduler: React.FC<SchedulerProps> = ({
     }, [viewMode, startDate, endDate]);
 
     // Calculate day width to exactly fill container with no gaps
+    // For multi-month views, enforce a minimum day width for readability
     const totalDays = getTotalDays();
-    const dayWidth = containerWidth > 0 ? containerWidth / totalDays : 10;
+    const MIN_DAY_WIDTH = 25; // Minimum width per day for readability
+    const calculatedDayWidth = containerWidth > 0 ? containerWidth / totalDays : 10;
+
+    // For 1-month view, fit to container; for longer views, use minimum width if needed
+    const monthsInView = Math.round(totalDays / 30);
+    const dayWidth = monthsInView <= 1
+        ? calculatedDayWidth
+        : Math.max(MIN_DAY_WIDTH, calculatedDayWidth);
 
     const config: TimelineConfig = generateTimelineConfig(startDate, endDate, dayWidth);
     const currentMonth = dayjs();

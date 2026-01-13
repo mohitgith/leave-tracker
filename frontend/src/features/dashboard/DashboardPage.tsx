@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Spin, message } from 'antd';
+import { Spin, message, Radio, Tooltip } from 'antd';
+import type { RadioChangeEvent } from 'antd';
 import dayjs from 'dayjs';
 import { FiClock, FiCalendar, FiUsers, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { LEAVE_TYPE_COLORS, LEAVE_TYPE_LABELS, LeaveType } from '../../types';
@@ -49,6 +50,7 @@ const DashboardPage: React.FC = () => {
     const [showPendingModal, setShowPendingModal] = useState(false);
     const [schedulerLeaves, setSchedulerLeaves] = useState<any[]>([]);
     const [schedulerStartDate, setSchedulerStartDate] = useState(dayjs());
+    const [viewMode, setViewMode] = useState<'1' | '3' | '6' | '12'>('1');
     const [showCreateLeaveModal, setShowCreateLeaveModal] = useState(false);
     const [editingLeave, setEditingLeave] = useState<LeaveRecordAPI | null>(null);
 
@@ -119,11 +121,13 @@ const DashboardPage: React.FC = () => {
 
 
     const handlePrevMonth = () => {
-        setSchedulerStartDate(schedulerStartDate.subtract(1, 'month'));
+        const months = parseInt(viewMode);
+        setSchedulerStartDate(schedulerStartDate.subtract(months, 'month'));
     };
 
     const handleNextMonth = () => {
-        setSchedulerStartDate(schedulerStartDate.add(1, 'month'));
+        const months = parseInt(viewMode);
+        setSchedulerStartDate(schedulerStartDate.add(months, 'month'));
     };
 
     const handleLeaveSubmit = async (values: { startDate: string; endDate: string; type: any; description: string; employeeId?: string }) => {
@@ -315,15 +319,61 @@ const DashboardPage: React.FC = () => {
             <div className="dashboard-scheduler-section">
                 <div className="scheduler-custom-header">
                     <div className="scheduler-header-top">
-                        <h3 className="scheduler-title">Leave Tracker</h3>
-                        <div className="scheduler-month-nav">
+                        <h3 className="scheduler-title">
+                            {viewMode === '1' ? 'Monthly View' :
+                                viewMode === '3' ? 'Quarterly View' :
+                                    viewMode === '6' ? 'Half-Yearly View' : 'Yearly View'}
+                        </h3>
+                    </div>
+                    {/* Date Range and View Mode Controls */}
+                    <div className="scheduler-controls-row">
+                        <div className="scheduler-date-nav">
                             <button className="month-nav-btn" onClick={handlePrevMonth}>
                                 <FiChevronLeft size={20} />
                             </button>
-                            <span className="current-month">{schedulerStartDate.format('MMMM YYYY')}</span>
+                            <span className="date-range-display" data-view-mode={viewMode}>
+                                {viewMode === '1'
+                                    ? schedulerStartDate.format('MMMM YYYY')
+                                    : `${schedulerStartDate.format('MMMM YYYY')} - ${schedulerStartDate.add(parseInt(viewMode) - 1, 'month').format('MMMM YYYY')}`
+                                }
+                            </span>
                             <button className="month-nav-btn" onClick={handleNextMonth}>
                                 <FiChevronRight size={20} />
                             </button>
+                        </div>
+                        <div className="scheduler-view-options">
+                            <Radio.Group
+                                value={viewMode}
+                                onChange={(e: RadioChangeEvent) => setViewMode(e.target.value)}
+                                className="view-mode-group"
+                                optionType="button"
+                                buttonStyle="solid"
+                            >
+                                <Tooltip title="1 Month View">
+                                    <Radio.Button value="1">
+                                        <span className="view-label">1 </span>
+                                        <span className="view-sublabel">month</span>
+                                    </Radio.Button>
+                                </Tooltip>
+                                <Tooltip title="3 Months View">
+                                    <Radio.Button value="3">
+                                        <span className="view-label">3</span>
+                                        <span className="view-sublabel">months</span>
+                                    </Radio.Button>
+                                </Tooltip>
+                                <Tooltip title="6 Months View">
+                                    <Radio.Button value="6">
+                                        <span className="view-label">6</span>
+                                        <span className="view-sublabel">months</span>
+                                    </Radio.Button>
+                                </Tooltip>
+                                <Tooltip title="12 Months View">
+                                    <Radio.Button value="12">
+                                        <span className="view-label">12</span>
+                                        <span className="view-sublabel">months</span>
+                                    </Radio.Button>
+                                </Tooltip>
+                            </Radio.Group>
                         </div>
                     </div>
                 </div>
@@ -336,8 +386,8 @@ const DashboardPage: React.FC = () => {
                         employees={filterSchedulerEmployees() as any}
                         leaves={filterSchedulerLeaves()}
                         startDate={schedulerStartDate.startOf('month')}
-                        endDate={schedulerStartDate.endOf('month')}
-                        viewMode="1"
+                        endDate={schedulerStartDate.add(parseInt(viewMode) - 1, 'month').endOf('month')}
+                        viewMode={viewMode as '1' | '3'}
                         onEditLeave={handleEditLeave}
                         onDeleteLeave={handleDeleteLeave}
                         currentUserId={user?.id}

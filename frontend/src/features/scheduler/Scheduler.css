@@ -33,22 +33,21 @@
 
 .scheduler-header-right {
     flex: 1;
-    overflow: hidden;
-    /* Reserve space for scrollbar to match body alignment */
-    scrollbar-gutter: stable;
-    /* border-right: 1px solid #e8e8e8; */
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* Hide scrollbar but allow scroll (sync with body) */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.scheduler-header-right::-webkit-scrollbar {
+    display: none;
 }
 
 .scheduler-body {
     display: flex;
     align-items: flex-start;
-    /* Fixed height for 10 rows (48px each) */
-    min-height: 480px;
-    max-height: 480px;
-    overflow-y: auto;
     overflow-x: hidden;
-    /* Reserve consistent scrollbar space for alignment with header */
-    scrollbar-gutter: stable;
 }
 
 .scheduler-employees {
@@ -65,7 +64,6 @@
 }
 
 /* Scrollbar sync */
-.scheduler-header-right::-webkit-scrollbar,
 .scheduler-timeline::-webkit-scrollbar {
     height: 8px;
 }
