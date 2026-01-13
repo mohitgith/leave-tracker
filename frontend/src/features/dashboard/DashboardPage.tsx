@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Spin, message } from 'antd';
 import dayjs from 'dayjs';
-import { FiClock, FiCalendar, FiUsers, FiSearch, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiClock, FiCalendar, FiUsers, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { LEAVE_TYPE_COLORS, LEAVE_TYPE_LABELS, LeaveType } from '../../types';
-import { fetchOrgChart, type OrgEmployeeAPI, deleteEmployee, createLeave, updateLeave, deleteLeave as deleteLeaveAPI, LeaveRecordAPI } from '../../services/api';
+import { fetchOrgChart, type OrgEmployeeAPI, createLeave, updateLeave, deleteLeave as deleteLeaveAPI, LeaveRecordAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
-import OrgList from '../employees/OrgList';
 import PendingRequestsModal from './PendingRequestsModal';
-import EmployeeDetailModal from '../employees/EmployeeDetailModal';
-import AddEmployeeModal from '../employees/AddEmployeeModal';
 import Scheduler from '../scheduler/Scheduler';
-import FilterBar, { FilterOptions } from '../../components/FilterBar';
+
 import { CreateLeaveModal } from '../../components';
 
 import './DashboardPage.css';
@@ -50,19 +47,9 @@ const DashboardPage: React.FC = () => {
     const [pendingRequests, setPendingRequests] = useState<LeaveItem[]>([]);
     const [orgData, setOrgData] = useState<OrgEmployeeAPI | null>(null);
     const [showPendingModal, setShowPendingModal] = useState(false);
-    const [selectedEmployee, setSelectedEmployee] = useState<OrgEmployeeAPI | null>(null);
-    const [showEmployeeModal, setShowEmployeeModal] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
     const [schedulerLeaves, setSchedulerLeaves] = useState<any[]>([]);
     const [schedulerStartDate, setSchedulerStartDate] = useState(dayjs());
-    const [schedulerSearch, setSchedulerSearch] = useState('');
     const [showCreateLeaveModal, setShowCreateLeaveModal] = useState(false);
-    const [leaveTypeFilter, setLeaveTypeFilter] = useState<string[]>([]);
-    const [filters, setFilters] = useState<FilterOptions>({
-        leaveTypes: [],
-        employeeTypes: [],
-    });
     const [editingLeave, setEditingLeave] = useState<LeaveRecordAPI | null>(null);
 
     useEffect(() => {
@@ -79,24 +66,6 @@ const DashboardPage: React.FC = () => {
             });
         }
         return result;
-    };
-
-    const filterEmployees = (employees: OrgEmployeeAPI[], term: string): OrgEmployeeAPI[] => {
-        return employees.filter(emp => {
-            // Exclude managers (anyone with 'MANAGER' in their role)
-            if (emp.role && emp.role.toUpperCase().includes('MANAGER')) {
-                return false;
-            }
-
-            // Apply search filter
-            if (!term.trim()) return true;
-            const lowerTerm = term.toLowerCase();
-            return (
-                emp.name.toLowerCase().includes(lowerTerm) ||
-                emp.role.toLowerCase().includes(lowerTerm) ||
-                emp.email.toLowerCase().includes(lowerTerm)
-            );
-        });
     };
 
     const loadDashboardData = async () => {
@@ -147,25 +116,7 @@ const DashboardPage: React.FC = () => {
         }
     };
 
-    const handleEmployeeClick = (emp: OrgEmployeeAPI) => {
-        setSelectedEmployee(emp);
-        setShowEmployeeModal(true);
-    };
 
-    const handleEditEmployee = (emp: OrgEmployeeAPI) => {
-        setSelectedEmployee(emp);
-        setShowEditModal(true);
-    };
-
-    const handleEmployeeDelete = async (emp: OrgEmployeeAPI) => {
-        try {
-            await deleteEmployee(emp.id);
-            message.success('Employee deleted successfully');
-            loadDashboardData(); // Reload data
-        } catch (error) {
-            message.error('Failed to delete employee');
-        }
-    };
 
     const handlePrevMonth = () => {
         setSchedulerStartDate(schedulerStartDate.subtract(1, 'month'));
@@ -173,11 +124,6 @@ const DashboardPage: React.FC = () => {
 
     const handleNextMonth = () => {
         setSchedulerStartDate(schedulerStartDate.add(1, 'month'));
-    };
-
-    const handleFiltersChange = (newFilters: FilterOptions) => {
-        setFilters(newFilters);
-        setLeaveTypeFilter(newFilters.leaveTypes);
     };
 
     const handleLeaveSubmit = async (values: { startDate: string; endDate: string; type: any; description: string; employeeId?: string }) => {
@@ -240,48 +186,14 @@ const DashboardPage: React.FC = () => {
         }
     };
 
-    // Filter employees based on search and employee type filter
+    // Get all employees for scheduler
     const filterSchedulerEmployees = () => {
-        let emps = flattenOrgData(orgData);
-
-        // Filter by employee type if set
-        if (filters.employeeTypes.length > 0) {
-            emps = emps.filter(emp =>
-                filters.employeeTypes.includes(emp.employeeType as any)
-            );
-        }
-
-        // Filter by search term
-        if (schedulerSearch.trim()) {
-            const lowerSearch = schedulerSearch.toLowerCase();
-            emps = emps.filter(emp =>
-                emp.name.toLowerCase().includes(lowerSearch) ||
-                emp.role.toLowerCase().includes(lowerSearch)
-            );
-        }
-
-        return emps;
+        return flattenOrgData(orgData);
     };
 
-    // Filter leaves based on search and type filter
+    // Get all leaves for scheduler
     const filterSchedulerLeaves = () => {
-        let filtered = schedulerLeaves;
-
-        // Filter by type
-        if (leaveTypeFilter.length > 0) {
-            filtered = filtered.filter(leave => leaveTypeFilter.includes(leave.type));
-        }
-
-        // Filter by search (employee name)
-        if (schedulerSearch.trim()) {
-            const lowerSearch = schedulerSearch.toLowerCase();
-            const searchedEmployeeIds = flattenOrgData(orgData)
-                .filter(emp => emp.name.toLowerCase().includes(lowerSearch))
-                .map(emp => emp.id);
-            filtered = filtered.filter(leave => searchedEmployeeIds.includes(leave.employeeId));
-        }
-
-        return filtered;
+        return schedulerLeaves;
     };
 
     if (loading) {
@@ -388,37 +300,6 @@ const DashboardPage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Right Column - Org List (2/3 width) */}
-                <div className="dashboard-org-column">
-                    <div className="org-column-header">
-                        <h3 className="org-column-title">Team Members</h3>
-                        <div className="org-header-right">
-                            <span className="org-member-count">{filterEmployees(flattenOrgData(orgData), '').length} Members</span>
-                            <div className="org-search-wrapper">
-                                <FiSearch className="org-search-icon" size={16} />
-                                <input
-                                    type="text"
-                                    placeholder="Search employees..."
-                                    className="org-search-input"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="org-list-wrapper">
-                        <OrgList
-                            employees={filterEmployees(flattenOrgData(orgData), searchTerm)}
-                            showManager={false}
-                            showActions={false}
-                            hideEmailLocation={false}
-                            hideHeaders={true}
-                            onEmployeeClick={handleEmployeeClick}
-                            onEditClick={handleEditEmployee}
-                            onDeleteClick={handleEmployeeDelete}
-                        />
-                    </div>
-                </div>
             </div>
 
             {/* Pending Requests Modal */}
@@ -428,52 +309,7 @@ const DashboardPage: React.FC = () => {
                 requests={pendingRequests}
             />
 
-            {/* Employee Detail Modal */}
-            {selectedEmployee && (
-                <EmployeeDetailModal
-                    open={showEmployeeModal}
-                    employee={selectedEmployee}
-                    onClose={() => {
-                        setShowEmployeeModal(false);
-                        setSelectedEmployee(null);
-                        loadDashboardData();
-                    }}
-                    onEdit={(emp) => {
-                        setShowEmployeeModal(false);
-                        handleEditEmployee(emp as any);
-                    }}
-                    onDelete={(emp) => {
-                        setShowEmployeeModal(false);
-                        handleEmployeeDelete(emp as any);
-                    }}
-                    showActions={user?.role?.toUpperCase().includes('MANAGER') || false}
-                />
-            )}
 
-            {/* Edit Employee Modal */}
-            {selectedEmployee && (
-                <AddEmployeeModal
-                    open={showEditModal}
-                    initialValues={selectedEmployee}
-                    onClose={() => {
-                        setShowEditModal(false);
-                        setSelectedEmployee(null);
-                    }}
-                    onSubmit={async (values) => {
-                        try {
-                            await import('../../services/api').then(({ updateEmployee }) =>
-                                updateEmployee(selectedEmployee.id, values)
-                            );
-                            setShowEditModal(false);
-                            setSelectedEmployee(null);
-                            await loadDashboardData();
-                        } catch (error) {
-                            console.error('Failed to update employee:', error);
-                            message.error('Failed to update employee');
-                        }
-                    }}
-                />
-            )}
 
             {/* Leave Tracker / Scheduler */}
             <div className="dashboard-scheduler-section">
@@ -488,26 +324,6 @@ const DashboardPage: React.FC = () => {
                             <button className="month-nav-btn" onClick={handleNextMonth}>
                                 <FiChevronRight size={20} />
                             </button>
-                        </div>
-                    </div>
-                    <div className="scheduler-header-bottom">
-                        <FilterBar
-                            viewMode="1"
-                            onViewModeChange={() => { }}
-                            onCreateLeave={() => setShowCreateLeaveModal(true)}
-                            filters={filters}
-                            onFiltersChange={handleFiltersChange}
-                            hideViewMode={true}
-                        />
-                        <div className="scheduler-search-wrapper">
-                            <FiSearch className="scheduler-search-icon" size={16} />
-                            <input
-                                type="text"
-                                placeholder="Search employees..."
-                                className="scheduler-search-input"
-                                value={schedulerSearch}
-                                onChange={(e) => setSchedulerSearch(e.target.value)}
-                            />
                         </div>
                     </div>
                 </div>
