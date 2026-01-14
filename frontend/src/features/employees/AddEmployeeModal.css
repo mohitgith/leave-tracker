@@ -1,0 +1,352 @@
+/* Employee Management Modal Styles */
+
+/* Tabs Styling */
+.employee-modal-tabs .ant-tabs-nav {
+    margin-bottom: 16px;
+}
+
+.employee-modal-tabs .ant-tabs-nav::before {
+    border-bottom: none !important;
+}
+
+.employee-modal-tabs .ant-tabs-tab {
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+.employee-modal-tabs .ant-tabs-tab .ant-tabs-tab-btn {
+    color: #231F20;
+}
+
+.employee-modal-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #EE3524 !important;
+}
+
+.employee-modal-tabs .ant-tabs-ink-bar {
+    background: #EE3524;
+}
+
+.employee-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.employee-modal-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #231F20;
+    margin: 0;
+}
+
+.employee-modal-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.add-new-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #EE3524;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.add-new-btn:hover {
+    background: #D42E1F;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #f5f5f5;
+    color: #231F20;
+    border: 1px solid #e8e8e8;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background: #e8e8e8;
+}
+
+/* Employee List */
+.employee-list-container {
+    min-height: 550px;
+    max-height: 550px;
+    overflow-y: auto;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+}
+
+.employee-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s ease;
+}
+
+.employee-list-item:last-child {
+    border-bottom: none;
+}
+
+.employee-list-item:hover {
+    background: #fafafa;
+}
+
+.employee-list-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.employee-list-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.employee-list-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.employee-list-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #231F20;
+    margin: 0 0 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.employee-list-role {
+    font-size: 12px;
+    color: #9FA1A4;
+    margin: 0;
+}
+
+.employee-list-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn.edit {
+    background: rgba(159, 161, 164, 0.15);
+    color: #9FA1A4;
+}
+
+.action-btn.edit:hover {
+    background: rgba(159, 161, 164, 0.25);
+}
+
+.action-btn.delete {
+    background: rgba(238, 53, 36, 0.1);
+    color: #EE3524;
+}
+
+.action-btn.delete:hover {
+    background: rgba(238, 53, 36, 0.2);
+}
+
+/* Delete Confirmation Inline */
+.delete-confirm-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.delete-confirm-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: #EE3524;
+}
+
+.confirm-btn {
+    padding: 4px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.confirm-btn.yes {
+    background: #EE3524;
+    color: #fff;
+}
+
+.confirm-btn.yes:hover {
+    background: #D42E1F;
+}
+
+.confirm-btn.no {
+    background: #e8e8e8;
+    color: #231F20;
+}
+
+.confirm-btn.no:hover {
+    background: #d0d0d0;
+}
+
+/* Empty State */
+.employee-list-empty {
+    padding: 48px 24px;
+    text-align: center;
+    color: #9FA1A4;
+}
+
+.employee-list-empty-icon {
+    font-size: 48px;
+    opacity: 0.4;
+    margin-bottom: 12px;
+}
+
+.employee-list-empty-text {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Form Container */
+.employee-form-container {
+    padding-top: 8px;
+    min-height: 400px;
+}
+
+/* Back to List Button */
+.back-to-list-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: transparent;
+    color: #EE3524;
+    border: 1px solid #EE3524;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 16px;
+}
+
+.back-to-list-btn:hover {
+    background: rgba(238, 53, 36, 0.1);
+}
+
+/* =========================================
+   Dark Mode
+   ========================================= */
+
+.dark-mode .employee-modal-tabs .ant-tabs-tab .ant-tabs-tab-btn {
+    color: #FFFFFF;
+}
+
+.dark-mode .employee-modal-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #EE3524 !important;
+}
+
+.dark-mode .employee-modal-title {
+    color: #fff;
+}
+
+.dark-mode .back-btn {
+    background: #3a3a3a;
+    border-color: #4a4a4a;
+    color: #fff;
+}
+
+.dark-mode .back-btn:hover {
+    background: #4a4a4a;
+}
+
+.dark-mode .employee-list-container {
+    border-color: #4a4a4a;
+    background: #2d2a2b;
+}
+
+.dark-mode .employee-list-item {
+    border-color: #3a3a3a;
+}
+
+.dark-mode .employee-list-item:hover {
+    background: #3a3a3a;
+}
+
+.dark-mode .employee-list-name {
+    color: #fff;
+}
+
+.dark-mode .action-btn.edit {
+    background: rgba(159, 161, 164, 0.2);
+    color: #9FA1A4;
+}
+
+.dark-mode .action-btn.edit:hover {
+    background: rgba(159, 161, 164, 0.3);
+}
+
+.dark-mode .action-btn.delete {
+    background: rgba(238, 53, 36, 0.15);
+    color: #EE3524;
+}
+
+.dark-mode .action-btn.delete:hover {
+    background: rgba(238, 53, 36, 0.25);
+}
+
+.dark-mode .confirm-btn.no {
+    background: #4a4a4a;
+    color: #fff;
+}
+
+.dark-mode .confirm-btn.no:hover {
+    background: #5a5a5a;
+}
+
+.dark-mode .employee-list-empty {
+    color: #666;
+}
+
+.dark-mode .back-to-list-btn {
+    color: #EE3524;
+    border-color: #EE3524;
+}
+
+.dark-mode .back-to-list-btn:hover {
+    background: rgba(238, 53, 36, 0.15);
+}

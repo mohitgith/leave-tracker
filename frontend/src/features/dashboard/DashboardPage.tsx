@@ -367,6 +367,8 @@ const DashboardPage: React.FC = () => {
                 open={isAddEmployeeModalOpen}
                 onClose={() => setIsAddEmployeeModalOpen(false)}
                 onSubmit={handleAddEmployeeSubmit}
+                onEmployeeUpdated={loadDashboardData}
+                onEmployeeDeleted={loadDashboardData}
             />
 
             {/* Dashboard Footer */}
