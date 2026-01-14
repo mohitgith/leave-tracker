@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useMemo } from 'react';
 import dayjs from 'dayjs';
 import { Employee, LeaveRecord } from '../../types';
+import { FiCalendar } from 'react-icons/fi';
 import MonthSection from './MonthSection';
 import './VerticalScheduler.css';
 
@@ -13,6 +14,7 @@ interface VerticalSchedulerProps {
     onEditLeave?: (leave: LeaveRecord) => void;
     onDeleteLeave?: (leaveId: string) => void;
     currentUserId?: string;
+    title?: string;
 }
 
 // Constants for height calculation
@@ -30,6 +32,7 @@ const VerticalScheduler: React.FC<VerticalSchedulerProps> = ({
     onEditLeave,
     onDeleteLeave,
     currentUserId,
+    title = 'Annual Leave Tracker'
 }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const currentMonthRef = useRef<HTMLDivElement>(null);
@@ -65,6 +68,10 @@ const VerticalScheduler: React.FC<VerticalSchedulerProps> = ({
 
     return (
         <div className="vertical-scheduler">
+            <div className="vertical-scheduler-header">
+                <FiCalendar className="header-icon" />
+                <h2 className="header-title">{title}</h2>
+            </div>
             <div
                 className="vertical-scheduler-container"
                 ref={scrollContainerRef}

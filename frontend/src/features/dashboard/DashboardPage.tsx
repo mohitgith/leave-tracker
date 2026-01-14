@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Spin, message } from 'antd';
 import dayjs from 'dayjs';
-import { FiClock, FiCalendar, FiUsers } from 'react-icons/fi';
+import { FiClock, FiCalendar, FiUsers, FiUserPlus } from 'react-icons/fi';
 import { LEAVE_TYPE_COLORS, LEAVE_TYPE_LABELS, LeaveType } from '../../types';
-import { fetchOrgChart, type OrgEmployeeAPI, createLeave, updateLeave, deleteLeave as deleteLeaveAPI, LeaveRecordAPI } from '../../services/api';
+import { fetchOrgChart, type OrgEmployeeAPI, createLeave, updateLeave, deleteLeave as deleteLeaveAPI, LeaveRecordAPI, createEmployee } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import PendingRequestsModal from './PendingRequestsModal';
 import VerticalScheduler from '../scheduler/VerticalScheduler';
+import AddEmployeeModal from '../employees/AddEmployeeModal';
 
 import { CreateLeaveModal } from '../../components';
 
@@ -50,6 +51,7 @@ const DashboardPage: React.FC = () => {
     const [schedulerLeaves, setSchedulerLeaves] = useState<any[]>([]);
     const [showCreateLeaveModal, setShowCreateLeaveModal] = useState(false);
     const [editingLeave, setEditingLeave] = useState<LeaveRecordAPI | null>(null);
+    const [isAddEmployeeModalOpen, setIsAddEmployeeModalOpen] = useState(false);
 
     useEffect(() => {
         loadDashboardData();
@@ -148,6 +150,22 @@ const DashboardPage: React.FC = () => {
         } catch (error) {
             console.error('Failed to save leave:', error);
             message.error(editingLeave ? 'Failed to update leave' : 'Failed to create leave request');
+        }
+    };
+
+    const handleAddEmployeeSubmit = async (values: any) => {
+        try {
+            await createEmployee({
+                ...values,
+                managerId: '0', // Default to manager
+                department: 'ENABLEMENT R&C',
+            });
+            message.success('Employee added successfully');
+            setIsAddEmployeeModalOpen(false);
+            await loadDashboardData();
+        } catch (error) {
+            console.error('Failed to add employee:', error);
+            message.error('Failed to add employee');
         }
     };
 
@@ -289,6 +307,17 @@ const DashboardPage: React.FC = () => {
                             )}
                         </div>
                     </div>
+
+                    {/* Add Employee Button (Manager only) */}
+                    {user?.isManager && (
+                        <button
+                            className="dashboard-add-employee-btn"
+                            onClick={() => setIsAddEmployeeModalOpen(true)}
+                        >
+                            <FiUserPlus size={18} style={{ marginRight: 8 }} />
+                            Add Employee
+                        </button>
+                    )}
                 </div>
 
                 {/* Right Column - Leave Tracker Scheduler (3/4 width) */}
@@ -344,6 +373,13 @@ const DashboardPage: React.FC = () => {
                 }}
                 onSubmit={handleLeaveSubmit}
                 initialValues={editingLeave as any}
+            />
+
+            {/* Add Employee Modal */}
+            <AddEmployeeModal
+                open={isAddEmployeeModalOpen}
+                onClose={() => setIsAddEmployeeModalOpen(false)}
+                onSubmit={handleAddEmployeeSubmit}
             />
 
             {/* Dashboard Footer */}
