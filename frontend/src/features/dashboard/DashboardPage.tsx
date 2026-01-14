@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Spin, message, Radio, Tooltip } from 'antd';
-import type { RadioChangeEvent } from 'antd';
+import { Spin, message } from 'antd';
 import dayjs from 'dayjs';
-import { FiClock, FiCalendar, FiUsers, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiClock, FiCalendar, FiUsers } from 'react-icons/fi';
 import { LEAVE_TYPE_COLORS, LEAVE_TYPE_LABELS, LeaveType } from '../../types';
 import { fetchOrgChart, type OrgEmployeeAPI, createLeave, updateLeave, deleteLeave as deleteLeaveAPI, LeaveRecordAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import PendingRequestsModal from './PendingRequestsModal';
-import Scheduler from '../scheduler/Scheduler';
+import VerticalScheduler from '../scheduler/VerticalScheduler';
 
 import { CreateLeaveModal } from '../../components';
 
@@ -49,8 +48,6 @@ const DashboardPage: React.FC = () => {
     const [orgData, setOrgData] = useState<OrgEmployeeAPI | null>(null);
     const [showPendingModal, setShowPendingModal] = useState(false);
     const [schedulerLeaves, setSchedulerLeaves] = useState<any[]>([]);
-    const [schedulerStartDate, setSchedulerStartDate] = useState(dayjs());
-    const [viewMode, setViewMode] = useState<'1' | '3' | '6' | '12'>('1');
     const [showCreateLeaveModal, setShowCreateLeaveModal] = useState(false);
     const [editingLeave, setEditingLeave] = useState<LeaveRecordAPI | null>(null);
 
@@ -119,16 +116,6 @@ const DashboardPage: React.FC = () => {
     };
 
 
-
-    const handlePrevMonth = () => {
-        const months = parseInt(viewMode);
-        setSchedulerStartDate(schedulerStartDate.subtract(months, 'month'));
-    };
-
-    const handleNextMonth = () => {
-        const months = parseInt(viewMode);
-        setSchedulerStartDate(schedulerStartDate.add(months, 'month'));
-    };
 
     const handleLeaveSubmit = async (values: { startDate: string; endDate: string; type: any; description: string; employeeId?: string }) => {
         try {
@@ -304,6 +291,41 @@ const DashboardPage: React.FC = () => {
                     </div>
                 </div>
 
+                {/* Right Column - Leave Tracker Scheduler (3/4 width) */}
+                <div className="dashboard-scheduler-section">
+                    {filterSchedulerEmployees().length === 0 ? (
+                        <div className="scheduler-empty-wrapper">
+                            <p className="scheduler-empty-text">Nothing found</p>
+                        </div>
+                    ) : (
+                        <VerticalScheduler
+                            employees={filterSchedulerEmployees() as any}
+                            leaves={filterSchedulerLeaves()}
+                            startDate={dayjs().subtract(12, 'month').startOf('month')}
+                            endDate={dayjs().add(11, 'month').endOf('month')}
+                            currentMonth={dayjs()}
+                            onEditLeave={handleEditLeave}
+                            onDeleteLeave={handleDeleteLeave}
+                            currentUserId={user?.id}
+                        />
+                    )}
+
+                    {/* Leave Types Legend */}
+                    <div className="scheduler-legend">
+                        {(Object.keys(LEAVE_TYPE_COLORS) as LeaveType[]).map((type) => (
+                            <div key={type} className="legend-item">
+                                <span
+                                    className="legend-color"
+                                    style={{
+                                        backgroundColor: LEAVE_TYPE_COLORS[type].bg,
+                                        borderColor: LEAVE_TYPE_COLORS[type].border
+                                    }}
+                                />
+                                <span className="legend-label">{LEAVE_TYPE_LABELS[type]}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
 
             {/* Pending Requests Modal */}
@@ -312,104 +334,6 @@ const DashboardPage: React.FC = () => {
                 onClose={() => setShowPendingModal(false)}
                 requests={pendingRequests}
             />
-
-
-
-            {/* Leave Tracker / Scheduler */}
-            <div className="dashboard-scheduler-section">
-                <div className="scheduler-custom-header">
-                    <div className="scheduler-header-top">
-                        <h3 className="scheduler-title">
-                            {viewMode === '1' ? 'Monthly View' :
-                                viewMode === '3' ? 'Quarterly View' :
-                                    viewMode === '6' ? 'Half-Yearly View' : 'Yearly View'}
-                        </h3>
-                    </div>
-                    {/* Date Range and View Mode Controls */}
-                    <div className="scheduler-controls-row">
-                        <div className="scheduler-date-nav">
-                            <button className="month-nav-btn" onClick={handlePrevMonth}>
-                                <FiChevronLeft size={20} />
-                            </button>
-                            <span className="date-range-display" data-view-mode={viewMode}>
-                                {viewMode === '1'
-                                    ? schedulerStartDate.format('MMMM YYYY')
-                                    : `${schedulerStartDate.format('MMMM YYYY')} - ${schedulerStartDate.add(parseInt(viewMode) - 1, 'month').format('MMMM YYYY')}`
-                                }
-                            </span>
-                            <button className="month-nav-btn" onClick={handleNextMonth}>
-                                <FiChevronRight size={20} />
-                            </button>
-                        </div>
-                        <div className="scheduler-view-options">
-                            <Radio.Group
-                                value={viewMode}
-                                onChange={(e: RadioChangeEvent) => setViewMode(e.target.value)}
-                                className="view-mode-group"
-                                optionType="button"
-                                buttonStyle="solid"
-                            >
-                                <Tooltip title="1 Month View">
-                                    <Radio.Button value="1">
-                                        <span className="view-label">1 </span>
-                                        <span className="view-sublabel">month</span>
-                                    </Radio.Button>
-                                </Tooltip>
-                                <Tooltip title="3 Months View">
-                                    <Radio.Button value="3">
-                                        <span className="view-label">3</span>
-                                        <span className="view-sublabel">months</span>
-                                    </Radio.Button>
-                                </Tooltip>
-                                <Tooltip title="6 Months View">
-                                    <Radio.Button value="6">
-                                        <span className="view-label">6</span>
-                                        <span className="view-sublabel">months</span>
-                                    </Radio.Button>
-                                </Tooltip>
-                                <Tooltip title="12 Months View">
-                                    <Radio.Button value="12">
-                                        <span className="view-label">12</span>
-                                        <span className="view-sublabel">months</span>
-                                    </Radio.Button>
-                                </Tooltip>
-                            </Radio.Group>
-                        </div>
-                    </div>
-                </div>
-                {filterSchedulerEmployees().length === 0 ? (
-                    <div className="scheduler-empty-wrapper">
-                        <p className="scheduler-empty-text">Nothing found</p>
-                    </div>
-                ) : (
-                    <Scheduler
-                        employees={filterSchedulerEmployees() as any}
-                        leaves={filterSchedulerLeaves()}
-                        startDate={schedulerStartDate.startOf('month')}
-                        endDate={schedulerStartDate.add(parseInt(viewMode) - 1, 'month').endOf('month')}
-                        viewMode={viewMode as '1' | '3'}
-                        onEditLeave={handleEditLeave}
-                        onDeleteLeave={handleDeleteLeave}
-                        currentUserId={user?.id}
-                    />
-                )}
-
-                {/* Leave Types Legend */}
-                <div className="scheduler-legend">
-                    {(Object.keys(LEAVE_TYPE_COLORS) as LeaveType[]).map((type) => (
-                        <div key={type} className="legend-item">
-                            <span
-                                className="legend-color"
-                                style={{
-                                    backgroundColor: LEAVE_TYPE_COLORS[type].bg,
-                                    borderColor: LEAVE_TYPE_COLORS[type].border
-                                }}
-                            />
-                            <span className="legend-label">{LEAVE_TYPE_LABELS[type]}</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
 
             {/* Create Leave Modal */}
             <CreateLeaveModal
@@ -431,3 +355,4 @@ const DashboardPage: React.FC = () => {
 };
 
 export default DashboardPage;
+
