@@ -29,6 +29,8 @@
 .vertical-scheduler-container {
     overflow-y: auto;
     overflow-x: hidden;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
 }
 
 /* Custom scrollbar */
@@ -82,4 +84,10 @@
 
 .dark-mode .vertical-scheduler-container::-webkit-scrollbar-thumb:hover {
     background: #6a6a6a;
+}
+
+/* Scroll Snap Wrapper */
+.month-snap-wrapper {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
 }

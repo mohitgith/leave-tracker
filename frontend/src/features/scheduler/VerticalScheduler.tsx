@@ -88,6 +88,7 @@ const VerticalScheduler: React.FC<VerticalSchedulerProps> = ({
                         <div
                             key={month.format('YYYY-MM')}
                             ref={isCurrentMonth ? currentMonthRef : undefined}
+                            className="month-snap-wrapper"
                         >
                             <MonthSection
                                 month={month}
