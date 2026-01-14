@@ -7,8 +7,8 @@
 
 /* Left column - fixed employee header and list */
 .scheduler-left-column {
-    width: 220px;
-    min-width: 220px;
+    width: 280px;
+    min-width: 280px;
     flex-shrink: 0;
     border-right: 1px solid #e8e8e8;
     background: #fff;

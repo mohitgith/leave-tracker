@@ -50,6 +50,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll() // Authenticate endpoint
                         .requestMatchers("/h2-console/**").permitAll() // Allow H2 Console
                         .requestMatchers("/error").permitAll()
+                        // Swagger UI / OpenAPI documentation
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/webjars/**")
+                        .permitAll()
                         .anyRequest().authenticated());
 
         // H2 Console fix (frame options)

@@ -64,7 +64,8 @@ const UnifiedGridlines: React.FC<UnifiedGridlinesProps> = ({
             style={{
                 top: `${monthsRowHeight}px`, // Start after months row
                 height: `${gridlinesHeight}px`,
-                minWidth: `${totalWidth}px`
+                width: '100%', // Fill container width, parent controls sizing
+                minWidth: totalWidth > 0 ? `${totalWidth}px` : undefined // Only set minWidth for multi-month scrollable views
             }}
         >
             {dayColumns.map((col, index) => (
