@@ -1,0 +1,257 @@
+.month-section {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.month-section.current-month {
+    background: rgba(238, 53, 36, 0.02);
+}
+
+/* Month Header - Contains label and days row */
+.month-section-header {
+    display: flex;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e8e8e8;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.month-section-label {
+    width: 200px;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    background: #f0f1f2;
+    border-right: 1px solid #e8e8e8;
+}
+
+.month-section.current-month .month-section-label {
+    background: rgba(238, 53, 36, 0.1);
+}
+
+.month-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #231F20;
+    text-transform: uppercase;
+}
+
+.month-year {
+    font-size: 11px;
+    color: #8c8c8c;
+    margin-top: 2px;
+}
+
+.month-section.current-month .month-name {
+    color: #EE3524;
+}
+
+.month-section-days-header {
+    display: flex;
+    height: 36px;
+}
+
+.month-section-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 500;
+    color: #666;
+    border-right: 1px solid #f0f0f0;
+    box-sizing: border-box;
+    gap: 1px;
+}
+
+.month-section-day .day-initial {
+    font-size: 9px;
+    font-weight: 400;
+    color: #999;
+    text-transform: uppercase;
+}
+
+.month-section-day .day-number {
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.month-section-day.weekend {
+    background: rgba(0, 0, 0, 0.03);
+    color: #999;
+}
+
+.month-section-day.weekend .day-initial,
+.month-section-day.weekend .day-number {
+    color: #bbb;
+}
+
+.month-section-day.today {
+    background: rgba(238, 53, 36, 0.15);
+    color: #EE3524;
+}
+
+.month-section-day.today .day-initial,
+.month-section-day.today .day-number {
+    color: #EE3524;
+}
+
+/* Employee Rows Section */
+.month-section-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.month-section-employee-row {
+    display: flex;
+    height: 32px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.month-section-employee-row:last-child {
+    border-bottom: none;
+}
+
+.month-section-employee-info {
+    width: 200px;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+    background: #fff;
+    border-right: 1px solid #e8e8e8;
+}
+
+.month-section-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.month-section-employee-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.month-section-timeline {
+    position: relative;
+    height: 32px;
+    background: #fff;
+}
+
+/* Gridlines */
+.month-section-gridlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    pointer-events: none;
+}
+
+.month-gridline {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-right: 1px solid #f0f0f0;
+    box-sizing: border-box;
+}
+
+.month-gridline.weekend {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.month-gridline.today {
+    background: rgba(238, 53, 36, 0.08);
+}
+
+/* =========================================
+   Dark Mode
+   ========================================= */
+
+.dark-mode .month-section {
+    border-color: #4a4a4a;
+}
+
+.dark-mode .month-section.current-month {
+    background: rgba(238, 53, 36, 0.05);
+}
+
+.dark-mode .month-section-header {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .month-section-label {
+    background: #3a3a3a;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .month-section.current-month .month-section-label {
+    background: rgba(238, 53, 36, 0.2);
+}
+
+.dark-mode .month-name {
+    color: #FFFFFF;
+}
+
+.dark-mode .month-year {
+    color: #9FA1A4;
+}
+
+.dark-mode .month-section-days-header {
+    background: #2d2a2b;
+}
+
+.dark-mode .month-section-day {
+    color: #9FA1A4;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .month-section-day.weekend {
+    background: rgba(255, 255, 255, 0.03);
+    color: #777;
+}
+
+.dark-mode .month-section-day.today {
+    background: rgba(238, 53, 36, 0.25);
+    color: #EE3524;
+}
+
+.dark-mode .month-section-employee-row {
+    border-color: #4a4a4a;
+}
+
+.dark-mode .month-section-employee-name {
+    background: #2d2a2b;
+    border-color: #4a4a4a;
+    color: #FFFFFF;
+}
+
+.dark-mode .month-section-timeline {
+    background: #2d2a2b;
+}
+
+.dark-mode .month-gridline {
+    border-color: #4a4a4a;
+}
+
+.dark-mode .month-gridline.weekend {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.dark-mode .month-gridline.today {
+    background: rgba(238, 53, 36, 0.15);
+}

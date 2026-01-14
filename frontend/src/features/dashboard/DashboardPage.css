@@ -1,22 +1,23 @@
 /* Dashboard Page Styles */
 .dashboard-page {
     padding: 24px;
-    max-width: 1600px;
+    max-width: 1800px;
     margin: 0 auto;
     width: 100%;
 }
 
-/* Dashboard Layout - Horizontal Tiles */
+/* Dashboard Layout - Side by Side: Tiles (1/4) + Scheduler (3/4) */
 .dashboard-layout {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
     gap: 24px;
+    align-items: start;
 }
 
-/* Tiles Row - Horizontal Layout */
+/* Tiles Column - Vertical Stack */
 .dashboard-tiles {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 16px;
 }
 
@@ -28,8 +29,7 @@
     display: flex;
     flex-direction: column;
     transition: all 0.2s ease;
-    min-height: 200px;
-    max-height: 280px;
+    min-height: 180px;
 }
 
 .dashboard-tile.clickable {
@@ -312,7 +312,6 @@
 
 /* Dashboard Scheduler Section */
 .dashboard-scheduler-section {
-    margin-top: 24px;
     background: #fff;
     border-radius: 12px;
     border: 1px solid #e8e8e8;

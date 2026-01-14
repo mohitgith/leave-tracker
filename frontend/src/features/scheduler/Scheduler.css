@@ -22,11 +22,14 @@
     border-bottom: 1px solid #e8e8e8;
 }
 
-.employee-search-header {
+.scheduler-month-label {
     height: 68px;
     display: flex;
     align-items: center;
-    padding: 0 16px;
+    padding: 0 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #231F20;
 }
 
 .scheduler-employees {
@@ -92,6 +95,10 @@
 
 .dark-mode .scheduler-employees {
     background: #2d2a2b;
+}
+
+.dark-mode .scheduler-month-label {
+    color: #FFFFFF;
 }
 
 .dark-mode .scheduler-timeline-wrapper::-webkit-scrollbar-track {

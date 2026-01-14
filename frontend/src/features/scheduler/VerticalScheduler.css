@@ -1,0 +1,49 @@
+.vertical-scheduler {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.vertical-scheduler-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+.vertical-scheduler-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.vertical-scheduler-container::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.vertical-scheduler-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+.vertical-scheduler-container::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+/* =========================================
+   Dark Mode
+   ========================================= */
+
+.dark-mode .vertical-scheduler {
+    background: #2d2a2b;
+}
+
+.dark-mode .vertical-scheduler-container::-webkit-scrollbar-track {
+    background: #3a3a3a;
+}
+
+.dark-mode .vertical-scheduler-container::-webkit-scrollbar-thumb {
+    background: #5a5a5a;
+}
+
+.dark-mode .vertical-scheduler-container::-webkit-scrollbar-thumb:hover {
+    background: #6a6a6a;
+}

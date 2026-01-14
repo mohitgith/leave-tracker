@@ -17,11 +17,12 @@ interface SchedulerProps {
     onEditLeave?: (leave: LeaveRecord) => void;
     onDeleteLeave?: (leaveId: string) => void;
     currentUserId?: string;
+    currentMonth?: dayjs.Dayjs; // The current month to display in header and scroll to
 }
 
 const MONTHS_ROW_HEIGHT = 32;
 const DAYS_ROW_HEIGHT = 36;
-const ROW_HEIGHT = 48;
+const ROW_HEIGHT = 36;
 
 const Scheduler: React.FC<SchedulerProps> = ({
     employees,
@@ -32,6 +33,7 @@ const Scheduler: React.FC<SchedulerProps> = ({
     onEditLeave,
     onDeleteLeave,
     currentUserId,
+    currentMonth = dayjs(),
 }) => {
     const timelineRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
@@ -79,7 +81,6 @@ const Scheduler: React.FC<SchedulerProps> = ({
         : Math.max(MIN_DAY_WIDTH, calculatedDayWidth);
 
     const config: TimelineConfig = generateTimelineConfig(startDate, endDate, dayWidth);
-    const currentMonth = dayjs();
 
     // Sync scroll between header and grid
     useEffect(() => {
@@ -96,13 +97,28 @@ const Scheduler: React.FC<SchedulerProps> = ({
         return () => timeline.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Scroll to current month on initial load
+    useEffect(() => {
+        if (!timelineRef.current || containerWidth === 0) return;
+
+        // Calculate the scroll position to show current month
+        const daysFromStart = currentMonth.startOf('month').diff(startDate.startOf('month'), 'day');
+        const scrollPosition = daysFromStart * dayWidth;
+
+        // Scroll to position (with a small offset to show some context)
+        timelineRef.current.scrollLeft = Math.max(0, scrollPosition - 50);
+        if (headerRef.current) {
+            headerRef.current.scrollLeft = Math.max(0, scrollPosition - 50);
+        }
+    }, [containerWidth, currentMonth, startDate, dayWidth]);
+
     return (
         <div className="scheduler">
             {/* Left column - fixed employee header and list */}
             <div className="scheduler-left-column">
                 <div className="scheduler-header-left">
-                    <div className="employee-search-header">
-                        {/* Empty space for alignment */}
+                    <div className="scheduler-month-label">
+                        {currentMonth.format('MMMM YYYY')}
                     </div>
                 </div>
                 <div className="scheduler-employees">
