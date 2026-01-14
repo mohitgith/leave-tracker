@@ -10,8 +10,13 @@ interface PageHeaderProps {
 const PageHeader: React.FC<PageHeaderProps> = ({ title, subtitle, variant = 'wide' }) => {
     return (
         <div className={`page-header page-header--${variant}`}>
-            <h1 className="page-header-title">{title}</h1>
-            {subtitle && <p className="page-header-subtitle">{subtitle}</p>}
+            <div className="page-header-container">
+                <div className="page-header-text">
+                    <h1 className="page-header-title">{title}</h1>
+                    {subtitle && <p className="page-header-subtitle">{subtitle}</p>}
+                </div>
+                <div id="page-header-extra" className="page-header-extra"></div>
+            </div>
         </div>
     );
 };

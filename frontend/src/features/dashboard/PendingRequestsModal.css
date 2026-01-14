@@ -11,6 +11,8 @@
 
 .pending-count-badge {
     margin-left: auto;
+    margin-right: 60px;
+    /* Increased to avoid close button overlap */
     background: #FFF3E0;
     color: #F57C00;
     padding: 4px 12px;
@@ -49,6 +51,9 @@
 
 .pending-avatar-wrapper {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .pending-avatar {

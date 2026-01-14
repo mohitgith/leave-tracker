@@ -62,7 +62,12 @@ const VerticalScheduler: React.FC<VerticalSchedulerProps> = ({
     // Scroll to current month on mount
     useEffect(() => {
         if (currentMonthRef.current && scrollContainerRef.current) {
-            currentMonthRef.current.scrollIntoView({ block: 'start', behavior: 'auto' });
+            // Manual scroll calculation to prevent the entire page from scrolling (which scrollIntoView does)
+            const container = scrollContainerRef.current;
+            const currentMonthElement = currentMonthRef.current;
+
+            // Calculate position relative to the container
+            container.scrollTop = currentMonthElement.offsetTop - container.offsetTop;
         }
     }, []);
 

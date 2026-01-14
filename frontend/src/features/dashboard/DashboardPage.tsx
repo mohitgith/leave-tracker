@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Spin, message } from 'antd';
 import dayjs from 'dayjs';
 import { FiClock, FiCalendar, FiUsers, FiUserPlus } from 'react-icons/fi';
@@ -234,11 +235,9 @@ const DashboardPage: React.FC = () => {
                                                 alt={item.employeeName}
                                                 className="tile-avatar"
                                             />
-                                            <div className={`tile-status-dot ${getLeaveTypeClass(item.leave.type)}`}></div>
                                         </div>
                                         <div className="tile-info">
                                             <p className="tile-name">{item.employeeName}</p>
-                                            <p className="tile-role">{item.employeeRole}</p>
                                         </div>
                                         <span className={`tile-type-badge ${getLeaveTypeClass(item.leave.type)}`}>
                                             {getLeaveTypeLabel(item.leave.type)}
@@ -273,7 +272,6 @@ const DashboardPage: React.FC = () => {
                                         </div>
                                         <div className="tile-info">
                                             <p className="tile-name">{item.employeeName}</p>
-                                            <p className="tile-role">{item.employeeRole}</p>
                                         </div>
                                         <span className="tile-dates">Whole Day</span>
                                     </div>
@@ -307,17 +305,6 @@ const DashboardPage: React.FC = () => {
                             )}
                         </div>
                     </div>
-
-                    {/* Add Employee Button (Manager only) */}
-                    {user?.isManager && (
-                        <button
-                            className="dashboard-add-employee-btn"
-                            onClick={() => setIsAddEmployeeModalOpen(true)}
-                        >
-                            <FiUserPlus size={18} style={{ marginRight: 8 }} />
-                            Add Employee
-                        </button>
-                    )}
                 </div>
 
                 {/* Right Column - Leave Tracker Scheduler (3/4 width) */}
@@ -386,6 +373,18 @@ const DashboardPage: React.FC = () => {
             <footer className="dashboard-footer">
                 <p>© {new Date().getFullYear()} Leave Tracker. All rights reserved.</p>
             </footer>
+
+            {/* Portal Action for Page Header */}
+            {user?.isManager && document.getElementById('page-header-extra') && createPortal(
+                <button
+                    className="dashboard-add-employee-btn"
+                    onClick={() => setIsAddEmployeeModalOpen(true)}
+                >
+                    <FiUserPlus size={16} style={{ marginRight: 8 }} />
+                    Add Employee
+                </button>,
+                document.getElementById('page-header-extra')!
+            )}
         </div>
     );
 };

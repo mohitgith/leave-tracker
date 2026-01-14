@@ -80,7 +80,6 @@ const PendingRequestsModal: React.FC<PendingRequestsModalProps> = ({ visible, on
                             </div>
                             <div className="pending-info">
                                 <p className="pending-name">{item.employeeName}</p>
-                                <p className="pending-role">{item.employeeRole}</p>
                             </div>
                             <span className={`pending-type-badge ${getLeaveTypeClass(item.leave.type)}`}>
                                 {getLeaveTypeLabel(item.leave.type)}
