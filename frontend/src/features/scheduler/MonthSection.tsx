@@ -53,7 +53,7 @@ const MonthSection: React.FC<MonthSectionProps> = ({
             <div
                 key={day}
                 className={`month-gridline ${isWeekend ? 'weekend' : ''} ${isToday ? 'today' : ''}`}
-                style={{ left: (day - 1) * DAY_WIDTH, width: DAY_WIDTH }}
+                style={{ flex: 1, minWidth: DAY_WIDTH }}
             />
         );
     }
@@ -99,7 +99,7 @@ const MonthSection: React.FC<MonthSectionProps> = ({
                             />
                             <span className="month-section-employee-name">{employee.name}</span>
                         </div>
-                        <div className="month-section-timeline" style={{ width: daysInMonth * DAY_WIDTH }}>
+                        <div className="month-section-timeline" style={{ minWidth: daysInMonth * DAY_WIDTH }}>
                             {/* Gridlines */}
                             <div className="month-section-gridlines">
                                 {gridlines}

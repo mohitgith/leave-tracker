@@ -16,9 +16,9 @@ interface VerticalSchedulerProps {
 }
 
 // Constants for height calculation
-const MONTH_HEADER_HEIGHT = 38; // Days header row (36px + borders)
-const EMPLOYEE_ROW_HEIGHT = 33; // Each employee row (32px + border)
-const MONTH_BORDER_HEIGHT = 3;  // Border between months
+const MONTH_HEADER_HEIGHT = 40; // Days header row (fixed height in CSS)
+const EMPLOYEE_ROW_HEIGHT = 32; // Each employee row (fixed height in CSS)
+const MONTH_BORDER_HEIGHT = 2;  // Border between months (1px top + 1px bottom)
 const VISIBLE_MONTHS = 3;       // Show 3 months at a time
 
 const VerticalScheduler: React.FC<VerticalSchedulerProps> = ({
