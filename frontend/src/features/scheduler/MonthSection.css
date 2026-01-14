@@ -238,9 +238,13 @@
     border-color: #4a4a4a;
 }
 
-.dark-mode .month-section-employee-name {
+.dark-mode .month-section-employee-info {
     background: #2d2a2b;
     border-color: #4a4a4a;
+}
+
+.dark-mode .month-section-employee-name {
+    background: transparent;
     color: #FFFFFF;
 }
 
