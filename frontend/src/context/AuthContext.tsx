@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode, useRef } from 'react';
 import { loginUser } from '../services/api';
 
 interface User {
@@ -26,20 +26,26 @@ const INACTIVITY_TIMEOUT = 15 * 60 * 1000;
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
-    let idleTimer: any;
+    const idleTimerRef = useRef<any>(null);
 
     const logout = useCallback(() => {
         setUser(null);
         localStorage.removeItem('isAuthenticated');
         localStorage.removeItem('currentUser');
         localStorage.removeItem('token');
-        if (idleTimer) clearTimeout(idleTimer);
+        if (idleTimerRef.current) {
+            clearTimeout(idleTimerRef.current);
+            idleTimerRef.current = null;
+        }
     }, []);
 
     const resetIdleTimer = useCallback(() => {
-        if (idleTimer) clearTimeout(idleTimer);
+        if (idleTimerRef.current) {
+            clearTimeout(idleTimerRef.current);
+        }
+
         if (user) {
-            idleTimer = setTimeout(() => {
+            idleTimerRef.current = setTimeout(() => {
                 console.log('User inactive for 15 minutes, logging out...');
                 logout();
                 window.location.href = '/login';
@@ -49,9 +55,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     // Setup idle listeners
     useEffect(() => {
-        if (!user) return;
+        if (!user) {
+            if (idleTimerRef.current) {
+                clearTimeout(idleTimerRef.current);
+                idleTimerRef.current = null;
+            }
+            return;
+        }
 
-        const events = ['mousemove', 'keydown', 'mousedown', 'touchstart'];
+        const events = ['mousemove', 'keydown', 'mousedown', 'touchstart', 'scroll'];
         const handleActivity = () => resetIdleTimer();
 
         events.forEach(event => window.addEventListener(event, handleActivity));
@@ -59,7 +71,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
         return () => {
             events.forEach(event => window.removeEventListener(event, handleActivity));
-            if (idleTimer) clearTimeout(idleTimer);
+            if (idleTimerRef.current) {
+                clearTimeout(idleTimerRef.current);
+                idleTimerRef.current = null;
+            }
         };
     }, [user, resetIdleTimer]);
 

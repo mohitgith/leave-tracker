@@ -33,7 +33,7 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({
     }, [employees, leaves]);
 
     return (
-        <div className="timeline-grid" style={{ minWidth: `${totalWidth}px` }}>
+        <div className="timeline-grid" style={{ width: '100%', minWidth: `${totalWidth}px` }}>
             {/* Employee rows */}
             {employees.map(employee => (
                 <div key={employee.id} className="timeline-row">

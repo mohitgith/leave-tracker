@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Spin, message } from 'antd';
 import dayjs from 'dayjs';
-import { FiClock, FiCalendar, FiUsers } from 'react-icons/fi';
+import { FiClock, FiCalendar, FiUsers, FiUserPlus } from 'react-icons/fi';
 import { LEAVE_TYPE_COLORS, LEAVE_TYPE_LABELS, LeaveType } from '../../types';
-import { fetchOrgChart, type OrgEmployeeAPI, createLeave, updateLeave, deleteLeave as deleteLeaveAPI, LeaveRecordAPI } from '../../services/api';
+import { fetchOrgChart, type OrgEmployeeAPI, createLeave, updateLeave, deleteLeave as deleteLeaveAPI, LeaveRecordAPI, createEmployee } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import PendingRequestsModal from './PendingRequestsModal';
 import VerticalScheduler from '../scheduler/VerticalScheduler';
+import AddEmployeeModal from '../employees/AddEmployeeModal';
 
 import { CreateLeaveModal } from '../../components';
 
@@ -50,6 +52,7 @@ const DashboardPage: React.FC = () => {
     const [schedulerLeaves, setSchedulerLeaves] = useState<any[]>([]);
     const [showCreateLeaveModal, setShowCreateLeaveModal] = useState(false);
     const [editingLeave, setEditingLeave] = useState<LeaveRecordAPI | null>(null);
+    const [isAddEmployeeModalOpen, setIsAddEmployeeModalOpen] = useState(false);
 
     useEffect(() => {
         loadDashboardData();
@@ -151,6 +154,22 @@ const DashboardPage: React.FC = () => {
         }
     };
 
+    const handleAddEmployeeSubmit = async (values: any) => {
+        try {
+            await createEmployee({
+                ...values,
+                managerId: '0', // Default to manager
+                department: 'ENABLEMENT R&C',
+            });
+            message.success('Employee added successfully');
+            setIsAddEmployeeModalOpen(false);
+            await loadDashboardData();
+        } catch (error) {
+            console.error('Failed to add employee:', error);
+            message.error('Failed to add employee');
+        }
+    };
+
     const handleEditLeave = (leave: any) => {
         // Only allow editing own leaves
         if (leave.employeeId !== user?.id) {
@@ -216,11 +235,9 @@ const DashboardPage: React.FC = () => {
                                                 alt={item.employeeName}
                                                 className="tile-avatar"
                                             />
-                                            <div className={`tile-status-dot ${getLeaveTypeClass(item.leave.type)}`}></div>
                                         </div>
                                         <div className="tile-info">
                                             <p className="tile-name">{item.employeeName}</p>
-                                            <p className="tile-role">{item.employeeRole}</p>
                                         </div>
                                         <span className={`tile-type-badge ${getLeaveTypeClass(item.leave.type)}`}>
                                             {getLeaveTypeLabel(item.leave.type)}
@@ -255,7 +272,6 @@ const DashboardPage: React.FC = () => {
                                         </div>
                                         <div className="tile-info">
                                             <p className="tile-name">{item.employeeName}</p>
-                                            <p className="tile-role">{item.employeeRole}</p>
                                         </div>
                                         <span className="tile-dates">Whole Day</span>
                                     </div>
@@ -346,10 +362,31 @@ const DashboardPage: React.FC = () => {
                 initialValues={editingLeave as any}
             />
 
+            {/* Add Employee Modal */}
+            <AddEmployeeModal
+                open={isAddEmployeeModalOpen}
+                onClose={() => setIsAddEmployeeModalOpen(false)}
+                onSubmit={handleAddEmployeeSubmit}
+                onEmployeeUpdated={loadDashboardData}
+                onEmployeeDeleted={loadDashboardData}
+            />
+
             {/* Dashboard Footer */}
             <footer className="dashboard-footer">
                 <p>© {new Date().getFullYear()} Leave Tracker. All rights reserved.</p>
             </footer>
+
+            {/* Portal Action for Page Header */}
+            {user?.isManager && document.getElementById('page-header-extra') && createPortal(
+                <button
+                    className="dashboard-add-employee-btn"
+                    onClick={() => setIsAddEmployeeModalOpen(true)}
+                >
+                    <FiUserPlus size={16} style={{ marginRight: 8 }} />
+                    Add Employee
+                </button>,
+                document.getElementById('page-header-extra')!
+            )}
         </div>
     );
 };

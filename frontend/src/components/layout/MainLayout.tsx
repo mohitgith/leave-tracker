@@ -32,9 +32,17 @@ const getPageHeaderConfig = (pathname: string): { title: string; subtitle?: stri
 
 const MainLayout: React.FC = () => {
     const location = useLocation();
+    const contentRef = React.useRef<HTMLDivElement>(null);
 
     // Get header config based on current route
     const headerConfig = useMemo(() => getPageHeaderConfig(location.pathname), [location.pathname]);
+
+    // Scroll to top whenever pathname changes
+    React.useLayoutEffect(() => {
+        if (contentRef.current) {
+            contentRef.current.scrollTop = 0;
+        }
+    }, [location.pathname]);
 
     return (
         <Layout style={{ minHeight: '100vh', flexDirection: 'column' }}>
@@ -44,12 +52,14 @@ const MainLayout: React.FC = () => {
             {/* Content below TopBar */}
             <Layout style={{ flex: 1, flexDirection: 'row', marginTop: 56 }}>
                 <Content
+                    ref={contentRef}
                     className="main-content"
                     style={{
                         flex: 1,
                         display: 'flex',
                         flexDirection: 'column',
-                        overflow: 'hidden',
+                        overflowY: 'auto',
+                        height: 'calc(100vh - 56px)', // Ensure proper height for scrolling
                     }}
                 >
                     {/* Unified PageHeader - follows container position based on variant */}

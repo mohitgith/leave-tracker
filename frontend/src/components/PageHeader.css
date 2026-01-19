@@ -17,6 +17,22 @@
     margin: 0 auto;
 }
 
+.page-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.page-header-text {
+    flex: 1;
+}
+
+.page-header-extra {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .page-header-title {
     font-size: 28px;
     font-weight: 800;

@@ -29,7 +29,7 @@
     display: flex;
     flex-direction: column;
     transition: all 0.2s ease;
-    min-height: 180px;
+    min-height: 220px;
 }
 
 .dashboard-tile.clickable {
@@ -685,6 +685,44 @@
 
 .dark-mode .scheduler-action-btn.filter-btn:hover {
     background: #4a4a4a;
+}
+
+.dashboard-add-employee-btn {
+    width: auto;
+    padding: 8px 16px;
+    background-color: #EE3524;
+    /* Teal/HSBC color theme */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-add-employee-btn:hover {
+    background-color: #D42E1F;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-add-employee-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .dashboard-add-employee-btn {
+    background-color: #009999;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .dashboard-add-employee-btn:hover {
+    background-color: #00b3b3;
 }
 
 /* Scheduler Legend */

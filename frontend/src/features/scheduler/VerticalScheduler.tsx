@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useMemo } from 'react';
 import dayjs from 'dayjs';
 import { Employee, LeaveRecord } from '../../types';
+import { FiCalendar } from 'react-icons/fi';
 import MonthSection from './MonthSection';
 import './VerticalScheduler.css';
 
@@ -13,12 +14,13 @@ interface VerticalSchedulerProps {
     onEditLeave?: (leave: LeaveRecord) => void;
     onDeleteLeave?: (leaveId: string) => void;
     currentUserId?: string;
+    title?: string;
 }
 
 // Constants for height calculation
-const MONTH_HEADER_HEIGHT = 38; // Days header row (36px + borders)
-const EMPLOYEE_ROW_HEIGHT = 33; // Each employee row (32px + border)
-const MONTH_BORDER_HEIGHT = 3;  // Border between months
+const MONTH_HEADER_HEIGHT = 40; // Days header row (fixed height in CSS)
+const EMPLOYEE_ROW_HEIGHT = 32; // Each employee row (fixed height in CSS)
+const MONTH_BORDER_HEIGHT = 2;  // Border between months (1px top + 1px bottom)
 const VISIBLE_MONTHS = 3;       // Show 3 months at a time
 
 const VerticalScheduler: React.FC<VerticalSchedulerProps> = ({
@@ -30,6 +32,7 @@ const VerticalScheduler: React.FC<VerticalSchedulerProps> = ({
     onEditLeave,
     onDeleteLeave,
     currentUserId,
+    title = 'Annual Leave Tracker'
 }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const currentMonthRef = useRef<HTMLDivElement>(null);
@@ -59,12 +62,21 @@ const VerticalScheduler: React.FC<VerticalSchedulerProps> = ({
     // Scroll to current month on mount
     useEffect(() => {
         if (currentMonthRef.current && scrollContainerRef.current) {
-            currentMonthRef.current.scrollIntoView({ block: 'start', behavior: 'auto' });
+            // Manual scroll calculation to prevent the entire page from scrolling (which scrollIntoView does)
+            const container = scrollContainerRef.current;
+            const currentMonthElement = currentMonthRef.current;
+
+            // Calculate position relative to the container
+            container.scrollTop = currentMonthElement.offsetTop - container.offsetTop;
         }
     }, []);
 
     return (
         <div className="vertical-scheduler">
+            <div className="vertical-scheduler-header">
+                <FiCalendar className="header-icon" />
+                <h2 className="header-title">{title}</h2>
+            </div>
             <div
                 className="vertical-scheduler-container"
                 ref={scrollContainerRef}
@@ -76,6 +88,7 @@ const VerticalScheduler: React.FC<VerticalSchedulerProps> = ({
                         <div
                             key={month.format('YYYY-MM')}
                             ref={isCurrentMonth ? currentMonthRef : undefined}
+                            className="month-snap-wrapper"
                         >
                             <MonthSection
                                 month={month}
