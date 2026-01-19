@@ -1,24 +1,24 @@
 /* Dashboard Page Styles */
 .dashboard-page {
     padding: 24px;
-    max-width: 1400px;
+    max-width: 1800px;
     margin: 0 auto;
     width: 100%;
 }
 
-/* New Dashboard Layout (1/3 + 2/3) */
+/* Dashboard Layout - Side by Side: Tiles (1/4) + Scheduler (3/4) */
 .dashboard-layout {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 3fr;
     gap: 24px;
+    align-items: start;
 }
 
-/* Left Column - Tiles (1/3 width) */
+/* Tiles Column - Vertical Stack */
 .dashboard-tiles {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    min-height: 600px;
 }
 
 .dashboard-tile {
@@ -29,8 +29,7 @@
     display: flex;
     flex-direction: column;
     transition: all 0.2s ease;
-    flex: 1;
-    min-height: 0;
+    min-height: 180px;
 }
 
 .dashboard-tile.clickable {
@@ -313,7 +312,6 @@
 
 /* Dashboard Scheduler Section */
 .dashboard-scheduler-section {
-    margin-top: 24px;
     background: #fff;
     border-radius: 12px;
     border: 1px solid #e8e8e8;
@@ -341,18 +339,26 @@
     margin: 0;
 }
 
-.scheduler-month-nav {
+/* Scheduler Controls Row - Date Range (left) + View Options (right) */
+.scheduler-controls-row {
     display: flex;
     align-items: center;
-    gap: 16px;
+    justify-content: space-between;
+    padding: 12px 0;
+}
+
+.scheduler-date-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .month-nav-btn {
     background: #f5f5f5;
     border: 1px solid #e8e8e8;
     border-radius: 8px;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -367,12 +373,52 @@
     color: #fff;
 }
 
-.current-month {
-    font-size: 16px;
+.date-range-display {
+    font-size: 15px;
     font-weight: 600;
     color: #231F20;
-    min-width: 150px;
     text-align: center;
+}
+
+/* Fixed widths per view mode to prevent button position shifting */
+/* Using tighter widths to match text length for consistent visual gap */
+.date-range-display[data-view-mode="1"] {
+    width: 130px;
+}
+
+.date-range-display[data-view-mode="3"] {
+    width: 250px;
+}
+
+.date-range-display[data-view-mode="6"] {
+    width: 250px;
+}
+
+.date-range-display[data-view-mode="12"] {
+    width: 260px;
+}
+
+.scheduler-view-options {
+    display: flex;
+    align-items: center;
+}
+
+.view-mode-group .ant-radio-button-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    height: auto;
+}
+
+.view-mode-group .view-label {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.view-mode-group .view-sublabel {
+    font-size: 11px;
+    opacity: 0.8;
 }
 
 .scheduler-header-bottom {
@@ -592,7 +638,23 @@
     border-color: #EE3524;
 }
 
-.dark-mode .current-month {
+.dark-mode .date-range-display {
+    color: #fff;
+}
+
+.dark-mode .view-mode-group .ant-radio-button-wrapper {
+    background: #3a3a3a;
+    border-color: #4a4a4a;
+    color: #9FA1A4;
+}
+
+.dark-mode .view-mode-group .ant-radio-button-wrapper:hover {
+    color: #EE3524;
+}
+
+.dark-mode .view-mode-group .ant-radio-button-wrapper-checked {
+    background: #EE3524;
+    border-color: #EE3524;
     color: #fff;
 }
 

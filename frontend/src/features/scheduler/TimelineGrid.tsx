@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import dayjs from 'dayjs';
 import { Employee, LeaveRecord } from '../../types';
 import { TimelineConfig, calculateLeavePosition } from '../../lib/timelineUtils';
 import EventBlock from './EventBlock';
@@ -22,8 +21,8 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({
     onDeleteLeave,
     currentUserId
 }) => {
-    const today = dayjs();
     const totalDays = config.totalDays;
+    const totalWidth = config.dayWidth * totalDays;
 
     const leavesByEmployee = useMemo(() => {
         const grouped: Record<string, LeaveRecord[]> = {};
@@ -33,48 +32,8 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({
         return grouped;
     }, [employees, leaves]);
 
-    // Generate all day columns for grid lines with percentage positions
-    const generateDayColumns = useMemo(() => {
-        const columns: { percentOffset: number; percentWidth: number; isMonthStart: boolean; isWeekend: boolean; isToday: boolean }[] = [];
-        let currentDate = config.startDate.startOf('month');
-        const endDate = config.endDate.endOf('month');
-        let dayIndex = 0;
-
-        while (currentDate.isBefore(endDate) || currentDate.isSame(endDate, 'day')) {
-            const isMonthStart = currentDate.date() === 1;
-            const isWeekend = currentDate.day() === 0 || currentDate.day() === 6;
-            const isToday = currentDate.isSame(today, 'day');
-
-            columns.push({
-                percentOffset: (dayIndex / totalDays) * 100,
-                percentWidth: (1 / totalDays) * 100,
-                isMonthStart,
-                isWeekend,
-                isToday,
-            });
-
-            dayIndex++;
-            currentDate = currentDate.add(1, 'day');
-        }
-        return columns;
-    }, [config, today, totalDays]);
-
     return (
-        <div className="timeline-grid">
-            {/* Day column grid lines */}
-            <div className="grid-lines">
-                {generateDayColumns.map((col, index) => (
-                    <div
-                        key={index}
-                        className={`grid-column ${col.isMonthStart && index > 0 ? 'grid-column-month' : ''} ${col.isWeekend ? 'grid-column-weekend' : ''} ${col.isToday ? 'grid-column-today' : ''}`}
-                        style={{
-                            left: `${col.percentOffset}%`,
-                            width: `${col.percentWidth}%`
-                        }}
-                    />
-                ))}
-            </div>
-
+        <div className="timeline-grid" style={{ minWidth: `${totalWidth}px` }}>
             {/* Employee rows */}
             {employees.map(employee => (
                 <div key={employee.id} className="timeline-row">
@@ -108,3 +67,4 @@ const TimelineGrid: React.FC<TimelineGridProps> = ({
 };
 
 export default TimelineGrid;
+

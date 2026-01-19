@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { Layout } from 'antd';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import Sidebar from './Sidebar';
+import { Outlet, useLocation } from 'react-router-dom';
 import TopBar from './TopBar';
 import { PageHeader } from '../';
 
@@ -32,45 +31,7 @@ const getPageHeaderConfig = (pathname: string): { title: string; subtitle?: stri
 };
 
 const MainLayout: React.FC = () => {
-    const navigate = useNavigate();
     const location = useLocation();
-
-    const handleNavigate = (key: string) => {
-        // Map keys to routes
-        switch (key) {
-            case 'dashboard':
-                navigate('/dashboard');
-                break;
-            case 'org-chart':
-                navigate('/org-chart');
-                break;
-            case 'documents':
-                navigate('/leave-tracker');
-                break;
-            case 'settings':
-                navigate('/settings');
-                break;
-            default:
-                navigate('/dashboard');
-        }
-    };
-
-    // Map route to key for highlighting
-    const getSelectedKey = () => {
-        const path = location.pathname;
-        if (path.includes('org-chart')) return 'org-chart';
-        if (path.includes('leave-tracker')) return 'documents';
-        if (path.includes('settings')) return 'settings';
-        return 'dashboard';
-    };
-
-    // Check if current route should hide sidebar
-    const shouldHideSidebar = () => {
-        const path = location.pathname;
-        return path.includes('/settings') || path.includes('/profile');
-    };
-
-    const hideSidebar = shouldHideSidebar();
 
     // Get header config based on current route
     const headerConfig = useMemo(() => getPageHeaderConfig(location.pathname), [location.pathname]);
@@ -80,10 +41,8 @@ const MainLayout: React.FC = () => {
             {/* TopBar at the very top, full width */}
             <TopBar />
 
-            {/* Below TopBar: Sidebar and Content side by side */}
+            {/* Content below TopBar */}
             <Layout style={{ flex: 1, flexDirection: 'row', marginTop: 56 }}>
-                {!hideSidebar && <Sidebar onNavigate={handleNavigate} selectedKey={getSelectedKey()} />}
-
                 <Content
                     className="main-content"
                     style={{
@@ -91,7 +50,6 @@ const MainLayout: React.FC = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         overflow: 'hidden',
-                        marginLeft: hideSidebar ? 0 : 60 // Account for sidebar width
                     }}
                 >
                     {/* Unified PageHeader - follows container position based on variant */}
@@ -105,3 +63,4 @@ const MainLayout: React.FC = () => {
 };
 
 export default MainLayout;
+

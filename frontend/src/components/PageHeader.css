@@ -4,9 +4,9 @@
     width: 100%;
 }
 
-/* Wide variant - matches dashboard, leave-tracker, org-chart containers (1400px) */
+/* Wide variant - matches dashboard, leave-tracker, org-chart containers (1600px) */
 .page-header--wide {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
 }
 

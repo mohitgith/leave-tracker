@@ -1,77 +1,78 @@
 .scheduler {
     display: flex;
-    flex-direction: column;
     background: #fff;
     border-radius: 8px;
-    /* border: 1px solid #e8e8e8; */
     overflow: hidden;
 }
 
-.scheduler-header {
-    display: flex;
-    border-bottom: 1px solid #e8e8e8;
-    background: #fff;
+/* Left column - fixed employee header and list */
+.scheduler-left-column {
+    width: 280px;
+    min-width: 280px;
     flex-shrink: 0;
+    border-right: 1px solid #e8e8e8;
+    background: #fff;
+    z-index: 2;
 }
 
 .scheduler-header-left {
-    width: 220px;
-    min-width: 220px;
-    flex-shrink: 0;
-    border-right: 1px solid #e8e8e8;
+    height: 68px;
     display: flex;
     align-items: flex-end;
+    border-bottom: 1px solid #e8e8e8;
 }
 
-.employee-search-header {
+.scheduler-month-label {
     height: 68px;
-    /* Match header height: 32px month row + 36px days row */
     display: flex;
     align-items: center;
-    padding: 0 16px;
-}
-
-.scheduler-header-right {
-    flex: 1;
-    overflow: hidden;
-    /* Reserve space for scrollbar to match body alignment */
-    scrollbar-gutter: stable;
-    /* border-right: 1px solid #e8e8e8; */
-}
-
-.scheduler-body {
-    display: flex;
-    align-items: flex-start;
-    /* Fixed height for 10 rows (48px each) */
-    min-height: 480px;
-    max-height: 480px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    /* Reserve consistent scrollbar space for alignment with header */
-    scrollbar-gutter: stable;
+    padding: 0 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #231F20;
 }
 
 .scheduler-employees {
-    width: 220px;
-    min-width: 220px;
-    flex-shrink: 0;
-    border-right: 1px solid #e8e8e8;
     background: #fff;
 }
 
-.scheduler-timeline {
+/* Right column - timeline wrapper with unified gridlines */
+.scheduler-right-column {
     flex: 1;
+    overflow: hidden;
+}
+
+.scheduler-timeline-wrapper {
+    position: relative;
     overflow-x: auto;
 }
 
-/* Scrollbar sync */
-.scheduler-header-right::-webkit-scrollbar,
-.scheduler-timeline::-webkit-scrollbar {
+.scheduler-header-right {
+    position: relative;
+    z-index: 1;
+}
+
+.scheduler-timeline {
+    position: relative;
+    z-index: 1;
+}
+
+/* Scrollbar styling */
+.scheduler-timeline-wrapper::-webkit-scrollbar {
     height: 8px;
 }
 
-.scheduler-header-right {
-    overflow-x: hidden;
+.scheduler-timeline-wrapper::-webkit-scrollbar-track {
+    background: #f5f5f5;
+}
+
+.scheduler-timeline-wrapper::-webkit-scrollbar-thumb {
+    background: #d0d0d0;
+    border-radius: 4px;
+}
+
+.scheduler-timeline-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #b0b0b0;
 }
 
 /* =========================================
@@ -83,8 +84,8 @@
     border-color: #4a4a4a;
 }
 
-.dark-mode .scheduler-header {
-    background: #1a1818;
+.dark-mode .scheduler-left-column {
+    background: #2d2a2b;
     border-color: #4a4a4a;
 }
 
@@ -94,5 +95,16 @@
 
 .dark-mode .scheduler-employees {
     background: #2d2a2b;
-    border-color: #4a4a4a;
+}
+
+.dark-mode .scheduler-month-label {
+    color: #FFFFFF;
+}
+
+.dark-mode .scheduler-timeline-wrapper::-webkit-scrollbar-track {
+    background: #3a3a3a;
+}
+
+.dark-mode .scheduler-timeline-wrapper::-webkit-scrollbar-thumb {
+    background: #5a5a5a;
 }

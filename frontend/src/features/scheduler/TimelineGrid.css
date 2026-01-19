@@ -1,42 +1,13 @@
 .timeline-grid {
     position: relative;
-    background: #fff;
+    background: transparent;
     width: 100%;
     height: fit-content;
 }
 
-.grid-lines {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    pointer-events: none;
-}
-
-.grid-column {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    border-right: 1px solid #f0f0f0;
-    box-sizing: border-box;
-}
-
-.grid-column-month {
-    border-left: 2px solid #d0d0d0;
-}
-
-.grid-column-weekend {
-    background: rgba(0, 0, 0, 0.02);
-}
-
-.grid-column-today {
-    background: rgba(238, 53, 36, 0.08);
-}
-
 .timeline-row {
     position: relative;
-    height: 48px;
+    height: 36px;
     border-bottom: 1px solid #f0f0f0;
     background: transparent;
 }
@@ -50,23 +21,7 @@
    ========================================= */
 
 .dark-mode .timeline-grid {
-    background: #2d2a2b;
-}
-
-.dark-mode .grid-column {
-    border-color: #4a4a4a;
-}
-
-.dark-mode .grid-column-month {
-    border-left-color: #666;
-}
-
-.dark-mode .grid-column-weekend {
-    background: rgba(255, 255, 255, 0.02);
-}
-
-.dark-mode .grid-column-today {
-    background: rgba(238, 53, 36, 0.15);
+    background: transparent;
 }
 
 .dark-mode .timeline-row {
